@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ネイタルチャート & トランジット分析</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            font-variant-emoji: text;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        .nav a {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.9em;
+            padding: 4px 12px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .nav a:hover { background: #eaf2f8; }
+        .nav a.active { font-weight: 600; background: #eaf2f8; }
+
+        h1 {
+            text-align: center;
+            margin: 10px 0 24px;
+            font-size: 1.5em;
+            color: #2c3e50;
+        }
+        h1 span { font-size: 0.7em; display: block; color: #7f8c8d; margin-top: 4px; }
+
+        /* Form */
+        .form-area {
+            background: #fff;
+            border-radius: 10px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .form-section {
+            margin-bottom: 16px;
+        }
+        .form-section:last-child { margin-bottom: 0; }
+        .form-section h3 {
+            font-size: 0.95em;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #eee;
+        }
+        .form-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+        .form-row label {
+            font-weight: 600;
+            font-size: 0.9em;
+            min-width: 40px;
+        }
+        .form-row select, .form-row input {
+            padding: 6px 10px;
+            font-size: 0.95em;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #fff;
+        }
+        .form-row input[type="number"] {
+            width: 90px;
+        }
+        .form-row input.dms-deg { width: 65px; }
+        .form-row input.dms-min { width: 55px; }
+        .coord-toggle {
+            font-size: 0.75em;
+            padding: 3px 8px;
+            border: 1px solid #8e44ad;
+            color: #8e44ad;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 4px;
+        }
+        .coord-toggle:hover { background: #f3e5f5; }
+        .dms-row { display: none; }
+        .dms-row.active { display: flex; }
+        .decimal-row.hidden { display: none; }
+        .coord-select {
+            padding: 4px 6px;
+            font-size: 0.9em;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #fff;
+        }
+        .form-row .separator { color: #999; }
+        .form-actions {
+            text-align: center;
+            margin-top: 16px;
+        }
+        .btn-generate {
+            padding: 10px 32px;
+            font-size: 1em;
+            font-weight: 600;
+            color: #fff;
+            background: #8e44ad;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-generate:hover { background: #7d3c98; }
+        .btn-generate:disabled { background: #bdc3c7; cursor: not-allowed; }
+
+        /* Status */
+        .status {
+            text-align: center;
+            margin: 16px 0;
+            font-size: 0.95em;
+            color: #7f8c8d;
+            min-height: 24px;
+        }
+        .status.error { color: #e74c3c; }
+        .spinner {
+            display: inline-block;
+            width: 18px; height: 18px;
+            border: 3px solid #ddd;
+            border-top-color: #8e44ad;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Tabs */
+        .result-area {
+            display: none;
+            margin-top: 20px;
+        }
+        .result-area.visible { display: block; }
+        .tabs {
+            display: flex;
+            gap: 0;
+        }
+        .tab-btn {
+            padding: 10px 18px;
+            font-size: 0.9em;
+            font-weight: 600;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            background: #eee;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            color: #666;
+            transition: background 0.2s;
+        }
+        .tab-btn.active {
+            background: #fff;
+            color: #2c3e50;
+            border-bottom: 1px solid #fff;
+            margin-bottom: -1px;
+            position: relative;
+            z-index: 1;
+        }
+        .tab-content {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 0 8px 8px 8px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        /* Natal chart table */
+        .natal-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88em;
+        }
+        .natal-table th {
+            text-align: left;
+            padding: 6px 10px;
+            background: #f8f8f8;
+            border-bottom: 2px solid #ddd;
+            font-weight: 600;
+        }
+        .natal-table td {
+            padding: 5px 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .natal-table tr:hover { background: #fafafa; }
+        .retro { color: #e74c3c; font-weight: 600; }
+        .point-row { background: #fdf6ff; }
+
+        /* Transit table */
+        .transit-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85em;
+        }
+        .transit-table th {
+            text-align: left;
+            padding: 6px 8px;
+            background: #f8f8f8;
+            border-bottom: 2px solid #ddd;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .transit-table td {
+            padding: 5px 8px;
+            border-bottom: 1px solid #f0f0f0;
+            white-space: nowrap;
+        }
+        .transit-table tr:hover { background: #fafafa; }
+        .sig-3 { color: #c0392b; font-weight: 700; }
+        .sig-2 { color: #d35400; font-weight: 600; }
+        .sig-1 { color: #7f8c8d; }
+
+        /* Aspect table */
+        .aspect-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88em;
+        }
+        .aspect-table th {
+            text-align: left;
+            padding: 6px 10px;
+            background: #f8f8f8;
+            border-bottom: 2px solid #ddd;
+        }
+        .aspect-table td {
+            padding: 5px 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        /* Text preview */
+        .tab-content pre {
+            font-family: "SF Mono", "Menlo", "Monaco", monospace;
+            font-size: 0.82em;
+            line-height: 1.5;
+            overflow-x: auto;
+            white-space: pre;
+            tab-size: 4;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* Download */
+        .download-area {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .btn-download {
+            padding: 10px 24px;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #fff;
+            background: #27ae60;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-download:hover { background: #219a52; }
+
+        /* Filter */
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .filter-bar label { font-size: 0.85em; font-weight: 600; }
+        .filter-bar select {
+            padding: 4px 8px;
+            font-size: 0.85em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Preset bar */
+        .preset-bar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .preset-bar label { font-size: 0.85em; font-weight: 600; color: #666; }
+        .preset-bar select {
+            padding: 5px 8px;
+            font-size: 0.85em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            min-width: 160px;
+        }
+        .preset-btn {
+            padding: 4px 12px;
+            font-size: 0.8em;
+            border: 1px solid #8e44ad;
+            color: #8e44ad;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .preset-btn:hover { background: #f3e5f5; }
+        .preset-btn.danger { border-color: #e74c3c; color: #e74c3c; }
+        .preset-btn.danger:hover { background: #fde8e8; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.8em;
+            color: #95a5a6;
+        }
+        footer a { color: #7f8c8d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav">
+            <a href="/">占星術カレンダー</a>
+            <a href="/natal" class="active">ネイタル & トランジット</a>
+        </nav>
+
+        <h1>
+            ネイタルチャート & トランジット分析
+            <span>個人の出生図に基づくパーソナル天体暦</span>
+        </h1>
+
+        <div class="form-area">
+            <div class="preset-bar">
+                <label>保存データ:</label>
+                <select id="presetSelect" onchange="loadPreset()">
+                    <option value="">（選択してください）</option>
+                </select>
+                <button type="button" class="preset-btn danger" onclick="deletePreset()">削除</button>
+            </div>
+            <div class="form-section">
+                <h3>出生データ</h3>
+                <div class="form-row">
+                    <label>氏名:</label>
+                    <input type="text" id="clientName" placeholder="氏名を入力してください" style="width:240px;">
+                </div>
+                <div class="form-row">
+                    <label>日付:</label>
+                    <select id="birthYear"></select>
+                    <span class="separator">年</span>
+                    <select id="birthMonth"></select>
+                    <span class="separator">月</span>
+                    <select id="birthDay"></select>
+                    <span class="separator">日</span>
+                </div>
+                <div class="form-row">
+                    <label>時刻:</label>
+                    <select id="birthHour"></select>
+                    <span class="separator">:</span>
+                    <select id="birthMinute"></select>
+                    <select id="timezone" class="coord-select" style="min-width:180px;">
+                        <option value="-12">UTC-12  ベーカー島</option>
+                        <option value="-11">UTC-11  サモア SST</option>
+                        <option value="-10">UTC-10  ハワイ HST</option>
+                        <option value="-9">UTC-9   アラスカ AKST</option>
+                        <option value="-8">UTC-8   米国太平洋 PST</option>
+                        <option value="-7">UTC-7   米国山岳 MST</option>
+                        <option value="-6">UTC-6   米国中部 CST</option>
+                        <option value="-5">UTC-5   米国東部 EST</option>
+                        <option value="-4">UTC-4   大西洋 AST</option>
+                        <option value="-3">UTC-3   ブラジル BRT</option>
+                        <option value="-2">UTC-2   中部大西洋</option>
+                        <option value="-1">UTC-1   アゾレス</option>
+                        <option value="0">UTC±0   グリニッジ GMT</option>
+                        <option value="1">UTC+1   中央ヨーロッパ CET</option>
+                        <option value="2">UTC+2   東ヨーロッパ EET</option>
+                        <option value="3">UTC+3   モスクワ MSK</option>
+                        <option value="3.5">UTC+3:30 イラン IRST</option>
+                        <option value="4">UTC+4   ドバイ GST</option>
+                        <option value="4.5">UTC+4:30 アフガニスタン</option>
+                        <option value="5">UTC+5   パキスタン PKT</option>
+                        <option value="5.5">UTC+5:30 インド IST</option>
+                        <option value="5.75">UTC+5:45 ネパール</option>
+                        <option value="6">UTC+6   バングラデシュ BST</option>
+                        <option value="6.5">UTC+6:30 ミャンマー</option>
+                        <option value="7">UTC+7   インドシナ ICT</option>
+                        <option value="8">UTC+8   中国/香港 CST</option>
+                        <option value="8.75">UTC+8:45 豪州中西部</option>
+                        <option value="9" selected>UTC+9   日本 JST</option>
+                        <option value="9.5">UTC+9:30 豪州中部 ACST</option>
+                        <option value="10">UTC+10  豪州東部 AEST</option>
+                        <option value="10.5">UTC+10:30 ロードハウ島</option>
+                        <option value="11">UTC+11  ソロモン諸島</option>
+                        <option value="12">UTC+12  NZ NZST</option>
+                        <option value="13">UTC+13  トンガ</option>
+                        <option value="14">UTC+14  ライン諸島</option>
+                    </select>
+                </div>
+                <div class="form-row" id="locationSelect">
+                    <label>場所:</label>
+                    <select id="prefSelect" class="coord-select" style="min-width:130px;" onchange="onPrefChange()">
+                        <option value="">都道府県</option>
+                    </select>
+                    <select id="citySelect" class="coord-select" style="min-width:170px;" onchange="onCityChange()">
+                        <option value="">市区町村</option>
+                    </select>
+                </div>
+                <div class="form-row decimal-row" id="coordDecimal">
+                    <label></label>
+                    <span style="font-size:0.85em">緯度</span>
+                    <input type="number" id="lat" step="0.0001" value="35.6895">
+                    <select id="latNS" class="coord-select"><option value="N">°N</option><option value="S">°S</option></select>
+                    <span style="font-size:0.85em">経度</span>
+                    <input type="number" id="lon" step="0.0001" value="139.6917">
+                    <select id="lonEW" class="coord-select"><option value="E">°E</option><option value="W">°W</option></select>
+                    <button type="button" class="coord-toggle" onclick="toggleCoordMode()">▸ 度分（X° X′）で入力する</button>
+                </div>
+                <div class="form-row dms-row" id="coordDms">
+                    <label></label>
+                    <span style="font-size:0.85em">緯度</span>
+                    <input type="number" class="dms-deg" id="latDeg" min="0" max="89" value="35">
+                    <span class="separator">°</span>
+                    <input type="number" class="dms-min" id="latMin" min="0" max="59" value="41">
+                    <select id="latNS_dms" class="coord-select"><option value="N">'N</option><option value="S">'S</option></select>
+                    <span style="font-size:0.85em; margin-left:8px;">経度</span>
+                    <input type="number" class="dms-deg" id="lonDeg" min="0" max="179" value="139">
+                    <span class="separator">°</span>
+                    <input type="number" class="dms-min" id="lonMin" min="0" max="59" value="41">
+                    <select id="lonEW_dms" class="coord-select"><option value="E">'E</option><option value="W">'W</option></select>
+                    <button type="button" class="coord-toggle" onclick="toggleCoordMode()">◂ 十進法で入力する</button>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>トランジット月</h3>
+                <div class="form-row">
+                    <label>年月:</label>
+                    <select id="transitYear"></select>
+                    <span class="separator">年</span>
+                    <select id="transitMonth"></select>
+                    <span class="separator">月</span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn-generate" id="btnCalculate" onclick="calculate()">
+                    計算する
+                </button>
+            </div>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div class="result-area" id="resultArea">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('transits')">月間トランジット</button>
+                <button class="tab-btn" onclick="switchTab('natal')">ネイタルチャート</button>
+                <button class="tab-btn" onclick="switchTab('aspects')">ネイタルアスペクト</button>
+                <button class="tab-btn" onclick="switchTab('text')">テキスト表示</button>
+            </div>
+            <div class="tab-content" id="tabContent">
+                <!-- dynamically filled -->
+            </div>
+
+            <div class="download-area">
+                <button class="btn-download" onclick="downloadReport()">
+                    レポートをダウンロード
+                </button>
+            </div>
+        </div>
+
+        <footer>
+            Powered by <a href="https://www.astro.com/swisseph/" target="_blank">Swiss Ephemeris</a> (pyswisseph)<br>
+            このツールのソースコードは AGPL v3 ライセンスで公開されています。
+        </footer>
+    </div>
+
+    <script>
+        // --- ドロップダウン初期化 ---
+        const currentYear = new Date().getFullYear();
+        const currentMonth = new Date().getMonth() + 1;
+
+        // 出生年 (1920-2025)
+        const birthYearSel = document.getElementById('birthYear');
+        for (let y = 1920; y <= currentYear; y++) {
+            const opt = document.createElement('option');
+            opt.value = y; opt.textContent = y;
+            if (y === 1990) opt.selected = true;
+            birthYearSel.appendChild(opt);
+        }
+
+        // 出生月
+        const birthMonthSel = document.getElementById('birthMonth');
+        for (let m = 1; m <= 12; m++) {
+            const opt = document.createElement('option');
+            opt.value = m; opt.textContent = m;
+            if (m === 1) opt.selected = true;
+            birthMonthSel.appendChild(opt);
+        }
+
+        // 出生日
+        const birthDaySel = document.getElementById('birthDay');
+        for (let d = 1; d <= 31; d++) {
+            const opt = document.createElement('option');
+            opt.value = d; opt.textContent = d;
+            if (d === 1) opt.selected = true;
+            birthDaySel.appendChild(opt);
+        }
+
+        // 出生時
+        const birthHourSel = document.getElementById('birthHour');
+        for (let h = 0; h <= 23; h++) {
+            const opt = document.createElement('option');
+            opt.value = h; opt.textContent = String(h).padStart(2, '0');
+            if (h === 12) opt.selected = true;
+            birthHourSel.appendChild(opt);
+        }
+
+        // 出生分
+        const birthMinSel = document.getElementById('birthMinute');
+        for (let m = 0; m <= 59; m++) {
+            const opt = document.createElement('option');
+            opt.value = m; opt.textContent = String(m).padStart(2, '0');
+            if (m === 0) opt.selected = true;
+            birthMinSel.appendChild(opt);
+        }
+
+        // トランジット年 (2020-2035)
+        const transitYearSel = document.getElementById('transitYear');
+        for (let y = 2020; y <= 2035; y++) {
+            const opt = document.createElement('option');
+            opt.value = y; opt.textContent = y;
+            if (y === currentYear) opt.selected = true;
+            transitYearSel.appendChild(opt);
+        }
+
+        // トランジット月
+        const transitMonthSel = document.getElementById('transitMonth');
+        for (let m = 1; m <= 12; m++) {
+            const opt = document.createElement('option');
+            opt.value = m; opt.textContent = m + '月';
+            if (m === currentMonth) opt.selected = true;
+            transitMonthSel.appendChild(opt);
+        }
+
+        // --- 座標入力モード切替 ---
+        let coordMode = 'decimal';  // 'decimal' or 'dms'
+
+        function toggleCoordMode() {
+            if (coordMode === 'decimal') {
+                // 十進 → 度分: 現在の十進値を度分に変換
+                const lat = parseFloat(document.getElementById('lat').value) || 0;
+                const lon = parseFloat(document.getElementById('lon').value) || 0;
+                document.getElementById('latDeg').value = Math.floor(Math.abs(lat));
+                document.getElementById('latMin').value = Math.round((Math.abs(lat) % 1) * 60);
+                document.getElementById('lonDeg').value = Math.floor(Math.abs(lon));
+                document.getElementById('lonMin').value = Math.round((Math.abs(lon) % 1) * 60);
+                // N/S・E/Wセレクターを同期
+                document.getElementById('latNS_dms').value = document.getElementById('latNS').value;
+                document.getElementById('lonEW_dms').value = document.getElementById('lonEW').value;
+                document.getElementById('coordDecimal').classList.add('hidden');
+                document.getElementById('coordDms').classList.add('active');
+                coordMode = 'dms';
+            } else {
+                // 度分 → 十進: 度分値を十進に変換
+                const latDeg = parseInt(document.getElementById('latDeg').value) || 0;
+                const latMin = parseInt(document.getElementById('latMin').value) || 0;
+                const lonDeg = parseInt(document.getElementById('lonDeg').value) || 0;
+                const lonMin = parseInt(document.getElementById('lonMin').value) || 0;
+                document.getElementById('lat').value = (latDeg + latMin / 60).toFixed(4);
+                document.getElementById('lon').value = (lonDeg + lonMin / 60).toFixed(4);
+                // N/S・E/Wセレクターを同期
+                document.getElementById('latNS').value = document.getElementById('latNS_dms').value;
+                document.getElementById('lonEW').value = document.getElementById('lonEW_dms').value;
+                document.getElementById('coordDecimal').classList.remove('hidden');
+                document.getElementById('coordDms').classList.remove('active');
+                coordMode = 'decimal';
+            }
+        }
+
+        function syncDmsToDecimal() {
+            // 度分モード時に計算前に十進フィールドへ同期（絶対値）
+            if (coordMode === 'dms') {
+                const latDeg = parseInt(document.getElementById('latDeg').value) || 0;
+                const latMin = parseInt(document.getElementById('latMin').value) || 0;
+                const lonDeg = parseInt(document.getElementById('lonDeg').value) || 0;
+                const lonMin = parseInt(document.getElementById('lonMin').value) || 0;
+                document.getElementById('lat').value = (latDeg + latMin / 60).toFixed(4);
+                document.getElementById('lon').value = (lonDeg + lonMin / 60).toFixed(4);
+            }
+        }
+
+        // N/S・E/Wセレクターの符号を適用した座標を返す
+        function getSignedCoords() {
+            const latNS = coordMode === 'dms'
+                ? document.getElementById('latNS_dms').value
+                : document.getElementById('latNS').value;
+            const lonEW = coordMode === 'dms'
+                ? document.getElementById('lonEW_dms').value
+                : document.getElementById('lonEW').value;
+            const lat = parseFloat(document.getElementById('lat').value) * (latNS === 'S' ? -1 : 1);
+            const lon = parseFloat(document.getElementById('lon').value) * (lonEW === 'W' ? -1 : 1);
+            return { lat, lon };
+        }
+
+        // --- 状態管理 ---
+        let resultData = null;
+        let activeTab = 'transits';
+
+        function setStatus(msg, isError) {
+            const el = document.getElementById('status');
+            el.innerHTML = msg;
+            el.className = 'status' + (isError ? ' error' : '');
+        }
+
+        // --- メイン計算 ---
+        async function calculate() {
+            syncDmsToDecimal();
+            const btn = document.getElementById('btnCalculate');
+            btn.disabled = true;
+            setStatus('<span class="spinner"></span> 計算中です... ネイタルチャートとトランジットを解析しています');
+            document.getElementById('resultArea').classList.remove('visible');
+
+            try {
+                const formData = new FormData();
+                formData.append('birth_year', document.getElementById('birthYear').value);
+                formData.append('birth_month', document.getElementById('birthMonth').value);
+                formData.append('birth_day', document.getElementById('birthDay').value);
+                formData.append('birth_hour', document.getElementById('birthHour').value);
+                formData.append('birth_minute', document.getElementById('birthMinute').value);
+                const coords = getSignedCoords();
+                formData.append('lat', coords.lat);
+                formData.append('lon', coords.lon);
+                formData.append('tz_offset', document.getElementById('timezone').value);
+                formData.append('transit_year', document.getElementById('transitYear').value);
+                formData.append('transit_month', document.getElementById('transitMonth').value);
+
+                const res = await fetch('/natal/calculate', { method: 'POST', body: formData });
+                const data = await res.json();
+
+                if (data.error) {
+                    setStatus(data.error, true);
+                    return;
+                }
+
+                resultData = data;
+                activeTab = 'transits';
+                updateTabContent();
+
+                const ty = document.getElementById('transitYear').value;
+                const tm = document.getElementById('transitMonth').value;
+                setStatus(`ネイタルチャートと${ty}年${tm}月のトランジットを計算しました。`);
+                document.getElementById('resultArea').classList.add('visible');
+
+                // 氏名が入力されている場合、保存確認
+                const clientName = document.getElementById('clientName').value.trim();
+                if (clientName) {
+                    const exists = getPresets().some(p => p.name === clientName);
+                    const msg = exists
+                        ? `「${clientName}」の出生データを上書き保存しますか？`
+                        : `「${clientName}」の出生データを保存しますか？`;
+                    if (confirm(msg)) {
+                        savePresetWithName(clientName);
+                    }
+                }
+
+            } catch (e) {
+                setStatus('エラーが発生しました: ' + e.message, true);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        // --- タブ切り替え ---
+        function switchTab(tab) {
+            activeTab = tab;
+            updateTabContent();
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+                const tabs = ['transits', 'natal', 'aspects', 'text'];
+                btn.classList.toggle('active', tabs[i] === tab);
+            });
+        }
+
+        function updateTabContent() {
+            if (!resultData) return;
+            const container = document.getElementById('tabContent');
+
+            if (activeTab === 'natal') {
+                container.innerHTML = renderNatalTable();
+            } else if (activeTab === 'aspects') {
+                container.innerHTML = renderAspectTable();
+            } else if (activeTab === 'transits') {
+                container.innerHTML = renderTransitTable();
+            } else if (activeTab === 'text') {
+                container.innerHTML = renderTextView();
+            }
+        }
+
+        // --- ネイタルチャート テーブル ---
+        function renderNatalTable() {
+            const n = resultData.natal;
+            let html = '<table class="natal-table">';
+            html += '<thead><tr><th>天体</th><th>位置（黄経）</th><th>ハウス位置</th><th>順行／逆行</th></tr></thead>';
+            html += '<tbody>';
+
+            for (const p of n.planets) {
+                const motion = p.retrograde ? '<span class="retro">Rx</span>' : 'D';
+                const houseDisplay = p.near_cusp
+                    ? `${p.house_str.split('（')[0]}<small style="color:#999;">（${p.house_str.split('（')[1]}</small>`
+                    : p.house_str;
+                html += `<tr>
+                    <td><strong>${p.name_ja}${p.symbol} ${p.name_en}</strong></td>
+                    <td>${p.position_ja}</td>
+                    <td>${houseDisplay}</td>
+                    <td>${motion}</td>
+                </tr>`;
+            }
+
+            // ASC / MC
+            html += `<tr class="point-row">
+                <td><strong>ASC</strong></td>
+                <td>${n.asc.position_ja}</td>
+                <td></td>
+                <td></td>
+            </tr>`;
+            html += `<tr class="point-row">
+                <td><strong>MC</strong></td>
+                <td>${n.mc.position_ja}</td>
+                <td></td>
+                <td></td>
+            </tr>`;
+
+            html += '</tbody></table>';
+
+            // ハウスカスプ
+            html += '<h4 style="margin:16px 0 8px; font-size:0.9em; color:#2c3e50;">ハウスカスプ (Placidus)</h4>';
+            html += '<table class="natal-table">';
+            html += '<thead><tr><th>House</th><th>位置</th></tr></thead>';
+            html += '<tbody>';
+            for (const h of n.houses) {
+                html += `<tr>
+                    <td>House ${h.number}</td>
+                    <td>${h.position_ja}</td>
+                </tr>`;
+            }
+            html += '</tbody></table>';
+
+            return html;
+        }
+
+        // --- ネイタルアスペクト テーブル ---
+        function renderAspectTable() {
+            const allAspects = resultData.natal.aspects;
+            if (!allAspects || allAspects.length === 0) {
+                return '<p style="color:#999; padding:20px;">アスペクトが見つかりませんでした。</p>';
+            }
+
+            // オーブ6°以内のみ表示
+            const aspects = allAspects.filter(a => a.orb <= 6.0);
+            if (aspects.length === 0) {
+                return '<p style="color:#999; padding:20px;">オーブ6°以内のアスペクトはありません。</p>';
+            }
+
+            let html = '<table class="aspect-table">';
+            html += '<thead><tr><th>天体1</th><th>アスペクト</th><th>天体2</th><th>オーブ</th></tr></thead>';
+            html += '<tbody>';
+            for (const a of aspects) {
+                html += `<tr>
+                    <td><strong>${a.planet1_ja}${a.planet1_symbol} ${a.planet1}</strong></td>
+                    <td><strong>${a.aspect_symbol}</strong> <small>${a.aspect}</small></td>
+                    <td><strong>${a.planet2_ja}${a.planet2_symbol} ${a.planet2}</strong></td>
+                    <td>${a.orb.toFixed(1)}\u00b0</td>
+                </tr>`;
+            }
+            html += '</tbody></table>';
+            if (aspects.length < allAspects.length) {
+                html += `<p style="color:#999; font-size:0.8em; margin-top:8px;">オーブ6°以内: ${aspects.length}/${allAspects.length} 件表示</p>`;
+            }
+            return html;
+        }
+
+        // --- トランジット テーブル ---
+        function renderTransitTable() {
+            const transits = resultData.transits;
+            if (!transits || transits.length === 0) {
+                return '<p style="color:#999; padding:20px;">この月に正確なトランジットアスペクトはありません。</p>';
+            }
+
+            const ty = document.getElementById('transitYear').value;
+
+            // フィルター
+            let html = '<div class="filter-bar">';
+            html += '<label>フィルター:</label>';
+            html += '<select id="sigFilter" onchange="updateTabContent()">';
+            html += '<option value="0">すべて表示</option>';
+            html += '<option value="2">\u2605\u2605 以上（重要）</option>';
+            html += '<option value="3">\u2605\u2605\u2605 のみ（最重要）</option>';
+            html += '</select>';
+            html += '</div>';
+
+            const sigFilter = document.getElementById('sigFilter');
+            const minSig = sigFilter ? parseInt(sigFilter.value) : 0;
+
+            const filtered = transits.filter(t => t.significance >= minSig);
+
+            html += '<table class="transit-table">';
+            html += `<thead><tr><th>日時（${ty}年）</th><th>トランジット</th><th>Aspect</th><th>ネイタル</th><th>位置</th><th>重要度</th></tr></thead>`;
+            html += '<tbody>';
+
+            for (const t of filtered) {
+                const stars = '\u2605'.repeat(t.significance);
+                const sigClass = `sig-${t.significance}`;
+                const dateJa = `${t.month}月${t.day}日 ${String(t.hour).padStart(2,'0')}:${String(t.minute).padStart(2,'0')}`;
+                const tEn = (t.transit_planet !== t.transit_planet_ja) ? ` ${t.transit_planet}` : '';
+                const nEn = (t.natal_planet !== t.natal_planet_ja) ? ` ${t.natal_planet}` : '';
+                html += `<tr>
+                    <td>${dateJa}</td>
+                    <td>T.${t.transit_planet_ja}${t.transit_symbol}${tEn}</td>
+                    <td><strong>${t.aspect_symbol}</strong> <small>${t.aspect}</small></td>
+                    <td>N.${t.natal_planet_ja}${t.natal_symbol}${nEn}</td>
+                    <td>${t.transit_position_ja}</td>
+                    <td class="${sigClass}">${stars}</td>
+                </tr>`;
+            }
+            html += '</tbody></table>';
+
+            if (filtered.length < transits.length) {
+                html += `<p style="color:#999; font-size:0.8em; margin-top:8px;">${filtered.length}/${transits.length} 件表示中</p>`;
+            }
+
+            return html;
+        }
+
+        // --- テキスト表示 ---
+        function renderTextView() {
+            let text = resultData.natal_text + '\n\n' + resultData.transit_text;
+            return `<pre>${escapeHtml(text)}</pre>`;
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        // --- ダウンロード ---
+        function downloadReport() {
+            if (!resultData) return;
+
+            const formData = new FormData();
+            formData.append('birth_year', document.getElementById('birthYear').value);
+            formData.append('birth_month', document.getElementById('birthMonth').value);
+            formData.append('birth_day', document.getElementById('birthDay').value);
+            formData.append('birth_hour', document.getElementById('birthHour').value);
+            formData.append('birth_minute', document.getElementById('birthMinute').value);
+            const coords = getSignedCoords();
+            formData.append('lat', coords.lat);
+            formData.append('lon', coords.lon);
+            formData.append('tz_offset', document.getElementById('timezone').value);
+            formData.append('transit_year', document.getElementById('transitYear').value);
+            formData.append('transit_month', document.getElementById('transitMonth').value);
+
+            fetch('/natal/download', { method: 'POST', body: formData })
+                .then(res => res.blob())
+                .then(blob => {
+                    const by = document.getElementById('birthYear').value;
+                    const bm = document.getElementById('birthMonth').value.padStart(2, '0');
+                    const bd = document.getElementById('birthDay').value.padStart(2, '0');
+                    const ty = document.getElementById('transitYear').value;
+                    const tm = document.getElementById('transitMonth').value.padStart(2, '0');
+                    const filename = `natal_transit_${by}${bm}${bd}_${ty}${tm}.txt`;
+
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                });
+        }
+
+        // --- プリセット管理 (localStorage) ---
+        const PRESET_KEY = 'natal_presets';
+
+        function getPresets() {
+            try {
+                return JSON.parse(localStorage.getItem(PRESET_KEY)) || [];
+            } catch { return []; }
+        }
+
+        function setPresets(presets) {
+            localStorage.setItem(PRESET_KEY, JSON.stringify(presets));
+        }
+
+        function refreshPresetSelect(selectedName) {
+            const sel = document.getElementById('presetSelect');
+            const presets = getPresets();
+            sel.innerHTML = '<option value="">（選択してください）</option>';
+            for (const p of presets) {
+                const opt = document.createElement('option');
+                opt.value = p.name;
+                opt.textContent = p.name;
+                if (p.name === selectedName) opt.selected = true;
+                sel.appendChild(opt);
+            }
+        }
+
+        function savePresetWithName(name) {
+            // 現在のフォーム値を収集
+            syncDmsToDecimal();
+            const data = {
+                name: name,
+                birthYear: document.getElementById('birthYear').value,
+                birthMonth: document.getElementById('birthMonth').value,
+                birthDay: document.getElementById('birthDay').value,
+                birthHour: document.getElementById('birthHour').value,
+                birthMinute: document.getElementById('birthMinute').value,
+                lat: document.getElementById('lat').value,
+                lon: document.getElementById('lon').value,
+                latNS: document.getElementById('latNS').value,
+                lonEW: document.getElementById('lonEW').value,
+                timezone: document.getElementById('timezone').value,
+            };
+
+            const presets = getPresets();
+            const idx = presets.findIndex(p => p.name === data.name);
+            if (idx >= 0) {
+                presets[idx] = data;  // 上書き
+            } else {
+                presets.push(data);
+            }
+            setPresets(presets);
+            refreshPresetSelect(data.name);
+        }
+
+        function loadPreset() {
+            const sel = document.getElementById('presetSelect');
+            const name = sel.value;
+            if (!name) return;
+
+            const presets = getPresets();
+            const p = presets.find(pr => pr.name === name);
+            if (!p) return;
+
+            // 場所ドロップダウンをリセット（プリセットはlat/lonを直接復元）
+            document.getElementById('prefSelect').value = '';
+            document.getElementById('citySelect').innerHTML = '<option value="">市区町村</option>';
+
+            // 氏名フィールドを復元
+            document.getElementById('clientName').value = p.name;
+
+            document.getElementById('birthYear').value = p.birthYear;
+            document.getElementById('birthMonth').value = p.birthMonth;
+            document.getElementById('birthDay').value = p.birthDay;
+            document.getElementById('birthHour').value = p.birthHour;
+            document.getElementById('birthMinute').value = p.birthMinute;
+            document.getElementById('lat').value = p.lat;
+            document.getElementById('lon').value = p.lon;
+            document.getElementById('latNS').value = p.latNS || 'N';
+            document.getElementById('lonEW').value = p.lonEW || 'E';
+            document.getElementById('timezone').value = p.timezone || '9';
+
+            // DMSモードの場合は同期
+            if (coordMode === 'dms') {
+                const lat = parseFloat(p.lat) || 0;
+                const lon = parseFloat(p.lon) || 0;
+                document.getElementById('latDeg').value = Math.floor(Math.abs(lat));
+                document.getElementById('latMin').value = Math.round((Math.abs(lat) % 1) * 60);
+                document.getElementById('lonDeg').value = Math.floor(Math.abs(lon));
+                document.getElementById('lonMin').value = Math.round((Math.abs(lon) % 1) * 60);
+                document.getElementById('latNS_dms').value = p.latNS || 'N';
+                document.getElementById('lonEW_dms').value = p.lonEW || 'E';
+            }
+        }
+
+        function deletePreset() {
+            const sel = document.getElementById('presetSelect');
+            const name = sel.value;
+            if (!name) { alert('削除するプリセットを選択してください。'); return; }
+            if (!confirm(`「${name}」を削除しますか？`)) return;
+
+            const presets = getPresets().filter(p => p.name !== name);
+            setPresets(presets);
+            refreshPresetSelect('');
+        }
+
+        // ページロード時にプリセットリストを復元
+        refreshPresetSelect('');
+
+        // --- 場所選択（都道府県・市区町村） ---
+        let japanCityData = null;
+
+        async function loadCityData() {
+            try {
+                const res = await fetch('/static/data/japan_cities.json');
+                japanCityData = await res.json();
+                const prefSel = document.getElementById('prefSelect');
+                for (const pref of Object.keys(japanCityData)) {
+                    const opt = document.createElement('option');
+                    opt.value = pref;
+                    opt.textContent = pref;
+                    prefSel.appendChild(opt);
+                }
+            } catch (e) {
+                console.error('City data load failed:', e);
+            }
+        }
+        loadCityData();
+
+        function onPrefChange() {
+            const citySel = document.getElementById('citySelect');
+            citySel.innerHTML = '<option value="">市区町村</option>';
+            const pref = document.getElementById('prefSelect').value;
+            if (!pref || !japanCityData || !japanCityData[pref]) return;
+            for (const city of japanCityData[pref]) {
+                const opt = document.createElement('option');
+                opt.value = city.name;
+                opt.textContent = city.name;
+                citySel.appendChild(opt);
+            }
+        }
+
+        function onCityChange() {
+            const pref = document.getElementById('prefSelect').value;
+            const cityName = document.getElementById('citySelect').value;
+            if (!pref || !cityName || !japanCityData) return;
+            const city = japanCityData[pref].find(c => c.name === cityName);
+            if (!city) return;
+
+            // 緯度・経度を自動入力
+            document.getElementById('lat').value = city.lat;
+            document.getElementById('lon').value = city.lng;
+            document.getElementById('latNS').value = 'N';
+            document.getElementById('lonEW').value = 'E';
+            document.getElementById('timezone').value = '9';  // 日本は常にJST
+
+            // DMSモード時は度分フィールドも同期
+            if (coordMode === 'dms') {
+                document.getElementById('latDeg').value = Math.floor(city.lat);
+                document.getElementById('latMin').value = Math.round((city.lat % 1) * 60);
+                document.getElementById('lonDeg').value = Math.floor(city.lng);
+                document.getElementById('lonMin').value = Math.round((city.lng % 1) * 60);
+                document.getElementById('latNS_dms').value = 'N';
+                document.getElementById('lonEW_dms').value = 'E';
+            }
+        }
+    </script>
+</body>
+</html>
