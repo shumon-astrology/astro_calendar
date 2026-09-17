@@ -337,5 +337,35 @@ class TestSampleChart(unittest.TestCase):
         self.assertIn("almuten_tie", d["angles"]["ascendant"])
 
 
+class TestSchemaV1(unittest.TestCase):
+    """schema/SCHEMA_chart_v1.json（draft 2020-12、正本は デジタル販売/10_schema の参照コピー）"""
+
+    @classmethod
+    def setUpClass(cls):
+        from jsonschema import Draft202012Validator
+        with open(os.path.join(ROOT, "schema", "SCHEMA_chart_v1.json"), encoding="utf-8") as f:
+            schema = json.load(f)
+        Draft202012Validator.check_schema(schema)
+        cls.validator = Draft202012Validator(schema)
+
+    def assertValid(self, instance):
+        errors = sorted(self.validator.iter_errors(instance), key=lambda e: list(e.absolute_path))
+        detail = "\n".join(f"{'/'.join(map(str, e.absolute_path)) or '(root)'}: {e.message}"
+                           for e in errors)
+        self.assertEqual(len(errors), 0, detail)
+
+    def test_sample_chart_v1_conforms(self):
+        with open(os.path.join(ROOT, "schema", "sample_chart_v1.json"), encoding="utf-8") as f:
+            self.assertValid(json.load(f))
+
+    def test_other_birth_data_conforms(self):
+        # 2000-01-01 00:00 UTC+0、緯度 51.5 経度 −0.1（ロンドン）。
+        # CLI の --json は UTC+9 固定のため、同じ処理（json.dumps(to_json(chart))）を直接呼ぶ
+        c = nc.calculate_classical_chart(2000, 1, 1, 0, 0, 51.5, -0.1, tz_offset=0.0)
+        out = json.loads(json.dumps(nc.to_json(c), ensure_ascii=False))
+        self.assertEqual(out["birth_data"]["tz_offset"], 0.0)
+        self.assertValid(out)
+
+
 if __name__ == "__main__":
     unittest.main()
