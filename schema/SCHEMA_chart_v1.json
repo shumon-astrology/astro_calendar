@@ -4,7 +4,7 @@
   "title": "SCHEMA_chart_v1 — Classical natal chart JSON (AmanJyoshi / traditionalchart)",
   "description": "Contract between the calculator (astro_calendar/natal_classical.py, branch classical) and the reading prompts (30_prompts/PROMPT_*_en_v*.md). The calculator WRITES this file; a prompt READS it and interprets only. The AI must never recompute positions, dignities, scores, houses or aspects — every needed value is present here. Conventions: tropical zodiac; seven classical planets; Regiomontanus houses with Lilly's 5° cusp rule; Dorothean triplicities (+3 to the sect ruler only); Egyptian terms (operative) with Ptolemaic/Lilly terms as audit only; Chaldean faces; mean node; chart sect by the ASC–DSC horizon; peregrine −5, cancelled by sign/exaltation/mixed mutual reception, never added on top of detriment/fall; almuten ties at a single degree resolved by house position, almuten figuris ties reported as joint almutens. Rule source: 20_method/METHOD_本質的品位表_v1.md (v1.2, 2026-09-17). Verification status: structure and dignity tables [確定・照合済み]; accidental-dignity codes, orbs, planetary-hour details [未照合 against CA Book I]; Ptolemaic term table [未照合]; house-cusp almutens [未実装・任意].",
   "x-project": "デジタル販売 / 10_schema",
-  "x-schema_file_version": "v1 (2026-09-17)",
+  "x-schema_file_version": "v1 (2026-09-17, rev.2: planetary_day_hour may be null in polar regions)",
   "x-sample": "astro_calendar/schema/sample_chart_v1.json (1985-07-21 14:30 JST, Tokyo; commit d55e83c)",
   "x-method": "20_method/METHOD_本質的品位表_v1.md v1.2",
   "type": "object",
@@ -1022,59 +1022,67 @@
       "additionalProperties": true
     },
     "planetary_day_hour": {
-      "type": "object",
-      "properties": {
-        "day_ruler": {
-          "type": "string",
-          "enum": [
-            "Saturn",
-            "Jupiter",
-            "Mars",
-            "Sun",
-            "Venus",
-            "Mercury",
-            "Moon"
-          ]
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "day_ruler": {
+              "type": "string",
+              "enum": [
+                "Saturn",
+                "Jupiter",
+                "Mars",
+                "Sun",
+                "Venus",
+                "Mercury",
+                "Moon"
+              ]
+            },
+            "hour_ruler": {
+              "type": "string",
+              "enum": [
+                "Saturn",
+                "Jupiter",
+                "Mars",
+                "Sun",
+                "Venus",
+                "Mercury",
+                "Moon"
+              ]
+            },
+            "hour_index": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 24,
+              "description": "Planetary hour number counted from sunrise (1–12 day hours, 13–24 night hours)."
+            },
+            "is_daytime": {
+              "type": "boolean"
+            },
+            "sunrise": {
+              "type": "string",
+              "description": "Local time \"YYYY-MM-DD HH:MM\"."
+            },
+            "sunset": {
+              "type": "string"
+            }
+          },
+          "description": "Planetary day and hour (Chaldean order from sunrise). [未照合] sunrise/sunset definition (apparent vs true) not yet documented.",
+          "required": [
+            "day_ruler",
+            "hour_ruler",
+            "hour_index",
+            "is_daytime",
+            "sunrise",
+            "sunset"
+          ],
+          "additionalProperties": true
         },
-        "hour_ruler": {
-          "type": "string",
-          "enum": [
-            "Saturn",
-            "Jupiter",
-            "Mars",
-            "Sun",
-            "Venus",
-            "Mercury",
-            "Moon"
-          ]
-        },
-        "hour_index": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 24,
-          "description": "Planetary hour number counted from sunrise (1–12 day hours, 13–24 night hours)."
-        },
-        "is_daytime": {
-          "type": "boolean"
-        },
-        "sunrise": {
-          "type": "string",
-          "description": "Local time \"YYYY-MM-DD HH:MM\"."
-        },
-        "sunset": {
-          "type": "string"
+        {
+          "type": "null"
         }
-      },
-      "description": "Planetary day and hour (Chaldean order from sunrise). [未照合] sunrise/sunset definition (apparent vs true) not yet documented.",
-      "required": [
-        "day_ruler",
-        "hour_ruler",
-        "hour_index",
-        "is_daytime",
-        "sunrise",
-        "sunset"
       ],
-      "additionalProperties": true
+      "description": "Planetary day/hour object, or null when sunrise/sunset cannot be computed (polar day or night). When null, skip the planetary-hour step and say why."
     },
     "angles": {
       "type": "object",

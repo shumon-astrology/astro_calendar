@@ -366,6 +366,14 @@ class TestSchemaV1(unittest.TestCase):
         self.assertEqual(out["birth_data"]["tz_offset"], 0.0)
         self.assertValid(out)
 
+    def test_polar_chart_without_planetary_hour_conforms(self):
+        # 2020-06-21 00:00 UTC+1、78.22N 15.63E（ロングイェールビーン）：白夜で日の出・日の入が
+        # 求まらず planetary_day_hour は null（スキーマ rev.2 で許容）
+        c = nc.calculate_classical_chart(2020, 6, 21, 0, 0, 78.22, 15.63, tz_offset=1.0)
+        out = json.loads(json.dumps(nc.to_json(c), ensure_ascii=False))
+        self.assertIsNone(out["planetary_day_hour"])
+        self.assertValid(out)
+
 
 if __name__ == "__main__":
     unittest.main()
