@@ -27,6 +27,8 @@ natal.py（モダン）との違い:
     print(nc.generate_classical_text(chart))
 """
 
+import datetime
+
 import swisseph as swe
 
 import astro_calendar as ac
@@ -1011,9 +1013,17 @@ def _sun_rise_set(jd, lat, lon, rise=True):
     return None
 
 
-def planetary_hour(jd, lat, lon):
+def jd_to_local_datetime(jd, tz_offset):
+    """ユリウス日（UT）を出生地の現地時刻（UTC＋tz_offset 時間）の datetime に変換"""
+    year, month, day, hour_ut = swe.revjul(jd)
+    base = datetime.datetime(year, month, day)
+    return base + datetime.timedelta(hours=hour_ut + tz_offset)
+
+
+def planetary_hour(jd, lat, lon, tz_offset=9.0):
     """
     出生時刻の曜日主星（Lord of the Day）と時刻主星（Lord of the Hour）。
+    日の出・日の入の表示と曜日の判定は出生地の現地時刻（tz_offset）で行う。
 
     惑星の一日は日の出に始まり、昼夜それぞれを12等分した不等時間を用いる。
     時刻主星はカルデア順（♄♃♂☉♀☿☽）の循環 ＝ リリー本文
@@ -1048,8 +1058,8 @@ def planetary_hour(jd, lat, lon):
         index = 12 + int((jd - sunset) / hour_len)
     index = max(0, min(23, index))
 
-    # 惑星の一日の曜日（日の出時点の日付で判定）
-    dt_sunrise = ac.jd_to_datetime_jst(sunrise)
+    # 惑星の一日の曜日（出生地の現地時刻での日の出の日付で判定）
+    dt_sunrise = jd_to_local_datetime(sunrise, tz_offset)
     day_ruler = WEEKDAY_RULERS[dt_sunrise.weekday()]
 
     start = HOUR_ORDER.index(day_ruler)
@@ -1062,8 +1072,8 @@ def planetary_hour(jd, lat, lon):
         "hour_ruler_ja": PLANET_JA[hour_ruler],
         "hour_index": index + 1,
         "is_daytime": is_daytime,
-        "sunrise_str": ac.format_date_file2(ac.jd_to_datetime_jst(sunrise)),
-        "sunset_str": ac.format_date_file2(ac.jd_to_datetime_jst(sunset)),
+        "sunrise_str": ac.format_date_file2(dt_sunrise),
+        "sunset_str": ac.format_date_file2(jd_to_local_datetime(sunset, tz_offset)),
     }
 
 
@@ -1558,7 +1568,7 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
         "aspects": aspects,
         "almuten": almuten,
         "sect_light": sect_light,
-        "planetary_hour": planetary_hour(jd, lat, lon),
+        "planetary_hour": planetary_hour(jd, lat, lon, tz_offset),
         "sect": dict(sect,
                      label_ja="昼のチャート" if is_day else "夜のチャート",
                      moon_increasing=increasing),

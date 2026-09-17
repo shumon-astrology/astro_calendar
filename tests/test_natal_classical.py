@@ -302,6 +302,54 @@ class TestSect(unittest.TestCase):
         self.assertEqual(nc.to_json(c)["sect"]["borderline"], True)
 
 
+class TestPlanetaryHour(unittest.TestCase):
+    """日の出・日の入と曜日は出生地の現地時刻（tz_offset）で扱う"""
+
+    def assertLocalTimes(self, ph, date):
+        sr_date, sr_time = ph["sunrise_str"].split()
+        ss_date, ss_time = ph["sunset_str"].split()
+        self.assertEqual(sr_date, date)
+        self.assertEqual(ss_date, date)
+        self.assertTrue("05:00" <= sr_time < "08:00", ph["sunrise_str"])
+        self.assertTrue("16:00" <= ss_time < "20:00", ph["sunset_str"])
+
+    def test_stockholm_utc_plus_1(self):
+        # 1915-08-29 03:30 CET：日の出前なので惑星の一日は前日（土曜）
+        # 外部計算（NOAA 近似）では 8/28 の日の出 04:34・日の入 19:04 CET
+        c = nc.calculate_classical_chart(1915, 8, 29, 3, 30, 59.3333, 18.05, tz_offset=1.0)
+        ph = c["planetary_hour"]
+        self.assertEqual(ph["sunrise_str"], "1915-08-28 04:33")
+        self.assertEqual(ph["sunset_str"], "1915-08-28 19:02")
+        self.assertEqual(ph["day_ruler"], "Saturn")
+        self.assertFalse(ph["is_daytime"])
+        # 範囲チェック（05〜08時／16〜20時）は日の出が 05 時前になる夏の北欧では
+        # 満たせないため、日没のみ確認する
+        self.assertTrue("16:00" <= ph["sunset_str"].split()[1] < "20:00")
+
+    def test_sydney_utc_plus_10(self):
+        # 1968-10-12 13:00 AEST（土曜）。NOAA 近似では日の出 05:16・日の入 18:05
+        c = nc.calculate_classical_chart(1968, 10, 12, 13, 0, -33.8667, 151.2167, tz_offset=10.0)
+        ph = c["planetary_hour"]
+        self.assertLocalTimes(ph, "1968-10-12")
+        self.assertEqual(ph["sunrise_str"], "1968-10-12 05:19")
+        self.assertEqual(ph["day_ruler"], "Saturn")
+        self.assertTrue(ph["is_daytime"])
+
+    def test_day_ruler_uses_local_date(self):
+        # ホノルル 2000-03-01 05:00 HST（日の出前）→ 惑星の一日は 2/29（火曜）＝火星。
+        # JST で判定すると日の出が 3/1 になり水星と誤る
+        c = nc.calculate_classical_chart(2000, 3, 1, 5, 0, 21.3, -157.85, tz_offset=-10.0)
+        ph = c["planetary_hour"]
+        self.assertLocalTimes(ph, "2000-02-29")
+        self.assertEqual(ph["day_ruler"], "Mars")
+
+    def test_tokyo_unchanged(self):
+        c = nc.calculate_classical_chart(1985, 7, 21, 14, 30, 35.6895, 139.6917)
+        ph = c["planetary_hour"]
+        self.assertEqual((ph["sunrise_str"], ph["sunset_str"], ph["day_ruler"]),
+                         ("1985-07-21 04:41", "1985-07-21 18:53", "Sun"))
+
+
 class TestSampleChart(unittest.TestCase):
 
     def test_sample_v1_is_current(self):
