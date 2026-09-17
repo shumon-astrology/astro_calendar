@@ -189,15 +189,16 @@ TRIPLICITY_TABLES = {
 }
 DEFAULT_TRIPLICITY = "dorothean"
 
-# エジプト式ターム（ドロテウス版）＝ TABLE_SOURCES["terms"]（要照合）
-# Lilly 表（プトレマイオス式）とは値が異なる。実務がエジプト式のため既定とする
+# エジプト式ターム（ドロテウス版）＝ 運用値 ＝ TABLE_SOURCES["terms"]
+# METHOD_本質的品位表_v1.md §4.1 と全12行一致（2026-09-17 照合）。
+# 初版は Ari〜Can が Lilly 値、Leo が混成だったため置き換えた
 # 各サイン [(上限度数, 主星), ...]
 TERMS_EGYPTIAN = [
-    [(6, "Jupiter"), (14, "Venus"), (21, "Mercury"), (26, "Mars"), (30, "Saturn")],      # Ari
-    [(8, "Venus"), (15, "Mercury"), (22, "Jupiter"), (26, "Saturn"), (30, "Mars")],      # Tau
-    [(7, "Mercury"), (14, "Jupiter"), (21, "Venus"), (25, "Mars"), (30, "Saturn")],      # Gem
-    [(6, "Mars"), (13, "Jupiter"), (20, "Mercury"), (27, "Venus"), (30, "Saturn")],      # Can
-    [(6, "Jupiter"), (13, "Venus"), (19, "Saturn"), (25, "Mercury"), (30, "Mars")],      # Leo
+    [(6, "Jupiter"), (12, "Venus"), (20, "Mercury"), (25, "Mars"), (30, "Saturn")],      # Ari
+    [(8, "Venus"), (14, "Mercury"), (22, "Jupiter"), (27, "Saturn"), (30, "Mars")],      # Tau
+    [(6, "Mercury"), (12, "Jupiter"), (17, "Venus"), (24, "Mars"), (30, "Saturn")],      # Gem
+    [(7, "Mars"), (13, "Venus"), (19, "Mercury"), (26, "Jupiter"), (30, "Saturn")],      # Can
+    [(6, "Jupiter"), (11, "Venus"), (18, "Saturn"), (24, "Mercury"), (30, "Mars")],      # Leo
     [(7, "Mercury"), (17, "Venus"), (21, "Jupiter"), (28, "Mars"), (30, "Saturn")],      # Vir
     [(6, "Saturn"), (14, "Mercury"), (21, "Jupiter"), (28, "Venus"), (30, "Mars")],      # Lib
     [(7, "Mars"), (11, "Venus"), (19, "Mercury"), (24, "Jupiter"), (30, "Saturn")],      # Sco
@@ -207,14 +208,39 @@ TERMS_EGYPTIAN = [
     [(12, "Venus"), (16, "Jupiter"), (19, "Mercury"), (28, "Mars"), (30, "Saturn")],     # Pis
 ]
 
-# フェイス（デカン）＝ カルデア順の循環 ＝ TABLE_SOURCES["faces"]（未照合）
+# プトレマイオス式ターム（Lilly 版）＝ 監査専用。得点・アルムテン・レセプションには使わない
+# ＝ TABLE_SOURCES["terms_audit"]（METHOD §4.2 の値。CA Book I と未照合）
+TERMS_PTOLEMAIC = [
+    [(6, "Jupiter"), (14, "Venus"), (21, "Mercury"), (26, "Mars"), (30, "Saturn")],      # Ari
+    [(8, "Venus"), (15, "Mercury"), (22, "Jupiter"), (26, "Saturn"), (30, "Mars")],      # Tau
+    [(7, "Mercury"), (14, "Jupiter"), (21, "Venus"), (25, "Mars"), (30, "Saturn")],      # Gem
+    [(6, "Mars"), (13, "Jupiter"), (20, "Mercury"), (27, "Venus"), (30, "Saturn")],      # Can
+    [(6, "Saturn"), (13, "Mercury"), (19, "Venus"), (25, "Jupiter"), (30, "Mars")],      # Leo
+    [(7, "Mercury"), (13, "Venus"), (18, "Jupiter"), (24, "Mars"), (30, "Saturn")],      # Vir
+    [(6, "Saturn"), (11, "Mercury"), (19, "Jupiter"), (24, "Venus"), (30, "Mars")],      # Lib
+    [(6, "Mars"), (14, "Jupiter"), (21, "Venus"), (27, "Mercury"), (30, "Saturn")],      # Sco
+    [(8, "Jupiter"), (14, "Venus"), (19, "Mercury"), (25, "Saturn"), (30, "Mars")],      # Sag
+    [(6, "Venus"), (12, "Mercury"), (19, "Jupiter"), (25, "Mars"), (30, "Saturn")],      # Cap
+    [(6, "Saturn"), (12, "Mercury"), (20, "Venus"), (25, "Jupiter"), (30, "Mars")],      # Aqu
+    [(8, "Venus"), (14, "Jupiter"), (20, "Mercury"), (26, "Mars"), (30, "Saturn")],      # Pis
+]
+
+TERMS_TABLES = {
+    "egyptian": TERMS_EGYPTIAN,
+    "ptolemaic_lilly": TERMS_PTOLEMAIC,
+}
+DEFAULT_TERMS = "egyptian"
+TERMS_AUDIT = "ptolemaic_lilly"
+
+# フェイス（デカン）＝ カルデア順の循環 ＝ TABLE_SOURCES["faces"]
 CHALDEAN_ORDER = ["Mars", "Sun", "Venus", "Mercury", "Moon", "Saturn", "Jupiter"]
 FACES = [
     [CHALDEAN_ORDER[(si * 3 + k) % 7] for k in range(3)]
     for si in range(12)
 ]
 
-# 品位の得点 ＝ TABLE_SOURCES["dignity_scores"]（未照合）
+# 品位の得点 ＝ TABLE_SOURCES["dignity_scores"]
+# トリプリシティはセクト主星のみ、ペレグリンはデトリメント／フォールと重複加算しない
 DIGNITY_SCORE = {
     "domicile": 5, "exaltation": 4, "triplicity": 3, "term": 2, "face": 1,
     "detriment": -5, "fall": -4, "peregrine": -5,
@@ -245,56 +271,95 @@ UNVERIFIED_NOTE = (
     "値は一般に流布する Lilly 版の表に基づく"
 )
 
-TABLE_SOURCES = {
-    "terms": {
-        "table": "Egyptian (Dorothean) terms",
-        "table_ja": "エジプト式ターム（ドロテウス版）",
-        "label": "プロジェクト慣行",
-        "citation": None,
-        "verified": False,
-        "reference": "三河氏の講義資料の必須品位表（ファイル名は未取得）",
-        "note": ("鑑定実務がエジプト式を採る"
-                 "（鑑定依頼人台帳/出生図鑑定_Case003_20260901.md）ため既定とする。"
-                 "Lilly 表はプトレマイオス式で値が異なるが、本モジュールでは実装しない。"
-                 "照合先は Book I ではなく講義資料の必須品位表。ファイル提供後に照合し "
-                 "citation を記入すること"),
-    },
-    "faces": {
-        "table": "Faces (Chaldean order)",
-        "table_ja": "フェイス（カルデア順）",
-        "label": "リリー本文",
-        "citation": None,
-        "verified": False,
-        "reference": "CA Book I 必須品位表（KB索引では CA_DH pp.45–47）",
-        "note": ("カルデア順の循環のため Book I 表と一致するはず。"
-                 "Desktop 配下の CA_BookI_II_fulltext.md に OS のプライバシー設定で"
-                 "アクセスできず未照合"),
-    },
-    "triplicity": {
-        "table": "Dorothean triplicity rulers (day / night / participating)",
-        "table_ja": "ドロセウス式トリプリシティ（昼・夜・参加）",
-        "label": "プロジェクト慣行",
-        "citation": None,
+# 品位表の照合先（正本）。§番号は METHOD 文書の節
+METHOD_DOC = "METHOD_本質的品位表_v1.md"
+METHOD_REFERENCE = "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)"
+METHOD_VERIFIED_NOTE = f"{METHOD_DOC}（v1.1）と機械照合し全行一致（2026-09-17）"
+
+
+def _method_source(table, table_ja, label, section, note=None):
+    """METHOD 文書と照合済みの表の出所ラベル"""
+    return {
+        "table": table,
+        "table_ja": table_ja,
+        "label": label,
+        "citation": f"{METHOD_DOC} §{section}",
         "verified": True,
-        "note": ("ホラリー実務が参加星を用いるため既定に採用"
-                 "（ケースNo002_失せ物_バイオリン弓_20260827.md §ラディカリティ①・§Collection）。"
-                 "Lilly 版2主星表は triplicity='lilly' で選択可（こちらは要照合）"),
-    },
-    "domicile_exaltation": {
-        "table": "Domicile / exaltation / detriment / fall",
-        "table_ja": "ドミサイル・イグザルテーション・デトリメント・フォール",
+        "reference": METHOD_REFERENCE,
+        "note": note or METHOD_VERIFIED_NOTE,
+    }
+
+
+TABLE_SOURCES = {
+    "terms": _method_source(
+        "Egyptian (Dorothean) terms", "エジプト式ターム（ドロテウス版）",
+        "プロジェクト慣行", "4.1",
+        METHOD_VERIFIED_NOTE + "。初版の Ari〜Leo の5行（Lilly 値の混入）を置換済み。"
+        "鑑定実務（鑑定依頼人台帳/出生図鑑定_Case003_20260901.md）がエジプト式のため運用値とする"),
+    "terms_audit": {
+        "table": "Ptolemaic terms (Lilly) — audit only, not scored",
+        "table_ja": "プトレマイオス式ターム（Lilly 版）— 監査専用・得点に不使用",
         "label": "リリー本文",
         "citation": None,
         "verified": False,
-        "note": UNVERIFIED_NOTE,
+        "reference": f"{METHOD_REFERENCE} §4.2",
+        "note": ("値は METHOD §4.2 に一致。CA Book I 品位表（KB索引 CA_DH pp.45–47）との"
+                 "照合が済むまで verified=false。"
+                 "Case003（出生図鑑定_Case003_20260901.md §ターム）の2例で本表の判定と一致："
+                 "M の☿♏15°41′（エジプト式＝☿自ターム／本表＝♀ターム→ペレグリン）、"
+                 "M の♂♑28°30′（エジプト式＝♂自ターム／本表＝♄ターム）"),
     },
-    "dignity_scores": {
-        "table": "Essential dignity scores (5/4/3/2/1, -5/-4/-5)",
-        "table_ja": "本質的品位の得点",
-        "label": "リリー本文",
-        "citation": None,
-        "verified": False,
-        "note": UNVERIFIED_NOTE,
+    "triplicity": _method_source(
+        "Dorothean triplicity rulers (day / night / participating)",
+        "ドロセウス式トリプリシティ（昼・夜・関与）", "プロジェクト慣行", "3",
+        METHOD_VERIFIED_NOTE + "。得点はセクト主星のみ +3、関与星は加点なし"
+        "（3主星は triplicity_rulers に出力）。"
+        "関与星はホラリー実務のレセプション判定で用いる"
+        "（ケースNo002_失せ物_バイオリン弓_20260827.md §ラディカリティ①・§Collection）。"
+        "Lilly 版2主星表は triplicity='lilly' で選択可（こちらは未照合）"),
+    "faces": _method_source("Faces (Chaldean order)", "フェイス（カルデア順）",
+                            "リリー本文", "5"),
+    "domicile": _method_source("Domicile (rulership)", "ルーラーシップ",
+                               "リリー本文", "1"),
+    "exaltation": _method_source(
+        "Exaltation (with degrees)", "イグザルテーション（度数つき）", "リリー本文", "2",
+        METHOD_VERIFIED_NOTE + "（7天体・度数を含む）。ノードの高揚は得点に用いない"),
+    "detriment": _method_source("Detriment", "デトリメント", "リリー本文", "6"),
+    "fall": _method_source("Fall", "フォール", "リリー本文", "7",
+                           METHOD_VERIFIED_NOTE + "（7天体のみ）"),
+    "dignity_scores": _method_source(
+        "Essential dignity scores (5/4/3/2/1, -5/-4/-5)", "本質的品位の得点",
+        "リリー本文", "8.1",
+        METHOD_VERIFIED_NOTE + "。ペレグリンの扱いは §8.2 の決定①〜③に従う"),
+    "peregrine": {
+        "table": "Peregrine rule (Lilly + Lehman)",
+        "table_ja": "ペレグリンの定義（Lilly＋Lehman）",
+        "label": "プロジェクト慣行",
+        "citation": f"{METHOD_DOC} §8.2",
+        "verified": True,
+        "reference": METHOD_REFERENCE,
+        "note": ("決定①〜③（2026-09-17）：−5／サインまたはイグザルテーションの"
+                 "ミューチュアル・レセプションで解除／デトリメント・フォールと重複加算しない"),
+    },
+    "almuten_tie": {
+        "table": "Almuten tie-break by house position",
+        "table_ja": "アルムテン同点時のハウス位置による決定",
+        "label": "プロジェクト慣行",
+        "citation": f"{METHOD_DOC} §10",
+        "verified": True,
+        "reference": METHOD_REFERENCE,
+        "note": ("決定④（2026-09-17）：アングル＞サクシーデント＞ケーデント"
+                 "（カスプ手前5°の繰り上げ適用）。なお同点なら almuten_tie=true で候補を列挙"),
+    },
+    "sect": {
+        "table": "Sect by horizon (ASC–DSC)",
+        "table_ja": "昼夜判定（ASC–DSC 地平線基準）",
+        "label": "プロジェクト慣行",
+        "citation": f"{METHOD_DOC} §9",
+        "verified": True,
+        "reference": METHOD_REFERENCE,
+        "note": ("太陽が ASC–DSC 軸より上（第7〜12ハウス側）なら昼図。"
+                 "太陽の実高度は sun_altitude に併記し、判定が食い違えば borderline=true"),
     },
     "orbs": {
         "table": "Planetary orbs and moieties",
@@ -365,14 +430,18 @@ NOCTURNAL_PLANETS = ("Moon", "Venus", "Mars")
 # 本質的品位の判定
 # ==============================================================================
 
-def term_ruler(lon):
-    """タームの主星を返す ＝ エジプト式ターム（TABLE_SOURCES["terms"]）"""
+def term_ruler(lon, table=None):
+    """
+    タームの主星を返す。既定はエジプト式（TABLE_SOURCES["terms"]）。
+    table に TERMS_PTOLEMAIC を渡すと監査用のプトレマイオス式で判定する
+    """
+    table = table or TERMS_TABLES[DEFAULT_TERMS]
     si = sign_of(lon)
     d = deg_in_sign(lon)
-    for limit, ruler in TERMS_EGYPTIAN[si]:
+    for limit, ruler in table[si]:
         if d < limit:
             return ruler
-    return TERMS_EGYPTIAN[si][-1][1]
+    return table[si][-1][1]
 
 
 def face_ruler(lon):
@@ -382,33 +451,98 @@ def face_ruler(lon):
 
 
 def triplicity_rulers(si, table=None):
-    """サインのトリプリシティ主星 (昼, 夜, 参加) を返す。既定はドロセウス式"""
+    """サインのトリプリシティ主星 (昼, 夜, 関与) を返す。既定はドロセウス式"""
     table = table or TRIPLICITY_TABLES[DEFAULT_TRIPLICITY]
     return table[element_of(si)]
 
 
-def essential_dignity(lon, planet, is_day, trip_table=None):
-    """
-    ある黄経における惑星の本質的品位を判定する。
+def sign_dignity_kinds(planet, si):
+    """planet がサイン si に対して持つ「サイン」「イグザルテーション」の品位"""
+    kinds = []
+    if DOMICILE_BY_SIGN[si] == planet:
+        kinds.append("sign")
+    if si in EXALT_BY_SIGN and EXALT_BY_SIGN[si][0] == planet:
+        kinds.append("exaltation")
+    return kinds
 
+
+_MR_ORDER = ["mutual_reception_sign", "mutual_reception_exaltation",
+             "mutual_reception_mixed"]
+
+
+def mutual_receptions(planet, positions):
+    """
+    planet と他の古典6天体との、サインまたはイグザルテーションによる
+    ミューチュアル・レセプションを列挙する（ペレグリン解除の判定用）
+    ＝ METHOD §8.2 決定②（Lehman）。トリプリシティ・ターム・フェイスによるものは含めない。
+    アスペクトの有無は問わない ＝ プロジェクト慣行
+
+    Parameters:
+        positions: {惑星名: 黄経}（7天体）
     Returns:
-        dict: labels（成立した品位のリスト）, score, peregrine, rulers
+        [{"with": 相手, "type": "mutual_reception_sign"|"..._exaltation"|"..._mixed"}]
+        （type は sign＝双方がサイン、exaltation＝双方が高揚、mixed＝サインと高揚）
+    """
+    my_si = sign_of(positions[planet])
+    found = []
+    for other, o_lon in positions.items():
+        if other == planet:
+            continue
+        o_si = sign_of(o_lon)
+        mine = sign_dignity_kinds(planet, o_si)     # planet が相手を受容
+        theirs = sign_dignity_kinds(other, my_si)   # 相手が planet を受容
+        types = set()
+        for a in mine:
+            for b in theirs:
+                types.add("mutual_reception_" + (a if a == b else "mixed"))
+        if types:
+            found.append({"with": other,
+                          "type": min(types, key=_MR_ORDER.index)})
+    found.sort(key=lambda r: (_MR_ORDER.index(r["type"]), PLANET_NAMES.index(r["with"])))
+    return found
+
+
+PEREGRINE_SCORE_NOTE = (
+    "peregrine but not scored: detriment/fall already counted "
+    "(no double penalty, METHOD §8.2 decision 3)"
+)
+
+
+def essential_dignity(lon, planet, is_day, trip_table=None, receptions=None):
+    """
+    ある黄経における惑星の本質的品位を判定する ＝ METHOD §1〜§8
+
+    - トリプリシティはセクト主星（昼図＝昼主星、夜図＝夜主星）にのみ +3。
+      関与星は加点しない（3主星は triplicity_rulers に出す）
+    - ペレグリン＝品位（上記基準）なし、かつサイン／イグザルテーションの
+      ミューチュアル・レセプションなし。−5。
+      レセプションがあれば解除（peregrine_cancelled_by に理由）。
+      デトリメント／フォールがある場合は −5 を重ねない（score_note に注記）
+
+    Parameters:
+        receptions: mutual_receptions() の結果。None ならレセプションなしとして扱う
+    Returns:
+        dict: labels（成立した品位）, debilities, peregrine, peregrine_cancelled_by,
+              score, score_note, rulers, triplicity_rulers, term_audit ほか
     """
     trip_table = trip_table or TRIPLICITY_TABLES[DEFAULT_TRIPLICITY]
+    receptions = receptions or []
     si = sign_of(lon)
     d = deg_in_sign(lon)
 
     day_l, night_l, part_l = triplicity_rulers(si, trip_table)
     trip_ruler = day_l if is_day else night_l
+    term_l = term_ruler(lon)
+    term_audit_l = term_ruler(lon, TERMS_TABLES[TERMS_AUDIT])
 
     labels = []
     if DOMICILE_BY_SIGN[si] == planet:
         labels.append("domicile")
     if si in EXALT_BY_SIGN and EXALT_BY_SIGN[si][0] == planet:
         labels.append("exaltation")
-    if planet == trip_ruler or (part_l is not None and planet == part_l):
+    if planet == trip_ruler:
         labels.append("triplicity")
-    if term_ruler(lon) == planet:
+    if term_l == planet:
         labels.append("term")
     if face_ruler(lon) == planet:
         labels.append("face")
@@ -419,10 +553,17 @@ def essential_dignity(lon, planet, is_day, trip_table=None):
     if si in FALL_BY_SIGN and FALL_BY_SIGN[si][0] == planet:
         debilities.append("fall")
 
-    # ペレグリン＝いかなる本質的品位も持たない（デトリメント／フォールとは別勘定）
-    peregrine = (not labels) and (not debilities)
+    peregrine = not labels
+    cancelled_by = None
+    score_note = None
+    if peregrine and receptions:
+        peregrine = False
+        cancelled_by = receptions[0]["type"]
     if peregrine:
-        debilities.append("peregrine")
+        if debilities:
+            score_note = PEREGRINE_SCORE_NOTE
+        else:
+            debilities.append("peregrine")
 
     score = sum(DIGNITY_SCORE[l] for l in labels + debilities)
 
@@ -432,58 +573,143 @@ def essential_dignity(lon, planet, is_day, trip_table=None):
         "labels": labels,
         "debilities": debilities,
         "peregrine": peregrine,
+        "peregrine_cancelled_by": cancelled_by,
+        "mutual_receptions": receptions,
         "score": score,
+        "score_note": score_note,
         "rulers": {
             "domicile": DOMICILE_BY_SIGN[si],
             "exaltation": EXALT_BY_SIGN.get(si, (None, None))[0],
             "triplicity": trip_ruler,
-            "triplicity_participating": part_l,
-            "term": term_ruler(lon),
+            "term": term_l,
             "face": face_ruler(lon),
+        },
+        "triplicity_rulers": {
+            "day": day_l,
+            "night": night_l,
+            "participating": part_l,
+            "sect_ruler": trip_ruler,   # +3 を受けるのはこの星のみ
+        },
+        "term_audit": {
+            "table": TERMS_AUDIT,
+            "ruler": term_audit_l,
+            "differs": term_audit_l != term_l,
+            "has_term": term_audit_l == planet,
         },
     }
 
 
-def almuten_of_degree(lon, is_day, trip_table=None):
+def dignity_points(lon, planet, is_day, trip_table=None):
+    """アルムテン用の品位点（+5/+4/+3/+2/+1 の合計。デビリティは含めない）"""
+    ed = essential_dignity(lon, planet, is_day, trip_table)
+    return sum(DIGNITY_SCORE[l] for l in ed["labels"])
+
+
+# ハウス位置の強さ（アルムテン同点の決定用）＝ METHOD §10 決定④
+ANGULAR_HOUSES = (1, 4, 7, 10)
+SUCCEDENT_HOUSES = (2, 5, 8, 11)
+
+
+def house_angularity(house):
+    """アングル＝3、サクシーデント＝2、ケーデント＝1（house が None なら 0）"""
+    if house in ANGULAR_HOUSES:
+        return 3
+    if house in SUCCEDENT_HOUSES:
+        return 2
+    return 1 if house else 0
+
+
+def resolve_almuten(scores, house_of=None):
     """
-    ある度数のアルムテン（最も品位の高い惑星）を求める。
-    各惑星の本質的品位得点（プラスのみ）を合算する ＝ プロジェクト慣行
+    得点表から勝者を決める ＝ METHOD §10 決定④
+    最高点が複数ならハウス位置（アングル＞サクシーデント＞ケーデント）で決め、
+    それでも同点なら almuten=None, almuten_tie=True とし候補を列挙する
+    （機械的にそれ以上は細分しない）
+
+    Parameters:
+        scores:   {惑星名: 点}（0 点の惑星は含めなくてよい）
+        house_of: {惑星名: ハウス番号（カスプ手前5°の繰り上げ適用済み）}
+    """
+    if not scores or max(scores.values()) <= 0:
+        return {"almuten": None, "almuten_tie": False, "candidates": [],
+                "tie_break": None}
+    top = max(scores.values())
+    cands = [n for n in PLANET_NAMES if scores.get(n) == top]
+    if len(cands) == 1:
+        return {"almuten": cands[0], "almuten_tie": False, "candidates": cands,
+                "tie_break": None}
+
+    house_of = house_of or {}
+    best = max(house_angularity(house_of.get(n)) for n in cands)
+    finalists = [n for n in cands if house_angularity(house_of.get(n)) == best]
+    if len(finalists) == 1 and best > 0:
+        return {"almuten": finalists[0], "almuten_tie": False, "candidates": cands,
+                "tie_break": "house_angularity"}
+    return {"almuten": None, "almuten_tie": True, "candidates": finalists,
+            "tie_break": "house_angularity" if best > 0 else None}
+
+
+def almuten_of_degree(lon, is_day, trip_table=None, house_of=None):
+    """
+    ある度数のアルムテン（最も品位の高い惑星）を求める ＝ METHOD §10
+    各惑星の本質的品位得点（プラスのみ）を合算し、同点は resolve_almuten() で決める
+
+    Returns:
+        dict: almuten, almuten_tie, candidates, tie_break, scores
     """
     scores = {}
     for name in PLANET_NAMES:
-        ed = essential_dignity(lon, name, is_day, trip_table)
-        s = sum(DIGNITY_SCORE[l] for l in ed["labels"])
+        s = dignity_points(lon, name, is_day, trip_table)
         if s:
             scores[name] = s
-    if not scores:
-        return None, {}
-    winner = max(scores.items(), key=lambda kv: kv[1])[0]
-    return winner, scores
+    result = resolve_almuten(scores, house_of)
+    result["scores"] = scores
+    return result
 
 
 # ==============================================================================
 # セクト・太陽光線・オリエンタル／オクシデンタル
 # ==============================================================================
 
-def is_day_chart(sun_lon, asc_lon, jd=None, lat=None, geo_lon=None):
-    """
-    昼のチャートか（太陽が地平線上）＝ リリー本文
+SECT_METHOD = "horizon_asc_dsc"
 
-    jd・緯度・経度が与えられた場合は太陽の実高度で判定する（厳密）。
-    与えられない場合は ASC からの黄道弧で近似する（ASC から黄道順に
-    0〜180° が地平線下＝第1〜6ハウス）。
-    極圏（|緯度| > 66.5°）では黄道弧による近似が実際の昼夜と食い違うため、
-    高度による判定を用いること。
+
+def is_day_chart(sun_lon, asc_lon):
     """
-    if jd is not None and lat is not None and geo_lon is not None:
-        try:
-            xx, _ = swe.calc_ut(jd, swe.SUN, ac.CALC_FLAGS)
-            _, true_alt, _ = swe.azalt(jd, swe.ECL2HOR, (geo_lon, lat, 0.0),
-                                       0.0, 0.0, (xx[0], xx[1], xx[2]))
-            return true_alt > 0.0
-        except Exception:
-            pass
+    昼のチャートか ＝ METHOD §9（講座資料の定義）
+    太陽が ASC–DSC 軸より上（ASC から黄道順に 180〜360°＝第7〜12ハウス側）なら昼図。
+    ハウス方式やカスプ手前5°の規則には依存しない
+    """
     return ((sun_lon - asc_lon) % 360.0) > 180.0
+
+
+def sun_altitude(jd, lat, geo_lon):
+    """太陽の実高度（度、大気差なし）。計算できなければ None"""
+    try:
+        xx, _ = swe.calc_ut(jd, swe.SUN, ac.CALC_FLAGS)
+        _, true_alt, _ = swe.azalt(jd, swe.ECL2HOR, (geo_lon, lat, 0.0),
+                                   0.0, 0.0, (xx[0], xx[1], xx[2]))
+        return true_alt
+    except Exception:
+        return None
+
+
+def sect_info(sun_lon, asc_lon, jd, lat, geo_lon):
+    """
+    セクト判定 ＝ METHOD §9
+    判定は地平線基準（horizon_asc_dsc）。太陽高度は補助として併記し、
+    高度による昼夜と食い違う場合（極圏・地平線際）は borderline=True
+    """
+    is_day = is_day_chart(sun_lon, asc_lon)
+    alt = sun_altitude(jd, lat, geo_lon)
+    alt_day = None if alt is None else alt > 0.0
+    return {
+        "method": SECT_METHOD,
+        "is_day": is_day,
+        "sun_altitude": alt,
+        "altitude_is_day": alt_day,
+        "borderline": alt_day is not None and alt_day != is_day,
+    }
 
 
 def solar_phase(planet_lon, sun_lon, planet_name):
@@ -603,9 +829,16 @@ def reception_between(p1, lon1, p2, lon2, is_day, trip_table=None):
     p1 が p2 を、どの品位で受容（レセプション）しているかを返す。
     「p1 が p2 を受容する」＝ p2 の在泊する度数を p1 が支配している
     ＝ リリー本文
+    トリプリシティによる受容はセクト主星に加えて関与星も認める
+    （METHOD §3：関与星は得点なし・レセプション判定には用いる）
     """
     ed = essential_dignity(lon2, p1, is_day, trip_table)
-    return ed["labels"]
+    labels = list(ed["labels"])
+    if ("triplicity" not in labels
+            and ed["triplicity_rulers"]["participating"] == p1):
+        pos = sum(1 for l in ("domicile", "exaltation") if l in labels)
+        labels.insert(pos, "triplicity")
+    return labels
 
 
 def find_classical_aspects(bodies, is_day, trip_table=None):
@@ -965,17 +1198,21 @@ HYLEGIACAL_LABELS = {
 }
 
 
-def almuten_figuris(places, is_day, accidental_scores=None, trip_table=None):
+def almuten_figuris(places, is_day, accidental_scores=None, trip_table=None,
+                    house_of=None):
     """
     5つのハイレジカル・ポイント（ASC・☉・☾・フォーチュン・プレナタルシジジー）
-    における本質的品位得点を合算し、出生図の総主星候補を求める。
-    同点は偶発的品位の高い方を上位とする ＝ プロジェクト慣行
+    における本質的品位得点を合算し、出生図の総主星候補を求める ＝ プロジェクト慣行
     （イブン・エズラ由来の慣行。Lilly は「Lord of the Geniture」を
       総合判断で定めるため、本表は判断材料として提示する）
+    同点はハウス位置で決め、なお同点なら almuten_tie ＝ METHOD §10 決定④
+    （偶発的品位の得点は参考として表に載せるが、順位の決定には用いない）
 
     Parameters:
-        places: {"asc": lon, "sun": lon, "moon": lon, "fortune": lon, "syzygy": lon}
+        places:   {"asc": lon, "sun": lon, "moon": lon, "fortune": lon, "syzygy": lon}
+        house_of: {惑星名: ハウス番号（カスプ手前5°の繰り上げ適用済み）}
     """
+    house_of = house_of or {}
     table = {}
     for name in PLANET_NAMES:
         row = {}
@@ -984,19 +1221,21 @@ def almuten_figuris(places, is_day, accidental_scores=None, trip_table=None):
             if lon is None:
                 row[key] = 0
                 continue
-            ed = essential_dignity(lon, name, is_day, trip_table)
-            s = sum(DIGNITY_SCORE[l] for l in ed["labels"])
+            s = dignity_points(lon, name, is_day, trip_table)
             row[key] = s
             total += s
         row["total"] = total
         row["accidental"] = (accidental_scores or {}).get(name, 0)
+        row["house"] = house_of.get(name)
         table[name] = row
 
-    ranked = sorted(table.items(),
-                    key=lambda kv: (kv[1]["total"], kv[1]["accidental"]),
+    ranked = sorted(PLANET_NAMES,
+                    key=lambda n: (table[n]["total"],
+                                   house_angularity(house_of.get(n))),
                     reverse=True)
-    return {"table": table, "ranked": [n for n, _ in ranked],
-            "almuten": ranked[0][0] if ranked else None}
+    result = resolve_almuten({n: r["total"] for n, r in table.items()}, house_of)
+    result.update({"table": table, "ranked": ranked})
+    return result
 
 
 # ==============================================================================
@@ -1073,7 +1312,8 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
 
     sun_lon = raw["Sun"][0]
     moon_lon = raw["Moon"][0]
-    is_day = is_day_chart(sun_lon, asc_lon, jd, lat, lon)
+    sect = sect_info(sun_lon, asc_lon, jd, lat, lon)
+    is_day = sect["is_day"]
     increasing = moon_increasing(moon_lon, sun_lon)
 
     # 古典の慣行によりノードは Mean Node を既定とする ＝ TABLE_SOURCES["node"]
@@ -1084,6 +1324,7 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
     true_south_node_lon = (true_node_lon + 180.0) % 360.0
 
     stars = fixed_star_longitudes(jd)
+    positions = {n: raw[n][0] for n in PLANET_NAMES}
 
     planets = []
     for body_id, name_en, name_ja, symbol in TRAD_PLANETS:
@@ -1096,7 +1337,8 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
         above = house_eff >= 7
         hayz_key, hayz_ja = hayz_status(name_en, p_sect, is_day, above,
                                         is_masculine_sign(sign_of(lon_deg)))
-        ed = essential_dignity(lon_deg, name_en, is_day, trip_table)
+        ed = essential_dignity(lon_deg, name_en, is_day, trip_table,
+                               mutual_receptions(name_en, positions))
         ant, cont = antiscia(lon_deg)
 
         p = _format_point(lon_deg, {
@@ -1141,6 +1383,7 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
         p["total_score"] = p["essential"]["score"] + p["accidental"]["score"]
 
     by_name = {p["name_en"]: p for p in planets}
+    house_of = {p["name_en"]: p["house_effective"] for p in planets}
 
     # --- ノード（mean＝採用値／true＝参考値）---
     def _node_entries(nlon, snlon, spd, node_type):
@@ -1206,7 +1449,10 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
     # --- ASC / MC / パーツ ---
     asc = _format_point(asc_lon)
     mc = _format_point(mc_lon)
-    asc["almuten"], asc["almuten_scores"] = almuten_of_degree(asc_lon, is_day, trip_table)
+    asc_alm = almuten_of_degree(asc_lon, is_day, trip_table, house_of)
+    asc["almuten"] = asc_alm["almuten"]
+    asc["almuten_scores"] = asc_alm["scores"]
+    asc["almuten_detail"] = asc_alm
     asc_lord = DOMICILE_BY_SIGN[sign_of(asc_lon)]
     asc["lord"] = asc_lord
     asc["lord_ja"] = PLANET_JA[asc_lord]
@@ -1231,7 +1477,9 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
     syzygy = prenatal_syzygy(jd)
     if syzygy:
         syzygy["point"] = _format_point(syzygy["longitude"])
-        syzygy["almuten"], _ = almuten_of_degree(syzygy["longitude"], is_day, trip_table)
+        sz_alm = almuten_of_degree(syzygy["longitude"], is_day, trip_table, house_of)
+        syzygy["almuten"] = sz_alm["almuten"]
+        syzygy["almuten_detail"] = sz_alm
 
     # --- アスペクト ---
     bodies = [{
@@ -1253,7 +1501,7 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
         "syzygy": syzygy["longitude"] if syzygy else None,
     }
     acc_scores = {p["name_en"]: p["accidental"]["score"] for p in planets}
-    almuten = almuten_figuris(places, is_day, acc_scores, trip_table)
+    almuten = almuten_figuris(places, is_day, acc_scores, trip_table, house_of)
 
     # --- セクトライトの三分主星 ---
     light = "Sun" if is_day else "Moon"
@@ -1267,7 +1515,7 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
         "lords": [],
     }
     seen = {}
-    for label, nm in (("第1", d_l), ("第2", n_l), ("参加", p_l)):
+    for label, nm in (("昼", d_l), ("夜", n_l), ("関与", p_l)):
         if nm is None:
             continue
         if nm in seen:   # Lilly の水の三分主星は昼夜とも火星
@@ -1299,11 +1547,9 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
         "almuten": almuten,
         "sect_light": sect_light,
         "planetary_hour": planetary_hour(jd, lat, lon),
-        "sect": {
-            "is_day": is_day,
-            "label_ja": "昼のチャート" if is_day else "夜のチャート",
-            "moon_increasing": increasing,
-        },
+        "sect": dict(sect,
+                     label_ja="昼のチャート" if is_day else "夜のチャート",
+                     moon_increasing=increasing),
         "stars": {k: _format_point(v) for k, v in stars.items()},
         "meta": {
             "jd": jd,
@@ -1316,7 +1562,8 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
             "house_system_name": HOUSE_SYSTEMS.get(house_system, ("", ""))[0],
             "house_system_ja": HOUSE_SYSTEMS.get(house_system, ("", house_system))[1],
             "triplicity": triplicity,
-            "terms": "egyptian",
+            "terms": DEFAULT_TERMS,
+            "terms_audit": TERMS_AUDIT,
             "faces": "chaldean",
             "node_type": "mean",
             "sources": TABLE_SOURCES,
@@ -1339,6 +1586,10 @@ def dignity_marks(ed):
     """本質的品位を短い記号列にする（支高三限面／損堕遍）"""
     marks = [m for k, m in _DIGNITY_MARK if k in ed["labels"]]
     marks += [m for k, m in _DEBILITY_MARK if k in ed["debilities"]]
+    if ed.get("peregrine") and "peregrine" not in ed["debilities"]:
+        marks.append("(遍)")   # デトリメント／フォールと重複のため得点なし
+    if ed.get("peregrine_cancelled_by"):
+        marks.append("(遍解除)")
     return "".join(marks) if marks else "－"
 
 
@@ -1368,8 +1619,12 @@ def generate_classical_text(chart, birth_info):
     L.append(f"出生地   : 緯度 {birth_info['lat']:.4f}° / 経度 {birth_info['lon']:.4f}°")
     L.append(f"ハウス   : {meta['house_system_ja']}（{meta['house_system']}）"
              f" / トリプリシティ: {meta['triplicity']} / ノード: {meta['node_type']}")
+    alt = sect.get("sun_altitude")
+    alt_s = f"、太陽高度 {alt:+.2f}°" if alt is not None else ""
+    border = "　※高度判定と食い違い（borderline）" if sect.get("borderline") else ""
     L.append(f"セクト   : {sect['label_ja']}"
-             f"（月は{'増光' if sect['moon_increasing'] else '減光'}）")
+             f"（ASC–DSC 地平線基準{alt_s}）"
+             f"（月は{'増光' if sect['moon_increasing'] else '減光'}）{border}")
 
     ph = chart["planetary_hour"]
     if ph:
@@ -1441,6 +1696,13 @@ def generate_classical_text(chart, birth_info):
                  + _sign_pad(_mk("face"), 8)
                  + f"{p['essential']['score']:+d}")
     L.append("  ※ ◎＝その惑星自身が支配する（本質的品位を得ている）")
+    L.append("  ※ 三分＝セクト主星（+3 はこの星のみ）。(遍)＝ペレグリンだが損／堕と重複のため")
+    L.append("     得点なし。(遍解除)＝サイン／高揚のミューチュアル・レセプションで解除")
+    diffs = [p for p in chart["planets"] if p["essential"]["term_audit"]["differs"]]
+    if diffs:
+        L.append("  監査（プトレマイオス式ターム・得点に不使用）: " + "、".join(
+            f"{p['name_ja']} {PLANET_JA[p['essential']['rulers']['term']]}→"
+            f"{PLANET_JA[p['essential']['term_audit']['ruler']]}" for p in diffs))
     L.append("")
 
     # --- 偶発的品位の内訳 ---
@@ -1521,8 +1783,13 @@ def generate_classical_text(chart, birth_info):
                  + _sign_pad(str(row["syzygy"]), 8)
                  + _sign_pad(str(row["total"]), 6)
                  + f"{row['accidental']:+d}")
-    L.append(f"  → アルムテン: {PLANET_JA[alm['almuten']]}"
-             "（Lilly の Lord of the Geniture は総合判断による。本表は材料）")
+    if alm["almuten_tie"]:
+        L.append("  → アルムテン: 同点（" + "・".join(PLANET_JA[n] for n in alm["candidates"])
+                 + "）。ハウス位置でも決まらないため判断は人が行う")
+    else:
+        L.append(f"  → アルムテン: {PLANET_JA.get(alm['almuten'], '—')}"
+                 + ("（同点をハウス位置で決定）" if alm["tie_break"] else "")
+                 + "（Lilly の Lord of the Geniture は総合判断による。本表は材料）")
     L.append("")
 
     # --- セクトライトの三分主星 ---
@@ -1543,9 +1810,9 @@ def generate_classical_text(chart, birth_info):
     L.append("─" * 37)
     L.append("凡例: 支＝ドミサイル 高＝イグザルテーション 三＝トリプリシティ")
     L.append("      限＝ターム 面＝フェイス 損＝デトリメント 堕＝フォール 遍＝ペレグリン")
-    L.append("出所: 支配・高揚・フェイス・オーブ・偶発的品位の各表は Christian Astrology")
-    L.append("      （リリー本文。CA Book I 品位表とは未照合）。")
-    L.append("      ターム＝エジプト式（ドロテウス版／講義資料の必須品位表と要照合）、")
+    L.append(f"出所: 品位表（支配・高揚・三分・ターム・フェイス・損・堕）と得点は {METHOD_DOC}")
+    L.append("      と照合済み。ターム＝エジプト式（§4.1）、プトレマイオス式は監査用（未照合）。")
+    L.append("      オーブ・偶発的品位の表は Christian Astrology（リリー本文。CA Book I と未照合）。")
     L.append("      トリプリシティ＝ドロセウス式、ハウス＝レジオモンタナス、ノード＝平均値")
     L.append("      はプロジェクト慣行。アプライング判定・挟撃の近似・アルムテン合算法・")
     L.append("      恒星位置の歳差近似も実装上の補い。")
@@ -1557,7 +1824,7 @@ def generate_classical_text(chart, birth_info):
 # JSON 出力
 # ==============================================================================
 
-SCHEMA_VERSION = "v0"
+SCHEMA_VERSION = "v1"
 
 _JSON_NODE_NAME = {"Node": "NorthNode", "SouthNode": "SouthNode"}
 
@@ -1594,8 +1861,13 @@ def _json_planet(p):
             "dignities": ed["labels"],
             "debilities": ed["debilities"],
             "peregrine": ed["peregrine"],
+            "peregrine_cancelled_by": ed["peregrine_cancelled_by"],
+            "mutual_receptions": ed["mutual_receptions"],
             "score": ed["score"],
+            "score_note": ed["score_note"],
             "rulers_of_position": ed["rulers"],
+            "triplicity_rulers": ed["triplicity_rulers"],
+            "term_audit": ed["term_audit"],
         },
         "accidental_dignity": {
             "score": acc["score"],
@@ -1620,6 +1892,17 @@ def _json_planet(p):
         "contra_antiscion": _json_point(p["contra_antiscion"]),
     })
     return d
+
+
+def _json_almuten(alm):
+    """度数のアルムテン判定を JSON 用に整形"""
+    return {
+        "almuten": alm["almuten"],
+        "almuten_tie": alm["almuten_tie"],
+        "almuten_candidates": alm["candidates"],
+        "almuten_tie_break": alm["tie_break"],
+        "almuten_scores": alm["scores"],
+    }
 
 
 def to_json(chart):
@@ -1671,6 +1954,7 @@ def to_json(chart):
         },
         "tables_used": {
             "terms": meta["terms"],
+            "terms_audit": meta["terms_audit"],
             "triplicity": meta["triplicity"],
             "faces": meta["faces"],
             "house_system": {
@@ -1681,8 +1965,13 @@ def to_json(chart):
             "sources": meta["sources"],
         },
         "sect": {
+            "method": chart["sect"]["method"],
             "is_day": chart["sect"]["is_day"],
             "chart_sect": "diurnal" if chart["sect"]["is_day"] else "nocturnal",
+            "sun_altitude": (None if chart["sect"]["sun_altitude"] is None
+                             else round(chart["sect"]["sun_altitude"], 4)),
+            "altitude_is_day": chart["sect"]["altitude_is_day"],
+            "borderline": chart["sect"]["borderline"],
             "moon_increasing_light": chart["sect"]["moon_increasing"],
             "sect_light": {
                 "light": chart["sect_light"]["light"],
@@ -1705,7 +1994,7 @@ def to_json(chart):
         "angles": {
             "ascendant": dict(_json_point(chart["asc"]),
                               lord=chart["asc"]["lord"],
-                              almuten=chart["asc"]["almuten"]),
+                              **_json_almuten(chart["asc"]["almuten_detail"])),
             "midheaven": _json_point(chart["mc"]),
         },
         "planets": [_json_planet(p) for p in chart["planets"]],
@@ -1729,7 +2018,7 @@ def to_json(chart):
         "prenatal_syzygy": ({
             "type": sz["type"],
             "datetime_local": sz["datetime_str"],
-            "almuten": sz["almuten"],
+            **_json_almuten(sz["almuten_detail"]),
             **_json_point(sz["point"]),
         } if sz else None),
         "houses": houses,
@@ -1748,6 +2037,9 @@ def to_json(chart):
         } for a in chart["aspects"]],
         "almuten_figuris": {
             "almuten": chart["almuten"]["almuten"],
+            "almuten_tie": chart["almuten"]["almuten_tie"],
+            "almuten_candidates": chart["almuten"]["candidates"],
+            "tie_break": chart["almuten"]["tie_break"],
             "ranking": chart["almuten"]["ranked"],
             "scores": {
                 name: {
@@ -1755,6 +2047,7 @@ def to_json(chart):
                     "moon": row["moon"], "fortune": row["fortune"],
                     "syzygy": row["syzygy"], "total": row["total"],
                     "accidental": row["accidental"],
+                    "house": row["house"],
                 }
                 for name, row in chart["almuten"]["table"].items()
             },
