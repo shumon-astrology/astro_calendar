@@ -9,7 +9,7 @@ William Lilly "Christian Astrology" の体系に基づき、出生図の
 natal.py（モダン）との違い:
   - 天体は伝統的7惑星（♄♃♂☉♀☿☽）＋ドラゴンヘッド／テイルのみ
   - ノードは Mean Node（古典の慣行）
-  - ハウスはレギオモンタヌス（Lilly 準拠）を既定とし、
+  - ハウスはレジオモンタナス（Lilly 準拠）を既定とし、
     プラシーダス／ホールサインも選択可
   - アスペクトはプトレマイオス的5種のみ、オーブは Lilly の
     「惑星のオーブ（moiety＝その半分）」表に従う
@@ -164,14 +164,18 @@ EXALT_BY_SIGN = {si: (pl, dg) for pl, (si, dg) in EXALTATIONS.items()}
 FALL_BY_SIGN = {(si + 6) % 12: (pl, dg) for pl, (si, dg) in EXALTATIONS.items()}
 
 # トリプリシティ
-# Lilly の表は昼／夜の2主星のみ（水は昼夜とも火星）＝ リリー本文
+# 既定はドロセウス式（参加星を含む3主星）。ホラリー実務（ケースNo002 の
+# ラディカリティ判定・Collection の受容判定）が参加星を用いているため
+# ＝ プロジェクト慣行。Lilly 表は triplicity="lilly" で選択できる
+#
+# Lilly 版：昼／夜の2主星のみ（水は昼夜とも火星）＝ リリー本文（要照合）
 TRIPLICITY_LILLY = {
     "fire":  ("Sun", "Jupiter", None),
     "earth": ("Venus", "Moon", None),
     "air":   ("Saturn", "Mercury", None),
     "water": ("Mars", "Mars", None),
 }
-# ドロセウス式（参加星を含む）＝ プロジェクト慣行（オプション）
+# ドロセウス式（昼・夜・参加の3主星）＝ 既定
 TRIPLICITY_DOROTHEAN = {
     "fire":  ("Sun", "Jupiter", "Saturn"),
     "earth": ("Venus", "Moon", "Mars"),
@@ -179,7 +183,14 @@ TRIPLICITY_DOROTHEAN = {
     "water": ("Venus", "Mars", "Moon"),
 }
 
-# エジプシャン・ターム（Lilly の表と同一）＝ リリー本文
+TRIPLICITY_TABLES = {
+    "dorothean": TRIPLICITY_DOROTHEAN,
+    "lilly": TRIPLICITY_LILLY,
+}
+DEFAULT_TRIPLICITY = "dorothean"
+
+# エジプト式ターム（ドロテウス版）＝ TABLE_SOURCES["terms"]（要照合）
+# Lilly 表（プトレマイオス式）とは値が異なる。実務がエジプト式のため既定とする
 # 各サイン [(上限度数, 主星), ...]
 TERMS_EGYPTIAN = [
     [(6, "Jupiter"), (14, "Venus"), (21, "Mercury"), (26, "Mars"), (30, "Saturn")],      # Ari
@@ -196,14 +207,14 @@ TERMS_EGYPTIAN = [
     [(12, "Venus"), (16, "Jupiter"), (19, "Mercury"), (28, "Mars"), (30, "Saturn")],     # Pis
 ]
 
-# フェイス（デカン）＝ カルデア順の循環 ＝ リリー本文
+# フェイス（デカン）＝ カルデア順の循環 ＝ TABLE_SOURCES["faces"]（未照合）
 CHALDEAN_ORDER = ["Mars", "Sun", "Venus", "Mercury", "Moon", "Saturn", "Jupiter"]
 FACES = [
     [CHALDEAN_ORDER[(si * 3 + k) % 7] for k in range(3)]
     for si in range(12)
 ]
 
-# 品位の得点 ＝ リリー本文
+# 品位の得点 ＝ TABLE_SOURCES["dignity_scores"]（未照合）
 DIGNITY_SCORE = {
     "domicile": 5, "exaltation": 4, "triplicity": 3, "term": 2, "face": 1,
     "detriment": -5, "fall": -4, "peregrine": -5,
@@ -218,6 +229,108 @@ DIGNITY_JA = {
     "detriment": "デトリメント",
     "fall": "フォール",
     "peregrine": "ペレグリン",
+}
+
+
+# ==============================================================================
+# 出所ラベル（ホラリー正本プロジェクト規約）
+# ==============================================================================
+# 引用標準：Reprint ページ＋1647年版ページの併記 ＝「Reprint p.N［1647: p.M］」
+# citation が None のものは未照合。照合の底本は
+#   CA_BookI_II_fulltext.md（古典占星術プロジェクトKB）
+# 確定後に citation を記入し verified を True にすること。
+
+UNVERIFIED_NOTE = (
+    "CA Book I 品位表（KB索引では CA_DH pp.45–47）と未照合。"
+    "値は一般に流布する Lilly 版の表に基づく"
+)
+
+TABLE_SOURCES = {
+    "terms": {
+        "table": "Egyptian (Dorothean) terms",
+        "table_ja": "エジプト式ターム（ドロテウス版）",
+        "label": "プロジェクト慣行",
+        "citation": None,
+        "verified": False,
+        "reference": "三河氏の講義資料の必須品位表（ファイル名は未取得）",
+        "note": ("鑑定実務がエジプト式を採る"
+                 "（鑑定依頼人台帳/出生図鑑定_Case003_20260901.md）ため既定とする。"
+                 "Lilly 表はプトレマイオス式で値が異なるが、本モジュールでは実装しない。"
+                 "照合先は Book I ではなく講義資料の必須品位表。ファイル提供後に照合し "
+                 "citation を記入すること"),
+    },
+    "faces": {
+        "table": "Faces (Chaldean order)",
+        "table_ja": "フェイス（カルデア順）",
+        "label": "リリー本文",
+        "citation": None,
+        "verified": False,
+        "reference": "CA Book I 必須品位表（KB索引では CA_DH pp.45–47）",
+        "note": ("カルデア順の循環のため Book I 表と一致するはず。"
+                 "Desktop 配下の CA_BookI_II_fulltext.md に OS のプライバシー設定で"
+                 "アクセスできず未照合"),
+    },
+    "triplicity": {
+        "table": "Dorothean triplicity rulers (day / night / participating)",
+        "table_ja": "ドロセウス式トリプリシティ（昼・夜・参加）",
+        "label": "プロジェクト慣行",
+        "citation": None,
+        "verified": True,
+        "note": ("ホラリー実務が参加星を用いるため既定に採用"
+                 "（ケースNo002_失せ物_バイオリン弓_20260827.md §ラディカリティ①・§Collection）。"
+                 "Lilly 版2主星表は triplicity='lilly' で選択可（こちらは要照合）"),
+    },
+    "domicile_exaltation": {
+        "table": "Domicile / exaltation / detriment / fall",
+        "table_ja": "ドミサイル・イグザルテーション・デトリメント・フォール",
+        "label": "リリー本文",
+        "citation": None,
+        "verified": False,
+        "note": UNVERIFIED_NOTE,
+    },
+    "dignity_scores": {
+        "table": "Essential dignity scores (5/4/3/2/1, -5/-4/-5)",
+        "table_ja": "本質的品位の得点",
+        "label": "リリー本文",
+        "citation": None,
+        "verified": False,
+        "note": UNVERIFIED_NOTE,
+    },
+    "orbs": {
+        "table": "Planetary orbs and moieties",
+        "table_ja": "惑星のオーブとモイエティ",
+        "label": "リリー本文",
+        "citation": None,
+        "verified": False,
+        "note": ("ケースNo002 のモイエティ運用（§月・§Collection）と整合。"
+                 "CA Book I 本文とは未照合"),
+    },
+    "accidental": {
+        "table": "Accidental fortitudes and debilities",
+        "table_ja": "偶発的品位・偶発的debility の表",
+        "label": "リリー本文",
+        "citation": None,
+        "verified": False,
+        "note": UNVERIFIED_NOTE,
+    },
+    "house_system": {
+        "table": "Regiomontanus houses",
+        "table_ja": "レジオモンタナス式ハウス",
+        "label": "プロジェクト慣行",
+        "citation": None,
+        "verified": True,
+        "note": ("Lilly が CA の全図で用いた方式。プロジェクト運用文書でも必須指定"
+                 "（鑑定受付フォーム_v1.md 必須4／ケースファイル雛形_ホラリー.md）"),
+    },
+    "node": {
+        "table": "Mean Node (true node reported for reference)",
+        "table_ja": "平均ノード（トゥルーノードは参考値として併記）",
+        "label": "プロジェクト慣行",
+        "citation": None,
+        "verified": True,
+        "note": ("古典のエフェメリスは平均値を掲載するため mean を既定とする。"
+                 "natal.py（モダン）は True Node を用いる"),
+    },
 }
 
 
@@ -253,7 +366,7 @@ NOCTURNAL_PLANETS = ("Moon", "Venus", "Mars")
 # ==============================================================================
 
 def term_ruler(lon):
-    """タームの主星を返す ＝ リリー本文（エジプシャン・ターム）"""
+    """タームの主星を返す ＝ エジプト式ターム（TABLE_SOURCES["terms"]）"""
     si = sign_of(lon)
     d = deg_in_sign(lon)
     for limit, ruler in TERMS_EGYPTIAN[si]:
@@ -269,8 +382,8 @@ def face_ruler(lon):
 
 
 def triplicity_rulers(si, table=None):
-    """サインのトリプリシティ主星 (昼, 夜, 参加) を返す"""
-    table = table or TRIPLICITY_LILLY
+    """サインのトリプリシティ主星 (昼, 夜, 参加) を返す。既定はドロセウス式"""
+    table = table or TRIPLICITY_TABLES[DEFAULT_TRIPLICITY]
     return table[element_of(si)]
 
 
@@ -281,7 +394,7 @@ def essential_dignity(lon, planet, is_day, trip_table=None):
     Returns:
         dict: labels（成立した品位のリスト）, score, peregrine, rulers
     """
-    trip_table = trip_table or TRIPLICITY_LILLY
+    trip_table = trip_table or TRIPLICITY_TABLES[DEFAULT_TRIPLICITY]
     si = sign_of(lon)
     d = deg_in_sign(lon)
 
@@ -352,11 +465,24 @@ def almuten_of_degree(lon, is_day, trip_table=None):
 # セクト・太陽光線・オリエンタル／オクシデンタル
 # ==============================================================================
 
-def is_day_chart(sun_lon, asc_lon):
+def is_day_chart(sun_lon, asc_lon, jd=None, lat=None, geo_lon=None):
     """
-    昼のチャートか（太陽が地平線上＝第7〜12ハウス）。
-    ASC から黄道順に 0〜180° が地平線下（第1〜6ハウス）＝ プロジェクト慣行
+    昼のチャートか（太陽が地平線上）＝ リリー本文
+
+    jd・緯度・経度が与えられた場合は太陽の実高度で判定する（厳密）。
+    与えられない場合は ASC からの黄道弧で近似する（ASC から黄道順に
+    0〜180° が地平線下＝第1〜6ハウス）。
+    極圏（|緯度| > 66.5°）では黄道弧による近似が実際の昼夜と食い違うため、
+    高度による判定を用いること。
     """
+    if jd is not None and lat is not None and geo_lon is not None:
+        try:
+            xx, _ = swe.calc_ut(jd, swe.SUN, ac.CALC_FLAGS)
+            _, true_alt, _ = swe.azalt(jd, swe.ECL2HOR, (geo_lon, lat, 0.0),
+                                       0.0, 0.0, (xx[0], xx[1], xx[2]))
+            return true_alt > 0.0
+        except Exception:
+            pass
     return ((sun_lon - asc_lon) % 360.0) > 180.0
 
 
@@ -732,7 +858,7 @@ def accidental_dignity(planet, ctx):
         ctx:    チャート文脈 dict（lons, sun_lon, node_lon, stars, is_day）
 
     Returns:
-        dict: score, items [(項目, 点数), ...]
+        dict: score, items [(英語コード, 和名, 点数), ...]
     """
     name = planet["name_en"]
     lon = planet["longitude"]
@@ -742,44 +868,44 @@ def accidental_dignity(planet, ctx):
     # --- ハウス（カスプ手前5°は次のハウスとして扱う）---
     h = planet.get("house_effective", planet["house"])
     if h in HOUSE_SCORE:
-        items.append((f"第{h}ハウス", HOUSE_SCORE[h]))
+        items.append((f"house_{h}", f"第{h}ハウス", HOUSE_SCORE[h]))
 
     # --- 順行・逆行 / 速度（☉☾を除く）---
     if name not in LUMINARIES:
         if planet["retrograde"]:
-            items.append(("逆行", -5))
+            items.append(("retrograde", "逆行", -5))
         else:
-            items.append(("順行", 4))
+            items.append(("direct", "順行", 4))
     if abs(speed) > MEAN_MOTION[name]:
-        items.append(("速行（平均運動以上）", 2))
+        items.append(("swift", "速行（平均運動以上）", 2))
     else:
-        items.append(("遅行（平均運動未満）", -2))
+        items.append(("slow", "遅行（平均運動未満）", -2))
 
     # --- オリエンタル／オクシデンタル ---
     orient = planet.get("orientality")
     if name in ("Saturn", "Jupiter", "Mars"):
-        items.append(("オリエンタル", 2) if orient == "oriental"
-                     else ("オクシデンタル", -2))
+        items.append(("oriental", "オリエンタル", 2) if orient == "oriental"
+                     else ("occidental", "オクシデンタル", -2))
     elif name in ("Venus", "Mercury"):
-        items.append(("オクシデンタル", 2) if orient == "occidental"
-                     else ("オリエンタル", -2))
+        items.append(("occidental", "オクシデンタル", 2) if orient == "occidental"
+                     else ("oriental", "オリエンタル", -2))
     elif name == "Moon":
         if ctx["moon_increasing"]:
-            items.append(("増光", 2))
+            items.append(("increasing_light", "増光", 2))
         else:
-            items.append(("減光", -2))
+            items.append(("decreasing_light", "減光", -2))
 
     # --- 太陽光線 ---
     if name != "Sun":
         st = planet["solar_phase"]["state"]
         if st == "cazimi":
-            items.append(("カジミ", 5))
+            items.append(("cazimi", "カジミ", 5))
         elif st == "combust":
-            items.append(("コンバスト", -5))
+            items.append(("combust", "コンバスト", -5))
         elif st == "under_beams":
-            items.append(("サンビームス下", -4))
+            items.append(("under_beams", "サンビームス下", -4))
         else:
-            items.append(("光線から自由", 5))
+            items.append(("free_of_beams", "光線から自由", 5))
 
     # --- 他天体とのパーティル・アスペクト ---
     for other in ("Jupiter", "Venus", "Saturn", "Mars"):
@@ -788,39 +914,45 @@ def accidental_dignity(planet, ctx):
         o_lon = ctx["lons"][other]
         d = abs(_signed_sep(lon, o_lon))
         benefic = other in BENEFICS
+        ol = other.lower()
         if d <= PARTILE_ORB:
-            items.append((f"{PLANET_JA[other]}と合（パーティル）",
+            items.append((f"partile_conjunction_{ol}",
+                          f"{PLANET_JA[other]}と合（パーティル）",
                           5 if benefic else -5))
         elif abs(d - 120.0) <= PARTILE_ORB and benefic:
-            items.append((f"{PLANET_JA[other]}と三分（パーティル）", 4))
+            items.append((f"partile_trine_{ol}",
+                          f"{PLANET_JA[other]}と三分（パーティル）", 4))
         elif abs(d - 60.0) <= PARTILE_ORB and benefic:
-            items.append((f"{PLANET_JA[other]}と六分（パーティル）", 3))
+            items.append((f"partile_sextile_{ol}",
+                          f"{PLANET_JA[other]}と六分（パーティル）", 3))
         elif abs(d - 180.0) <= PARTILE_ORB and not benefic:
-            items.append((f"{PLANET_JA[other]}と衝（パーティル）", -4))
+            items.append((f"partile_opposition_{ol}",
+                          f"{PLANET_JA[other]}と衝（パーティル）", -4))
         elif abs(d - 90.0) <= PARTILE_ORB and not benefic:
-            items.append((f"{PLANET_JA[other]}と矩（パーティル）", -3))
+            items.append((f"partile_square_{ol}",
+                          f"{PLANET_JA[other]}と矩（パーティル）", -3))
 
     # --- ノードとの合 ---
     if abs(_signed_sep(lon, ctx["node_lon"])) <= PARTILE_ORB:
-        items.append(("ドラゴンヘッドと合", 4))
+        items.append(("partile_conjunction_north_node", "ドラゴンヘッドと合", 4))
     if abs(_signed_sep(lon, ctx["south_node_lon"])) <= PARTILE_ORB:
-        items.append(("ドラゴンテイルと合", -4))
+        items.append(("partile_conjunction_south_node", "ドラゴンテイルと合", -4))
 
     # --- 挟撃（besieged）---
     if name not in ("Saturn", "Mars"):
         if _is_besieged(lon, ctx["lons"]["Saturn"], ctx["lons"]["Mars"]):
-            items.append(("土星と火星に挙さまれる", -5))
+            items.append(("besieged_saturn_mars", "土星と火星に挟まれる", -5))
 
     # --- 恒星 ---
     stars = ctx["stars"]
     if abs(_signed_sep(lon, stars["Regulus"])) <= PARTILE_ORB:
-        items.append(("レグルスと合", 6))
+        items.append(("conjunct_regulus", "レグルスと合", 6))
     if abs(_signed_sep(lon, stars["Spica"])) <= PARTILE_ORB:
-        items.append(("スピカと合", 5))
+        items.append(("conjunct_spica", "スピカと合", 5))
     if abs(_signed_sep(lon, stars["Algol"])) <= 5.0:
-        items.append(("アルゴルと合（5°以内）", -5))
+        items.append(("conjunct_algol", "アルゴルと合（5°以内）", -5))
 
-    return {"score": sum(pt for _, pt in items), "items": items}
+    return {"score": sum(it[2] for it in items), "items": items}
 
 
 # ==============================================================================
@@ -872,7 +1004,7 @@ def almuten_figuris(places, is_day, accidental_scores=None, trip_table=None):
 # ==============================================================================
 
 HOUSE_SYSTEMS = {
-    "R": ("Regiomontanus", "レギオモンタヌス"),
+    "R": ("Regiomontanus", "レジオモンタナス"),
     "P": ("Placidus", "プラシーダス"),
     "W": ("Whole Sign", "ホールサイン"),
     "C": ("Campanus", "カンパヌス"),
@@ -904,7 +1036,7 @@ def _format_point(lon_deg, extra=None):
 
 def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
                               tz_offset=9.0, house_system="R",
-                              triplicity="lilly"):
+                              triplicity=DEFAULT_TRIPLICITY):
     """
     古典占星術のネイタルチャートを計算する。
 
@@ -912,14 +1044,14 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
         year, month, day, hour, minute: 出生日時（現地時刻）
         lat, lon: 出生地の緯度・経度
         tz_offset: UTCからの時差（既定 9.0 ＝ JST）
-        house_system: "R"（レギオモンタヌス・既定）/"P"/"W"/"C"
-        triplicity: "lilly"（既定）/"dorothean"
+        house_system: "R"（レジオモンタナス・既定）/"P"/"W"/"C"
+        triplicity: "dorothean"（既定・参加星あり）/"lilly"（昼夜2主星）
 
     Returns:
         dict: planets, houses, house_rulers, asc, mc, sect, parts, syzygy,
               aspects, antiscia, almuten, planetary_hour, meta
     """
-    trip_table = TRIPLICITY_DOROTHEAN if triplicity == "dorothean" else TRIPLICITY_LILLY
+    trip_table = TRIPLICITY_TABLES.get(triplicity, TRIPLICITY_DOROTHEAN)
     jd = ac.datetime_local_to_jd(year, month, day, hour, minute, tz_offset)
 
     # --- ハウスカスプ・ASC・MC ---
@@ -941,12 +1073,15 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
 
     sun_lon = raw["Sun"][0]
     moon_lon = raw["Moon"][0]
-    is_day = is_day_chart(sun_lon, asc_lon)
+    is_day = is_day_chart(sun_lon, asc_lon, jd, lat, lon)
     increasing = moon_increasing(moon_lon, sun_lon)
 
-    # 古典の慣行によりノードは Mean Node を用いる
+    # 古典の慣行によりノードは Mean Node を既定とする ＝ TABLE_SOURCES["node"]
+    # トゥルーノードは参考値として併記する（判断・得点には用いない）
     node_lon, node_speed = ac.get_body_lon_speed(jd, swe.MEAN_NODE)
     south_node_lon = (node_lon + 180.0) % 360.0
+    true_node_lon, true_node_speed = ac.get_body_lon_speed(jd, swe.TRUE_NODE)
+    true_south_node_lon = (true_node_lon + 180.0) % 360.0
 
     stars = fixed_star_longitudes(jd)
 
@@ -1007,17 +1142,41 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
 
     by_name = {p["name_en"]: p for p in planets}
 
-    # --- ノード ---
-    nodes = []
-    for nm, nlon in (("Node", node_lon), ("SouthNode", south_node_lon)):
-        h_info = determine_house(nlon, cusp_lons)
-        nodes.append(_format_point(nlon, {
-            "name_en": nm,
-            "name_ja": PLANET_JA[nm],
-            "symbol": PLANET_SYMBOLS[nm],
-            "house": h_info["house"],
-            "house_str": h_info["house_str"],
-            "retrograde": node_speed < 0,
+    # --- ノード（mean＝採用値／true＝参考値）---
+    def _node_entries(nlon, snlon, spd, node_type):
+        out = []
+        for nm, lv in (("Node", nlon), ("SouthNode", snlon)):
+            h_info = determine_house(lv, cusp_lons)
+            house_eff = (h_info["house"] % 12 + 1) if h_info["near_cusp"] else h_info["house"]
+            out.append(_format_point(lv, {
+                "name_en": nm,
+                "name_ja": PLANET_JA[nm],
+                "symbol": PLANET_SYMBOLS[nm],
+                "speed": spd if nm == "Node" else spd,
+                "retrograde": spd < 0,
+                "house": h_info["house"],
+                "house_effective": house_eff,
+                "house_str": h_info["house_str"],
+                "node_type": node_type,
+            }))
+        return out
+
+    nodes = _node_entries(node_lon, south_node_lon, node_speed, "mean")
+    nodes_true = _node_entries(true_node_lon, true_south_node_lon,
+                               true_node_speed, "true")
+
+    # --- 現代天体（古典判断には用いない参考値）---
+    modern_reference = []
+    for body_id, nm, nm_ja in ((swe.URANUS, "Uranus", "天王星"),
+                               (swe.NEPTUNE, "Neptune", "海王星"),
+                               (swe.PLUTO, "Pluto", "冥王星")):
+        m_lon, m_speed = ac.get_body_lon_speed(jd, body_id)
+        h_info = determine_house(m_lon, cusp_lons)
+        house_eff = (h_info["house"] % 12 + 1) if h_info["near_cusp"] else h_info["house"]
+        modern_reference.append(_format_point(m_lon, {
+            "name_en": nm, "name_ja": nm_ja,
+            "speed": m_speed, "retrograde": m_speed < 0,
+            "house": h_info["house"], "house_effective": house_eff,
         }))
 
     # --- ハウスカスプと各ハウス主星 ---
@@ -1127,6 +1286,8 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
     return {
         "planets": planets,
         "nodes": nodes,
+        "nodes_true": nodes_true,
+        "modern_reference": modern_reference,
         "houses": houses,
         "house_rulers": house_rulers,
         "asc": asc,
@@ -1146,10 +1307,19 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
         "stars": {k: _format_point(v) for k, v in stars.items()},
         "meta": {
             "jd": jd,
+            "birth": {
+                "year": year, "month": month, "day": day,
+                "hour": hour, "minute": minute,
+                "tz_offset": tz_offset, "latitude": lat, "longitude": lon,
+            },
             "house_system": house_system,
+            "house_system_name": HOUSE_SYSTEMS.get(house_system, ("", ""))[0],
             "house_system_ja": HOUSE_SYSTEMS.get(house_system, ("", house_system))[1],
             "triplicity": triplicity,
-            "node_type": "Mean Node",
+            "terms": "egyptian",
+            "faces": "chaldean",
+            "node_type": "mean",
+            "sources": TABLE_SOURCES,
         },
     }
 
@@ -1253,7 +1423,7 @@ def generate_classical_text(chart, birth_info):
     L.append("")
 
     # --- 本質的品位表 ---
-    L.append("── 本質的品位（Lilly の表）──")
+    L.append(f"── 本質的品位（ターム: エジプト式／トリプリシティ: {meta['triplicity']}）──")
     L.append("  " + _sign_pad("天体", 14) + _sign_pad("支配", 8) + _sign_pad("高揚", 8)
              + _sign_pad("三分", 8) + _sign_pad("限界", 8) + _sign_pad("面", 8) + "得点")
     L.append("  " + "-" * 62)
@@ -1276,7 +1446,7 @@ def generate_classical_text(chart, birth_info):
     # --- 偶発的品位の内訳 ---
     L.append("── 偶発的品位の内訳 ──")
     for p in chart["planets"]:
-        detail = "、".join(f"{lab}{pt:+d}" for lab, pt in p["accidental"]["items"])
+        detail = "、".join(f"{lab}{pt:+d}" for _, lab, pt in p["accidental"]["items"])
         L.append(f"  {p['symbol']}{p['name_ja']}（計 {p['accidental']['score']:+d}）: {detail}")
     L.append("")
 
@@ -1373,11 +1543,233 @@ def generate_classical_text(chart, birth_info):
     L.append("─" * 37)
     L.append("凡例: 支＝ドミサイル 高＝イグザルテーション 三＝トリプリシティ")
     L.append("      限＝ターム 面＝フェイス 損＝デトリメント 堕＝フォール 遍＝ペレグリン")
-    L.append("出所: 品位表・オーブ表・偶発的品位表は Christian Astrology（リリー本文）。")
-    L.append("      アプライング判定・挟撃の近似・アルムテン合算法・恒星位置の歳差近似は")
-    L.append("      プロジェクト慣行（実装上の補い）。")
+    L.append("出所: 支配・高揚・フェイス・オーブ・偶発的品位の各表は Christian Astrology")
+    L.append("      （リリー本文。CA Book I 品位表とは未照合）。")
+    L.append("      ターム＝エジプト式（ドロテウス版／講義資料の必須品位表と要照合）、")
+    L.append("      トリプリシティ＝ドロセウス式、ハウス＝レジオモンタナス、ノード＝平均値")
+    L.append("      はプロジェクト慣行。アプライング判定・挟撃の近似・アルムテン合算法・")
+    L.append("      恒星位置の歳差近似も実装上の補い。")
 
     return "\n".join(L)
+
+
+# ==============================================================================
+# JSON 出力
+# ==============================================================================
+
+SCHEMA_VERSION = "v0"
+
+_JSON_NODE_NAME = {"Node": "NorthNode", "SouthNode": "SouthNode"}
+
+
+def _json_point(pt):
+    """感受点・天体の位置を JSON 用に整形（サイン名は英語）"""
+    return {
+        "longitude": round(pt["longitude"] % 360.0, 6),
+        "sign": pt["sign"],
+        "sign_index": sign_of(pt["longitude"]),
+        "degrees": pt["degrees"],
+        "minutes": pt["minutes"],
+        "position": pt["position_str"],
+    }
+
+
+def _json_planet(p):
+    """惑星1件を JSON 用に整形"""
+    ed = p["essential"]
+    acc = p["accidental"]
+    codes = {it[0] for it in acc["items"]}
+    sp = p["solar_phase"]
+
+    d = _json_point(p)
+    d.update({
+        "name": p["name_en"],
+        "speed": round(p["speed"], 6),
+        "retrograde": p["retrograde"],
+        "house": p["house_effective"],
+        "house_raw": p["house"],
+        "near_next_cusp": p["near_cusp"],
+        "above_horizon": p["above_horizon"],
+        "essential_dignity": {
+            "dignities": ed["labels"],
+            "debilities": ed["debilities"],
+            "peregrine": ed["peregrine"],
+            "score": ed["score"],
+            "rulers_of_position": ed["rulers"],
+        },
+        "accidental_dignity": {
+            "score": acc["score"],
+            "items": [{"code": c, "points": pt, "label_ja": ja}
+                      for c, ja, pt in acc["items"]],
+            "solar_phase": sp["state"],
+            "distance_from_sun": sp["distance"],
+            "cazimi": sp["state"] == "cazimi",
+            "combust": sp["state"] == "combust",
+            "under_beams": sp["state"] == "under_beams",
+            "free_of_beams": sp["state"] == "free",
+            "orientality": p["orientality"],
+            "motion": "swift" if "swift" in codes else "slow",
+        },
+        "sect": {
+            "planet_sect": p["sect"],
+            "in_sect": p["in_sect"],
+            "hayz": p["hayz"],
+        },
+        "total_score": p["total_score"],
+        "antiscion": _json_point(p["antiscion"]),
+        "contra_antiscion": _json_point(p["contra_antiscion"]),
+    })
+    return d
+
+
+def to_json(chart):
+    """
+    チャートを JSON 直列化可能な dict に変換する。
+
+    キーは英語のスネークケース、惑星名・サイン名も英語。
+    現代天体（天王星・海王星・冥王星）は古典判断に用いないため
+    "modern_reference" として別枠に置く。
+
+    json.dump(to_json(chart), f, ensure_ascii=False, indent=2) で保存できる。
+    """
+    meta = chart["meta"]
+    b = meta["birth"]
+    ph = chart["planetary_hour"]
+    sz = chart["syzygy"]
+
+    by_name = {p["name_en"]: p for p in chart["planets"]}
+    houses = []
+    for h, hr in zip(chart["houses"], chart["house_rulers"]):
+        lp = by_name[hr["lord"]]
+        entry = _json_point(h)
+        entry.update({
+            "house": h["number"],
+            "lord": hr["lord"],
+            "lord_placement": {
+                "sign": lp["sign"],
+                "position": lp["position_str"],
+                "house": lp["house_effective"],
+                "dignities": lp["essential"]["labels"],
+                "debilities": lp["essential"]["debilities"],
+                "essential_score": lp["essential"]["score"],
+                "accidental_score": lp["accidental"]["score"],
+                "retrograde": lp["retrograde"],
+                "solar_phase": lp["solar_phase"]["state"],
+            },
+        })
+        houses.append(entry)
+
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "generator": "natal_classical.py",
+        "birth_data": {
+            "year": b["year"], "month": b["month"], "day": b["day"],
+            "hour": b["hour"], "minute": b["minute"],
+            "tz_offset": b["tz_offset"],
+            "latitude": b["latitude"], "longitude": b["longitude"],
+            "julian_day_ut": round(meta["jd"], 8),
+        },
+        "tables_used": {
+            "terms": meta["terms"],
+            "triplicity": meta["triplicity"],
+            "faces": meta["faces"],
+            "house_system": {
+                "code": meta["house_system"],
+                "name": meta["house_system_name"],
+            },
+            "node": meta["node_type"],
+            "sources": meta["sources"],
+        },
+        "sect": {
+            "is_day": chart["sect"]["is_day"],
+            "chart_sect": "diurnal" if chart["sect"]["is_day"] else "nocturnal",
+            "moon_increasing_light": chart["sect"]["moon_increasing"],
+            "sect_light": {
+                "light": chart["sect_light"]["light"],
+                "triplicity_lords": [
+                    {"order": lo["order"], "planet": lo["planet"],
+                     "house": lo["house"], "dignities": lo["dignity"],
+                     "score": lo["score"]}
+                    for lo in chart["sect_light"]["lords"]
+                ],
+            },
+        },
+        "planetary_day_hour": ({
+            "day_ruler": ph["day_ruler"],
+            "hour_ruler": ph["hour_ruler"],
+            "hour_index": ph["hour_index"],
+            "is_daytime": ph["is_daytime"],
+            "sunrise": ph["sunrise_str"],
+            "sunset": ph["sunset_str"],
+        } if ph else None),
+        "angles": {
+            "ascendant": dict(_json_point(chart["asc"]),
+                              lord=chart["asc"]["lord"],
+                              almuten=chart["asc"]["almuten"]),
+            "midheaven": _json_point(chart["mc"]),
+        },
+        "planets": [_json_planet(p) for p in chart["planets"]],
+        "nodes": {
+            "used": meta["node_type"],
+            "mean": [dict(_json_point(n), name=_JSON_NODE_NAME[n["name_en"]],
+                          house=n["house_effective"], retrograde=n["retrograde"])
+                     for n in chart["nodes"]],
+            "true": [dict(_json_point(n), name=_JSON_NODE_NAME[n["name_en"]],
+                          house=n["house_effective"], retrograde=n["retrograde"])
+                     for n in chart["nodes_true"]],
+        },
+        "lots": {
+            "fortune": dict(_json_point(chart["fortune"]),
+                            house=chart["fortune"]["house"],
+                            lord=chart["fortune"]["lord"]),
+            "spirit": dict(_json_point(chart["spirit"]),
+                           house=chart["spirit"]["house"],
+                           lord=chart["spirit"]["lord"]),
+        },
+        "prenatal_syzygy": ({
+            "type": sz["type"],
+            "datetime_local": sz["datetime_str"],
+            "almuten": sz["almuten"],
+            **_json_point(sz["point"]),
+        } if sz else None),
+        "houses": houses,
+        "aspects": [{
+            "from": a["planet1"],
+            "to": a["planet2"],
+            "aspect": a["aspect"],
+            "orb": a["orb"],
+            "max_orb": a["max_orb"],
+            "partile": a["partile"],
+            "condition": a["state"],
+            "direction": a["direction"],
+            "reception_from_to": a["reception_1to2"],
+            "reception_to_from": a["reception_2to1"],
+            "mutual_reception": a["mutual_reception"],
+        } for a in chart["aspects"]],
+        "almuten_figuris": {
+            "almuten": chart["almuten"]["almuten"],
+            "ranking": chart["almuten"]["ranked"],
+            "scores": {
+                name: {
+                    "ascendant": row["asc"], "sun": row["sun"],
+                    "moon": row["moon"], "fortune": row["fortune"],
+                    "syzygy": row["syzygy"], "total": row["total"],
+                    "accidental": row["accidental"],
+                }
+                for name, row in chart["almuten"]["table"].items()
+            },
+        },
+        "fixed_stars": {name: _json_point(pt)
+                        for name, pt in chart["stars"].items()},
+        "modern_reference": {
+            "note": "古典判断には用いない参考値 / not used in classical judgment",
+            "planets": [dict(_json_point(m), name=m["name_en"],
+                             speed=round(m["speed"], 6),
+                             retrograde=m["retrograde"],
+                             house=m["house_effective"])
+                        for m in chart["modern_reference"]],
+        },
+    }
 
 
 # ==============================================================================
@@ -1385,12 +1777,16 @@ def generate_classical_text(chart, birth_info):
 # ==============================================================================
 
 def main():
-    """python3 natal_classical.py 年 月 日 時 分 [緯度 経度] [ハウス記号]"""
+    """python3 natal_classical.py 年 月 日 時 分 [緯度 経度] [ハウス記号] [--json]"""
     import sys
-    args = sys.argv[1:]
+    import json as _json
+
+    args = [a for a in sys.argv[1:] if a != "--json"]
+    as_json = "--json" in sys.argv[1:]
     if len(args) < 5:
         print(main.__doc__.strip())
         print("例: python3 natal_classical.py 1985 7 21 14 30 35.6895 139.6917 R")
+        print("    python3 natal_classical.py 1985 7 21 14 30 --json > chart.json")
         return
 
     y, mo, d, h, mi = (int(a) for a in args[:5])
@@ -1399,6 +1795,10 @@ def main():
     hsys = args[7] if len(args) > 7 else "R"
 
     chart = calculate_classical_chart(y, mo, d, h, mi, lat, lon, house_system=hsys)
+    if as_json:
+        print(_json.dumps(to_json(chart), ensure_ascii=False, indent=2))
+        return
+
     birth_info = {"year": y, "month": mo, "day": d, "hour": h, "minute": mi,
                   "lat": lat, "lon": lon, "tz_offset": 9.0}
     print(generate_classical_text(chart, birth_info))
