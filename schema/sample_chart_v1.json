@@ -29,8 +29,8 @@
         "label": "プロジェクト慣行",
         "citation": "METHOD_本質的品位表_v1.md §4.1",
         "verified": true,
-        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)",
-        "note": "METHOD_本質的品位表_v1.md（v1.1）と機械照合し全行一致（2026-09-17）。初版の Ari〜Leo の5行（Lilly 値の混入）を置換済み。鑑定実務（鑑定依頼人台帳/出生図鑑定_Case003_20260901.md）がエジプト式のため運用値とする"
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）。初版の Ari〜Leo の5行（Lilly 値の混入）を置換済み。鑑定実務（鑑定依頼人台帳/出生図鑑定_Case003_20260901.md）がエジプト式のため運用値とする"
       },
       "terms_audit": {
         "table": "Ptolemaic terms (Lilly) — audit only, not scored",
@@ -38,7 +38,7 @@
         "label": "リリー本文",
         "citation": null,
         "verified": false,
-        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1) §4.2",
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2) §4.2",
         "note": "値は METHOD §4.2 に一致。CA Book I 品位表（KB索引 CA_DH pp.45–47）との照合が済むまで verified=false。Case003（出生図鑑定_Case003_20260901.md §ターム）の2例で本表の判定と一致：M の☿♏15°41′（エジプト式＝☿自ターム／本表＝♀ターム→ペレグリン）、M の♂♑28°30′（エジプト式＝♂自ターム／本表＝♄ターム）"
       },
       "triplicity": {
@@ -47,8 +47,8 @@
         "label": "プロジェクト慣行",
         "citation": "METHOD_本質的品位表_v1.md §3",
         "verified": true,
-        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)",
-        "note": "METHOD_本質的品位表_v1.md（v1.1）と機械照合し全行一致（2026-09-17）。得点はセクト主星のみ +3、関与星は加点なし（3主星は triplicity_rulers に出力）。関与星はホラリー実務のレセプション判定で用いる（ケースNo002_失せ物_バイオリン弓_20260827.md §ラディカリティ①・§Collection）。Lilly 版2主星表は triplicity='lilly' で選択可（こちらは未照合）"
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）。得点はセクト主星のみ +3、関与星は加点なし（3主星は triplicity_rulers に出力）。関与星はホラリー実務のレセプション判定で用いる（ケースNo002_失せ物_バイオリン弓_20260827.md §ラディカリティ①・§Collection）。Lilly 版2主星表は triplicity='lilly' で選択可（こちらは未照合）"
       },
       "faces": {
         "table": "Faces (Chaldean order)",
@@ -56,8 +56,8 @@
         "label": "リリー本文",
         "citation": "METHOD_本質的品位表_v1.md §5",
         "verified": true,
-        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)",
-        "note": "METHOD_本質的品位表_v1.md（v1.1）と機械照合し全行一致（2026-09-17）"
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）"
       },
       "domicile": {
         "table": "Domicile (rulership)",
@@ -65,8 +65,8 @@
         "label": "リリー本文",
         "citation": "METHOD_本質的品位表_v1.md §1",
         "verified": true,
-        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)",
-        "note": "METHOD_本質的品位表_v1.md（v1.1）と機械照合し全行一致（2026-09-17）"
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）"
       },
       "exaltation": {
         "table": "Exaltation (with degrees)",
@@ -74,8 +74,8 @@
         "label": "リリー本文",
         "citation": "METHOD_本質的品位表_v1.md §2",
         "verified": true,
-        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)",
-        "note": "METHOD_本質的品位表_v1.md（v1.1）と機械照合し全行一致（2026-09-17）（7天体・度数を含む）。ノードの高揚は得点に用いない"
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）（7天体・度数を含む）。ノードの高揚は得点に用いない"
       },
       "detriment": {
         "table": "Detriment",
@@ -83,8 +83,8 @@
         "label": "リリー本文",
         "citation": "METHOD_本質的品位表_v1.md §6",
         "verified": true,
-        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)",
-        "note": "METHOD_本質的品位表_v1.md（v1.1）と機械照合し全行一致（2026-09-17）"
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）"
       },
       "fall": {
         "table": "Fall",
@@ -92,8 +92,8 @@
         "label": "リリー本文",
         "citation": "METHOD_本質的品位表_v1.md §7",
         "verified": true,
-        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)",
-        "note": "METHOD_本質的品位表_v1.md（v1.1）と機械照合し全行一致（2026-09-17）（7天体のみ）"
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）（7天体のみ）"
       },
       "dignity_scores": {
         "table": "Essential dignity scores (5/4/3/2/1, -5/-4/-5)",
@@ -101,8 +101,8 @@
         "label": "リリー本文",
         "citation": "METHOD_本質的品位表_v1.md §8.1",
         "verified": true,
-        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)",
-        "note": "METHOD_本質的品位表_v1.md（v1.1）と機械照合し全行一致（2026-09-17）。ペレグリンの扱いは §8.2 の決定①〜③に従う"
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）。ペレグリンの扱いは §8.2 の決定①〜③に従う"
       },
       "peregrine": {
         "table": "Peregrine rule (Lilly + Lehman)",
@@ -110,17 +110,17 @@
         "label": "プロジェクト慣行",
         "citation": "METHOD_本質的品位表_v1.md §8.2",
         "verified": true,
-        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)",
-        "note": "決定①〜③（2026-09-17）：−5／サインまたはイグザルテーションのミューチュアル・レセプションで解除／デトリメント・フォールと重複加算しない"
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "決定①〜③（2026-09-17）：−5／サインまたはイグザルテーションのミューチュアル・レセプションで解除／デトリメント・フォールと重複加算しない。サイン×イグザルテーションの mixed レセプション（mutual_reception_mixed）による解除も含める：METHOD §8.2（v1.2）で確定"
       },
       "almuten_tie": {
-        "table": "Almuten tie-break by house position",
-        "table_ja": "アルムテン同点時のハウス位置による決定",
+        "table": "Almuten ties (house position for single degrees / joint almutens for figuris)",
+        "table_ja": "アルムテン同点時の扱い（単一度数＝ハウス位置／フィギュリス＝共同アルムテン）",
         "label": "プロジェクト慣行",
         "citation": "METHOD_本質的品位表_v1.md §10",
         "verified": true,
-        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)",
-        "note": "決定④（2026-09-17）：アングル＞サクシーデント＞ケーデント（カスプ手前5°の繰り上げ適用）。なお同点なら almuten_tie=true で候補を列挙"
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "決定④（2026-09-17）：単一度数のアルムテン（ASC・シジジー等）の同点はアングル＞サクシーデント＞ケーデント（カスプ手前5°の繰り上げ適用）で決め、なお同点なら almuten_tie=true で候補を列挙。決定⑤（2026-09-17、METHOD §10 v1.2）：アルムテン・フィギュリスの同点はハウス位置で決着させず、同点の全天体を almutens に列挙して共同アルムテンとする"
       },
       "sect": {
         "table": "Sect by horizon (ASC–DSC)",
@@ -128,7 +128,7 @@
         "label": "プロジェクト慣行",
         "citation": "METHOD_本質的品位表_v1.md §9",
         "verified": true,
-        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)",
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
         "note": "太陽が ASC–DSC 軸より上（第7〜12ハウス側）なら昼図。太陽の実高度は sun_altitude に併記し、判定が食い違えば borderline=true"
       },
       "orbs": {
@@ -1564,12 +1564,11 @@
     }
   ],
   "almuten_figuris": {
-    "almuten": "Venus",
-    "almuten_tie": false,
-    "almuten_candidates": [
+    "almutens": [
       "Venus"
     ],
-    "tie_break": null,
+    "almuten": "Venus",
+    "almuten_tie": false,
     "ranking": [
       "Venus",
       "Jupiter",

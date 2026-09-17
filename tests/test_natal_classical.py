@@ -258,13 +258,22 @@ class TestAlmutenTie(unittest.TestCase):
         self.assertEqual(res["almuten"], "Moon")
 
     def test_figuris_tie(self):
+        # 決定⑤：フィギュリスの同点はハウス位置で決着させず、両方を共同アルムテンとする
+        # （蟹 25°19′：木星6・月6。月がアングル、木星がケーデントでも決着しない）
         places = {"asc": lon("Can", 25 + 19 / 60)}
         res = nc.almuten_figuris(places, True, {"Jupiter": 99},
-                                 house_of={"Jupiter": 1, "Moon": 4})
-        # 偶発的品位は順位に用いない：両者アングル → 同点のまま
+                                 house_of={"Jupiter": 3, "Moon": 10})
         self.assertTrue(res["almuten_tie"])
+        self.assertEqual(res["almutens"], ["Jupiter", "Moon"])
         self.assertIsNone(res["almuten"])
-        self.assertEqual(res["candidates"], ["Jupiter", "Moon"])
+        self.assertNotIn("tie_break", res)
+
+    def test_figuris_single_winner(self):
+        places = {"asc": lon("Leo", 2), "sun": lon("Leo", 2)}
+        res = nc.almuten_figuris(places, True, house_of={"Sun": 12})
+        self.assertFalse(res["almuten_tie"])
+        self.assertEqual(res["almutens"], ["Sun"])
+        self.assertEqual(res["almuten"], "Sun")
 
 
 class TestSect(unittest.TestCase):
@@ -323,6 +332,8 @@ class TestSampleChart(unittest.TestCase):
                       "score_note", "term_audit"):
                 self.assertIn(k, ed)
         self.assertIn("almuten_tie", d["almuten_figuris"])
+        self.assertIn("almutens", d["almuten_figuris"])
+        self.assertIn("METHOD §8.2（v1.2）で確定", src["peregrine"]["note"])
         self.assertIn("almuten_tie", d["angles"]["ascendant"])
 
 

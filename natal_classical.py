@@ -273,8 +273,8 @@ UNVERIFIED_NOTE = (
 
 # 品位表の照合先（正本）。§番号は METHOD 文書の節
 METHOD_DOC = "METHOD_本質的品位表_v1.md"
-METHOD_REFERENCE = "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.1)"
-METHOD_VERIFIED_NOTE = f"{METHOD_DOC}（v1.1）と機械照合し全行一致（2026-09-17）"
+METHOD_REFERENCE = "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)"
+METHOD_VERIFIED_NOTE = f"{METHOD_DOC}（v1.2）と機械照合し全行一致（2026-09-17）"
 
 
 def _method_source(table, table_ja, label, section, note=None):
@@ -339,17 +339,22 @@ TABLE_SOURCES = {
         "verified": True,
         "reference": METHOD_REFERENCE,
         "note": ("決定①〜③（2026-09-17）：−5／サインまたはイグザルテーションの"
-                 "ミューチュアル・レセプションで解除／デトリメント・フォールと重複加算しない"),
+                 "ミューチュアル・レセプションで解除／デトリメント・フォールと重複加算しない。"
+                 "サイン×イグザルテーションの mixed レセプション（mutual_reception_mixed）による"
+                 "解除も含める：METHOD §8.2（v1.2）で確定"),
     },
     "almuten_tie": {
-        "table": "Almuten tie-break by house position",
-        "table_ja": "アルムテン同点時のハウス位置による決定",
+        "table": "Almuten ties (house position for single degrees / joint almutens for figuris)",
+        "table_ja": "アルムテン同点時の扱い（単一度数＝ハウス位置／フィギュリス＝共同アルムテン）",
         "label": "プロジェクト慣行",
         "citation": f"{METHOD_DOC} §10",
         "verified": True,
         "reference": METHOD_REFERENCE,
-        "note": ("決定④（2026-09-17）：アングル＞サクシーデント＞ケーデント"
-                 "（カスプ手前5°の繰り上げ適用）。なお同点なら almuten_tie=true で候補を列挙"),
+        "note": ("決定④（2026-09-17）：単一度数のアルムテン（ASC・シジジー等）の同点は"
+                 "アングル＞サクシーデント＞ケーデント（カスプ手前5°の繰り上げ適用）で決め、"
+                 "なお同点なら almuten_tie=true で候補を列挙。"
+                 "決定⑤（2026-09-17、METHOD §10 v1.2）：アルムテン・フィギュリスの同点は"
+                 "ハウス位置で決着させず、同点の全天体を almutens に列挙して共同アルムテンとする"),
     },
     "sect": {
         "table": "Sect by horizon (ASC–DSC)",
@@ -621,7 +626,8 @@ def house_angularity(house):
 
 def resolve_almuten(scores, house_of=None):
     """
-    得点表から勝者を決める ＝ METHOD §10 決定④
+    単一度数のアルムテンの勝者を決める ＝ METHOD §10 決定④
+    （アルムテン・フィギュリスには用いない。決定⑤）
     最高点が複数ならハウス位置（アングル＞サクシーデント＞ケーデント）で決め、
     それでも同点なら almuten=None, almuten_tie=True とし候補を列挙する
     （機械的にそれ以上は細分しない）
@@ -1205,12 +1211,15 @@ def almuten_figuris(places, is_day, accidental_scores=None, trip_table=None,
     における本質的品位得点を合算し、出生図の総主星候補を求める ＝ プロジェクト慣行
     （イブン・エズラ由来の慣行。Lilly は「Lord of the Geniture」を
       総合判断で定めるため、本表は判断材料として提示する）
-    同点はハウス位置で決め、なお同点なら almuten_tie ＝ METHOD §10 決定④
-    （偶発的品位の得点は参考として表に載せるが、順位の決定には用いない）
+    同点はハウス位置で決着させず、同点の全天体を共同アルムテンとして
+    almutens に列挙する ＝ METHOD §10 決定⑤
+    （偶発的品位の得点・ハウスは参考として表に載せるが、順位の決定には用いない）
 
     Parameters:
         places:   {"asc": lon, "sun": lon, "moon": lon, "fortune": lon, "syzygy": lon}
-        house_of: {惑星名: ハウス番号（カスプ手前5°の繰り上げ適用済み）}
+        house_of: {惑星名: ハウス番号}（表示用）
+    Returns:
+        dict: almutens, almuten（単独時のみ。同点なら None）, almuten_tie, table, ranked
     """
     house_of = house_of or {}
     table = {}
@@ -1229,13 +1238,16 @@ def almuten_figuris(places, is_day, accidental_scores=None, trip_table=None,
         row["house"] = house_of.get(name)
         table[name] = row
 
-    ranked = sorted(PLANET_NAMES,
-                    key=lambda n: (table[n]["total"],
-                                   house_angularity(house_of.get(n))),
-                    reverse=True)
-    result = resolve_almuten({n: r["total"] for n, r in table.items()}, house_of)
-    result.update({"table": table, "ranked": ranked})
-    return result
+    ranked = sorted(PLANET_NAMES, key=lambda n: table[n]["total"], reverse=True)
+    top = table[ranked[0]]["total"]
+    almutens = [n for n in ranked if table[n]["total"] == top] if top > 0 else []
+    return {
+        "almutens": almutens,
+        "almuten": almutens[0] if len(almutens) == 1 else None,
+        "almuten_tie": len(almutens) > 1,
+        "table": table,
+        "ranked": ranked,
+    }
 
 
 # ==============================================================================
@@ -1784,12 +1796,11 @@ def generate_classical_text(chart, birth_info):
                  + _sign_pad(str(row["total"]), 6)
                  + f"{row['accidental']:+d}")
     if alm["almuten_tie"]:
-        L.append("  → アルムテン: 同点（" + "・".join(PLANET_JA[n] for n in alm["candidates"])
-                 + "）。ハウス位置でも決まらないため判断は人が行う")
+        L.append("  → 共同アルムーテン: " + "・".join(PLANET_JA[n] for n in alm["almutens"])
+                 + "（同点。両方を主星として読む）")
     else:
-        L.append(f"  → アルムテン: {PLANET_JA.get(alm['almuten'], '—')}"
-                 + ("（同点をハウス位置で決定）" if alm["tie_break"] else "")
-                 + "（Lilly の Lord of the Geniture は総合判断による。本表は材料）")
+        L.append(f"  → アルムテン: {PLANET_JA.get(alm['almuten'], '—')}")
+    L.append("    （Lilly の Lord of the Geniture は総合判断による。本表は材料）")
     L.append("")
 
     # --- セクトライトの三分主星 ---
@@ -2036,10 +2047,9 @@ def to_json(chart):
             "mutual_reception": a["mutual_reception"],
         } for a in chart["aspects"]],
         "almuten_figuris": {
+            "almutens": chart["almuten"]["almutens"],
             "almuten": chart["almuten"]["almuten"],
             "almuten_tie": chart["almuten"]["almuten_tie"],
-            "almuten_candidates": chart["almuten"]["candidates"],
-            "tie_break": chart["almuten"]["tie_break"],
             "ranking": chart["almuten"]["ranked"],
             "scores": {
                 name: {
