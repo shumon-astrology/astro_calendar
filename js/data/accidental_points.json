@@ -1,0 +1,84 @@
+{
+  "_source": "natal_classical.py constants, exported by scripts/export_tables.py",
+  "house_score": {
+    "1": 5,
+    "10": 5,
+    "7": 4,
+    "4": 4,
+    "11": 4,
+    "2": 3,
+    "5": 3,
+    "9": 2,
+    "3": 1,
+    "6": -2,
+    "8": -2,
+    "12": -5
+  },
+  "benefics": [
+    "Jupiter",
+    "Venus"
+  ],
+  "malefics": [
+    "Saturn",
+    "Mars"
+  ],
+  "luminaries": [
+    "Sun",
+    "Moon"
+  ],
+  "diurnal_planets": [
+    "Sun",
+    "Jupiter",
+    "Saturn"
+  ],
+  "nocturnal_planets": [
+    "Moon",
+    "Venus",
+    "Mars"
+  ],
+  "weekday_rulers": [
+    "Moon",
+    "Mars",
+    "Mercury",
+    "Jupiter",
+    "Venus",
+    "Saturn",
+    "Sun"
+  ],
+  "hour_order": [
+    "Saturn",
+    "Jupiter",
+    "Mars",
+    "Sun",
+    "Venus",
+    "Mercury",
+    "Moon"
+  ],
+  "fixed_stars_j2000": {
+    "Regulus": 149.847,
+    "Spica": 203.833,
+    "Algol": 56.167
+  },
+  "precession_per_year": 0.013969444444444444,
+  "planet_ja": {
+    "Saturn": "土星",
+    "Jupiter": "木星",
+    "Mars": "火星",
+    "Sun": "太陽",
+    "Venus": "金星",
+    "Mercury": "水星",
+    "Moon": "月",
+    "Node": "ドラゴンヘッド",
+    "SouthNode": "ドラゴンテイル"
+  },
+  "dignity_ja": {
+    "domicile": "ドミサイル",
+    "exaltation": "イグザルテーション",
+    "triplicity": "トリプリシティ",
+    "term": "ターム",
+    "face": "フェイス",
+    "detriment": "デトリメント",
+    "fall": "フォール",
+    "peregrine": "ペレグリン"
+  }
+}

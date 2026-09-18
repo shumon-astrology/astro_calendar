@@ -1,0 +1,68 @@
+{
+  "_source": "natal_classical.py constants, exported by scripts/export_tables.py",
+  "planet_orb": {
+    "Saturn": 9.0,
+    "Jupiter": 9.0,
+    "Mars": 7.0,
+    "Sun": 15.0,
+    "Venus": 7.0,
+    "Mercury": 7.0,
+    "Moon": 12.0
+  },
+  "moiety": {
+    "Saturn": 4.5,
+    "Jupiter": 4.5,
+    "Mars": 3.5,
+    "Sun": 7.5,
+    "Venus": 3.5,
+    "Mercury": 3.5,
+    "Moon": 6.0
+  },
+  "point_moiety": 5.0,
+  "partile_orb": 1.0,
+  "cazimi_orb": 0.2833333333333333,
+  "combust_orb": 8.5,
+  "under_beams_orb": 17.0,
+  "mean_motion": {
+    "Saturn": 0.0334,
+    "Jupiter": 0.0831,
+    "Mars": 0.5242,
+    "Sun": 0.9856,
+    "Venus": 0.9856,
+    "Mercury": 0.9856,
+    "Moon": 13.1764
+  },
+  "aspects": [
+    {
+      "angle": 0.0,
+      "name": "conjunction",
+      "abbrev": "Con",
+      "name_ja": "合"
+    },
+    {
+      "angle": 60.0,
+      "name": "sextile",
+      "abbrev": "Sex",
+      "name_ja": "六分"
+    },
+    {
+      "angle": 90.0,
+      "name": "square",
+      "abbrev": "Squ",
+      "name_ja": "矩"
+    },
+    {
+      "angle": 120.0,
+      "name": "trine",
+      "abbrev": "Tri",
+      "name_ja": "三分"
+    },
+    {
+      "angle": 180.0,
+      "name": "opposition",
+      "abbrev": "Opp",
+      "name_ja": "衝"
+    }
+  ],
+  "cusp_threshold": 5.0
+}

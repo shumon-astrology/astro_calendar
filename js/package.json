@@ -1,0 +1,29 @@
+{
+  "name": "traditionalchart-core",
+  "version": "0.1.0",
+  "description": "Classical natal chart calculator (SCHEMA_chart_v2). Pure functions, no DOM, no network.",
+  "type": "module",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "typegen": "json2ts --input ../schema/SCHEMA_chart_v2.json --output src/types/chart_v2.d.ts --unreachableDefinitions --additionalProperties false",
+    "build": "tsc --noEmit && esbuild src/index.ts --bundle --format=esm --outfile=dist/traditionalchart.mjs",
+    "chart": "node --experimental-strip-types cli/chart.ts",
+    "compare": "node --experimental-strip-types cli/compare.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "astronomy-engine": "^2.1.19"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.1",
+    "ajv": "^8.17.1",
+    "esbuild": "^0.25.0",
+    "json-schema-to-typescript": "^15.0.4",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}
