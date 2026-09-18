@@ -1,6 +1,6 @@
 /**
  * 適職ブロック（I-3）のテスト。
- * GT-4：較正例 No.001（Ms. Marie）。期待値は設計提案書 §7-1（凍結前。監修待ち）。
+ * GT-4：較正例 No.001。期待値は設計提案書 §7-1（凍結前。監修待ち）。
  * GT-5(d)：三候補がすべて燃焼する合成入力で no_significator。
  */
 import { readFileSync } from "node:fs";
