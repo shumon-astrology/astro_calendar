@@ -67,6 +67,18 @@
 - `fixed_star_contacts`：null。56 星カタログは実装せず、キーのみ予約（I-2-1 保留、付録A #16）。v1 の `fixed_stars`（Regulus・Spica・Algol）は現状維持。
 - `timing`：null。`vocation.timing_slice`：null（METHOD_timing 未作成）。
 
+## 参照実装（Python）の記録
+
+- **タグ `v1-reference`**：GT-2 の基準となる Python 実装。
+  - 2026-09-19 に打ち直した（現在は commit `226e8d6`）。**旧タグは `1f813ff`**（決定 C まで）。
+    打ち直しの理由は `prenatal_syzygy.datetime_local` が tz_offset によらず常に JST
+    だった不具合の修正（付録 A #19）。値が変わったのは tz≠9 の 8 図の当該キーのみ。
+  - 暦は Swiss Ephemeris の Moshier フォールバック（se1 未配置、付録 A #17）。
+- **実装候補（保留）**：恒星 Spica は Python が Swiss の内蔵値（視位置）、JS が線形近似で
+  約 18″ ずれる。Astronomy Engine の `DefineStar` に ICRS 座標を与えて視位置を計算すれば
+  数秒角まで寄せられる見込み。新しい星集合（ロイヤルスター 6＋4〜6）を決めるときに
+  併せて検討する（付録 A #16・#21）。
+
 ## v1 rev.2（2026-09-17）
 
 - `planetary_day_hour` を `oneOf [object, null]` にし、極圏（白夜・極夜）で日出没が求まらない場合の null を許容。

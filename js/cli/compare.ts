@@ -42,13 +42,11 @@ const SCALAR_KEYS = new Set(["speed", "sun_altitude", "julian_day_ut"]);
 /** 黄経から導かれる離散値（境界事例の判定に使う） */
 const DERIVED_FROM_LONGITUDE = new Set(["degrees", "minutes", "position", "sign", "sign_index"]);
 
-const KNOWN_DIVERGENCES: { match: (path: string) => boolean; note: string }[] = [
-  {
-    match: (p) => p.endsWith("/prenatal_syzygy/datetime_local"),
-    note: "Python は朔望の日時を常に JST で整形する（natal_classical.py 988 行付近の既知の不具合）。"
-      + "JS は出生地の現地時刻で出している",
-  },
-];
+// Python 側を直したので、既知の相違は現時点で無い（付録 A #19 は解決済み）
+const KNOWN_DIVERGENCES: { match: (path: string) => boolean; note: string }[] = [];
+
+/** 分まで切り捨てて出す日時。2 分以内のずれは境界事例として扱う */
+const MINUTE_STRING_KEYS = ["/sunrise", "/sunset", "/prenatal_syzygy/datetime_local"];
 
 function angleDelta(a: number, b: number): number {
   return Math.abs(((a - b + 540) % 360) - 180);
@@ -129,11 +127,13 @@ function walk(py: unknown, js: unknown, path: string, ctx: WalkContext): void {
     return;
   }
 
-  if (path.endsWith("/sunrise") || path.endsWith("/sunset")) {
+  if (MINUTE_STRING_KEYS.some((k) => path.endsWith(k))) {
     const delta = minutesBetween(py as string, js as string);
-    if (delta > TIME_TOLERANCE_MIN) {
-      ctx.diffs.push({ chart: ctx.chart, path, python: py, js, kind: "time", delta });
-    }
+    ctx.diffs.push({
+      chart: ctx.chart, path, python: py, js, delta,
+      kind: delta > TIME_TOLERANCE_MIN ? "time" : "boundary",
+      note: delta > TIME_TOLERANCE_MIN ? undefined : "分の切り捨て境界（2 分以内）",
+    });
     return;
   }
   if (path === "/generator") return;            // 実装名は異なってよい
