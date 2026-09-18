@@ -953,9 +953,12 @@ def part_of_spirit(asc_lon, sun_lon, moon_lon, is_day):
     return (asc_lon + moon_lon - sun_lon) % 360.0
 
 
-def prenatal_syzygy(jd_birth, max_days=32.0, step=0.25):
+def prenatal_syzygy(jd_birth, max_days=32.0, step=0.25, tz_offset=9.0):
     """
     出生直前の新月または満月（プレナタル・シジジー）を求める。
+
+    datetime_str は出生地の現地時刻（tz_offset）で整形する。
+    2026-09-19 まで JST 固定だった（tz_offset≠9 の図で誤り）
 
     Returns:
         dict: jd, longitude, type（"new"/"full"）, datetime 文字列
@@ -995,7 +998,7 @@ def prenatal_syzygy(jd_birth, max_days=32.0, step=0.25):
     # ここでは伝統的な簡便法として、新月は合の度数、満月は月の度数を採る
     # ＝ プロジェクト慣行
     lon = sun_lon if angle == 0.0 else moon_lon
-    dt = ac.jd_to_datetime_jst(jd_exact)
+    dt = jd_to_local_datetime(jd_exact, tz_offset)
     return {
         "jd": jd_exact,
         "type": "new" if angle == 0.0 else "full",
@@ -1507,7 +1510,7 @@ def calculate_classical_chart(year, month, day, hour, minute, lat, lon,
     })
 
     # --- プレナタル・シジジー ---
-    syzygy = prenatal_syzygy(jd)
+    syzygy = prenatal_syzygy(jd, tz_offset=tz_offset)
     if syzygy:
         syzygy["point"] = _format_point(syzygy["longitude"])
         sz_alm = almuten_of_degree(syzygy["longitude"], is_day, trip_table, house_of)

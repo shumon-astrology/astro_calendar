@@ -385,6 +385,20 @@ class TestPlanetaryHour(unittest.TestCase):
         self.assertLocalTimes(ph, "2000-02-29")
         self.assertEqual(ph["day_ruler"], "Mars")
 
+    def test_syzygy_datetime_is_local(self):
+        """プレナタル・シジジーの日時も出生地の現地時刻（2026-09-19 修正）"""
+        stockholm = nc.calculate_classical_chart(1915, 8, 29, 3, 30, 59.3333, 18.05,
+                                                 tz_offset=1.0)
+        tokyo = nc.calculate_classical_chart(1915, 8, 29, 3, 30, 35.6895, 139.6917,
+                                             tz_offset=9.0)
+        # 同じ朔望を、それぞれの現地時刻で出す（表示の差はちょうど 8 時間）。
+        # 探索の開始点が tz の分だけずれるので jd は数秒だけ違う
+        self.assertAlmostEqual(stockholm["syzygy"]["jd"], tokyo["syzygy"]["jd"], delta=1e-4)
+        self.assertEqual(stockholm["syzygy"]["datetime_str"], "1915-08-24 22:40")
+        self.assertEqual(tokyo["syzygy"]["datetime_str"], "1915-08-25 06:40")
+        self.assertEqual(nc.to_json(stockholm)["prenatal_syzygy"]["datetime_local"],
+                         "1915-08-24 22:40")
+
     def test_tokyo_unchanged(self):
         c = nc.calculate_classical_chart(1985, 7, 21, 14, 30, 35.6895, 139.6917)
         ph = c["planetary_hour"]
