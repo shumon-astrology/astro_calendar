@@ -1,0 +1,1858 @@
+{
+  "schema_version": "v1",
+  "generator": "natal_classical.py",
+  "birth_data": {
+    "year": 2020,
+    "month": 6,
+    "day": 21,
+    "hour": 12,
+    "minute": 0,
+    "tz_offset": 1.0,
+    "latitude": 78.22,
+    "longitude": 15.63,
+    "julian_day_ut": 2459021.95833333
+  },
+  "tables_used": {
+    "terms": "egyptian",
+    "terms_audit": "ptolemaic_lilly",
+    "triplicity": "dorothean",
+    "faces": "chaldean",
+    "house_system": {
+      "code": "R",
+      "name": "Regiomontanus"
+    },
+    "node": "mean",
+    "sources": {
+      "terms": {
+        "table": "Egyptian (Dorothean) terms",
+        "table_ja": "エジプト式ターム（ドロテウス版）",
+        "label": "プロジェクト慣行",
+        "citation": "METHOD_本質的品位表_v1.md §4.1",
+        "verified": true,
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）。初版の Ari〜Leo の5行（Lilly 値の混入）を置換済み。鑑定実務（鑑定依頼人台帳/出生図鑑定_Case003_20260901.md）がエジプト式のため運用値とする"
+      },
+      "terms_audit": {
+        "table": "Ptolemaic terms (Lilly) — audit only, not scored",
+        "table_ja": "プトレマイオス式ターム（Lilly 版）— 監査専用・得点に不使用",
+        "label": "リリー本文",
+        "citation": null,
+        "verified": false,
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2) §4.2",
+        "note": "値は METHOD §4.2 に一致。CA Book I 品位表（KB索引 CA_DH pp.45–47）との照合が済むまで verified=false。Case003（出生図鑑定_Case003_20260901.md §ターム）の2例で本表の判定と一致：M の☿♏15°41′（エジプト式＝☿自ターム／本表＝♀ターム→ペレグリン）、M の♂♑28°30′（エジプト式＝♂自ターム／本表＝♄ターム）"
+      },
+      "triplicity": {
+        "table": "Dorothean triplicity rulers (day / night / participating)",
+        "table_ja": "ドロセウス式トリプリシティ（昼・夜・関与）",
+        "label": "プロジェクト慣行",
+        "citation": "METHOD_本質的品位表_v1.md §3",
+        "verified": true,
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）。得点はセクト主星のみ +3、関与星は加点なし（3主星は triplicity_rulers に出力）。関与星はホラリー実務のレセプション判定で用いる（ケースNo002_失せ物_バイオリン弓_20260827.md §ラディカリティ①・§Collection）。Lilly 版2主星表は triplicity='lilly' で選択可（こちらは未照合）"
+      },
+      "faces": {
+        "table": "Faces (Chaldean order)",
+        "table_ja": "フェイス（カルデア順）",
+        "label": "リリー本文",
+        "citation": "METHOD_本質的品位表_v1.md §5",
+        "verified": true,
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）"
+      },
+      "domicile": {
+        "table": "Domicile (rulership)",
+        "table_ja": "ルーラーシップ",
+        "label": "リリー本文",
+        "citation": "METHOD_本質的品位表_v1.md §1",
+        "verified": true,
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）"
+      },
+      "exaltation": {
+        "table": "Exaltation (with degrees)",
+        "table_ja": "イグザルテーション（度数つき）",
+        "label": "リリー本文",
+        "citation": "METHOD_本質的品位表_v1.md §2",
+        "verified": true,
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）（7天体・度数を含む）。ノードの高揚は得点に用いない"
+      },
+      "detriment": {
+        "table": "Detriment",
+        "table_ja": "デトリメント",
+        "label": "リリー本文",
+        "citation": "METHOD_本質的品位表_v1.md §6",
+        "verified": true,
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）"
+      },
+      "fall": {
+        "table": "Fall",
+        "table_ja": "フォール",
+        "label": "リリー本文",
+        "citation": "METHOD_本質的品位表_v1.md §7",
+        "verified": true,
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）（7天体のみ）"
+      },
+      "dignity_scores": {
+        "table": "Essential dignity scores (5/4/3/2/1, -5/-4/-5)",
+        "table_ja": "本質的品位の得点",
+        "label": "リリー本文",
+        "citation": "METHOD_本質的品位表_v1.md §8.1",
+        "verified": true,
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）。ペレグリンの扱いは §8.2 の決定①〜③に従う"
+      },
+      "peregrine": {
+        "table": "Peregrine rule (Lilly + Lehman)",
+        "table_ja": "ペレグリンの定義（Lilly＋Lehman）",
+        "label": "プロジェクト慣行",
+        "citation": "METHOD_本質的品位表_v1.md §8.2",
+        "verified": true,
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "決定①〜③（2026-09-17）：−5／サインまたはイグザルテーションのミューチュアル・レセプションで解除／デトリメント・フォールと重複加算しない。サイン×イグザルテーションの mixed レセプション（mutual_reception_mixed）による解除も含める：METHOD §8.2（v1.2）で確定"
+      },
+      "almuten_tie": {
+        "table": "Almuten ties (house position for single degrees / joint almutens for figuris)",
+        "table_ja": "アルムテン同点時の扱い（単一度数＝ハウス位置／フィギュリス＝共同アルムテン）",
+        "label": "プロジェクト慣行",
+        "citation": "METHOD_本質的品位表_v1.md §10",
+        "verified": true,
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "決定④（2026-09-17）：単一度数のアルムテン（ASC・シジジー等）の同点はアングル＞サクシーデント＞ケーデント（カスプ手前5°の繰り上げ適用）で決め、なお同点なら almuten_tie=true で候補を列挙。決定⑤（2026-09-17、METHOD §10 v1.2）：アルムテン・フィギュリスの同点はハウス位置で決着させず、同点の全天体を almutens に列挙して共同アルムテンとする"
+      },
+      "sect": {
+        "table": "Sect by horizon (ASC–DSC)",
+        "table_ja": "昼夜判定（ASC–DSC 地平線基準）",
+        "label": "プロジェクト慣行",
+        "citation": "METHOD_本質的品位表_v1.md §9",
+        "verified": true,
+        "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+        "note": "太陽が ASC–DSC 軸より上（第7〜12ハウス側）なら昼図。太陽の実高度は sun_altitude に併記し、判定が食い違えば borderline=true"
+      },
+      "orbs": {
+        "table": "Planetary orbs and moieties",
+        "table_ja": "惑星のオーブとモイエティ",
+        "label": "リリー本文",
+        "citation": null,
+        "verified": false,
+        "note": "ケースNo002 のモイエティ運用（§月・§Collection）と整合。CA Book I 本文とは未照合"
+      },
+      "accidental": {
+        "table": "Accidental fortitudes and debilities",
+        "table_ja": "偶発的品位・偶発的debility の表",
+        "label": "リリー本文",
+        "citation": null,
+        "verified": false,
+        "note": "CA Book I 品位表（KB索引では CA_DH pp.45–47）と未照合。値は一般に流布する Lilly 版の表に基づく"
+      },
+      "house_system": {
+        "table": "Regiomontanus houses",
+        "table_ja": "レジオモンタナス式ハウス",
+        "label": "プロジェクト慣行",
+        "citation": null,
+        "verified": true,
+        "note": "Lilly が CA の全図で用いた方式。プロジェクト運用文書でも必須指定（鑑定受付フォーム_v1.md 必須4／ケースファイル雛形_ホラリー.md）"
+      },
+      "node": {
+        "table": "Mean Node (true node reported for reference)",
+        "table_ja": "平均ノード（トゥルーノードは参考値として併記）",
+        "label": "プロジェクト慣行",
+        "citation": null,
+        "verified": true,
+        "note": "古典のエフェメリスは平均値を掲載するため mean を既定とする。natal.py（モダン）は True Node を用いる"
+      }
+    }
+  },
+  "sect": {
+    "method": "horizon_asc_dsc",
+    "is_day": true,
+    "chart_sect": "diurnal",
+    "sun_altitude": 35.2154,
+    "altitude_is_day": true,
+    "borderline": false,
+    "moon_increasing_light": true,
+    "sect_light": {
+      "light": "Sun",
+      "triplicity_lords": [
+        {
+          "order": "昼",
+          "planet": "Venus",
+          "house": 9,
+          "dignities": [],
+          "score": -7
+        },
+        {
+          "order": "夜",
+          "planet": "Mars",
+          "house": 7,
+          "dignities": [
+            "term",
+            "face"
+          ],
+          "score": 23
+        },
+        {
+          "order": "関与",
+          "planet": "Moon",
+          "house": 10,
+          "dignities": [
+            "domicile"
+          ],
+          "score": 5
+        }
+      ]
+    }
+  },
+  "planetary_day_hour": null,
+  "angles": {
+    "ascendant": {
+      "longitude": 180.258623,
+      "sign": "Libra",
+      "sign_index": 6,
+      "degrees": 0,
+      "minutes": 15,
+      "position": "Lib 00°15'",
+      "lord": "Venus",
+      "almuten": "Saturn",
+      "almuten_tie": false,
+      "almuten_candidates": [
+        "Saturn"
+      ],
+      "almuten_tie_break": null,
+      "almuten_scores": {
+        "Saturn": 9,
+        "Venus": 5,
+        "Moon": 1
+      }
+    },
+    "midheaven": {
+      "longitude": 90.670267,
+      "sign": "Cancer",
+      "sign_index": 3,
+      "degrees": 0,
+      "minutes": 40,
+      "position": "Can 00°40'"
+    }
+  },
+  "planets": [
+    {
+      "longitude": 300.664388,
+      "sign": "Aquarius",
+      "sign_index": 10,
+      "degrees": 0,
+      "minutes": 39,
+      "position": "Aqu 00°39'",
+      "name": "Saturn",
+      "speed": -0.058326,
+      "retrograde": true,
+      "house": 4,
+      "house_raw": 4,
+      "near_next_cusp": false,
+      "above_horizon": false,
+      "essential_dignity": {
+        "dignities": [
+          "domicile",
+          "triplicity"
+        ],
+        "debilities": [],
+        "peregrine": false,
+        "peregrine_cancelled_by": null,
+        "mutual_receptions": [],
+        "score": 8,
+        "score_note": null,
+        "rulers_of_position": {
+          "domicile": "Saturn",
+          "exaltation": null,
+          "triplicity": "Saturn",
+          "term": "Mercury",
+          "face": "Venus"
+        },
+        "triplicity_rulers": {
+          "day": "Saturn",
+          "night": "Mercury",
+          "participating": "Jupiter",
+          "sect_ruler": "Saturn"
+        },
+        "term_audit": {
+          "table": "ptolemaic_lilly",
+          "ruler": "Saturn",
+          "differs": true,
+          "has_term": true
+        }
+      },
+      "accidental_dignity": {
+        "score": 8,
+        "items": [
+          {
+            "code": "house_4",
+            "points": 4,
+            "label_ja": "第4ハウス"
+          },
+          {
+            "code": "retrograde",
+            "points": -5,
+            "label_ja": "逆行"
+          },
+          {
+            "code": "swift",
+            "points": 2,
+            "label_ja": "速行（平均運動以上）"
+          },
+          {
+            "code": "oriental",
+            "points": 2,
+            "label_ja": "オリエンタル"
+          },
+          {
+            "code": "free_of_beams",
+            "points": 5,
+            "label_ja": "光線から自由"
+          }
+        ],
+        "solar_phase": "free",
+        "distance_from_sun": 149.86,
+        "cazimi": false,
+        "combust": false,
+        "under_beams": false,
+        "free_of_beams": true,
+        "orientality": "oriental",
+        "motion": "swift"
+      },
+      "sect": {
+        "planet_sect": "diurnal",
+        "in_sect": true,
+        "hayz": "half_hayz"
+      },
+      "total_score": 16,
+      "antiscion": {
+        "longitude": 239.335612,
+        "sign": "Scorpio",
+        "sign_index": 7,
+        "degrees": 29,
+        "minutes": 20,
+        "position": "Sco 29°20'"
+      },
+      "contra_antiscion": {
+        "longitude": 59.335612,
+        "sign": "Taurus",
+        "sign_index": 1,
+        "degrees": 29,
+        "minutes": 20,
+        "position": "Tau 29°20'"
+      }
+    },
+    {
+      "longitude": 295.101826,
+      "sign": "Capricorn",
+      "sign_index": 9,
+      "degrees": 25,
+      "minutes": 6,
+      "position": "Cap 25°06'",
+      "name": "Jupiter",
+      "speed": -0.105399,
+      "retrograde": true,
+      "house": 4,
+      "house_raw": 4,
+      "near_next_cusp": false,
+      "above_horizon": false,
+      "essential_dignity": {
+        "dignities": [],
+        "debilities": [
+          "fall"
+        ],
+        "peregrine": false,
+        "peregrine_cancelled_by": "mutual_reception_mixed",
+        "mutual_receptions": [
+          {
+            "with": "Mars",
+            "type": "mutual_reception_mixed"
+          }
+        ],
+        "score": -4,
+        "score_note": null,
+        "rulers_of_position": {
+          "domicile": "Saturn",
+          "exaltation": "Mars",
+          "triplicity": "Venus",
+          "term": "Saturn",
+          "face": "Sun"
+        },
+        "triplicity_rulers": {
+          "day": "Venus",
+          "night": "Moon",
+          "participating": "Mars",
+          "sect_ruler": "Venus"
+        },
+        "term_audit": {
+          "table": "ptolemaic_lilly",
+          "ruler": "Saturn",
+          "differs": false,
+          "has_term": false
+        }
+      },
+      "accidental_dignity": {
+        "score": 8,
+        "items": [
+          {
+            "code": "house_4",
+            "points": 4,
+            "label_ja": "第4ハウス"
+          },
+          {
+            "code": "retrograde",
+            "points": -5,
+            "label_ja": "逆行"
+          },
+          {
+            "code": "swift",
+            "points": 2,
+            "label_ja": "速行（平均運動以上）"
+          },
+          {
+            "code": "oriental",
+            "points": 2,
+            "label_ja": "オリエンタル"
+          },
+          {
+            "code": "free_of_beams",
+            "points": 5,
+            "label_ja": "光線から自由"
+          }
+        ],
+        "solar_phase": "free",
+        "distance_from_sun": 155.43,
+        "cazimi": false,
+        "combust": false,
+        "under_beams": false,
+        "free_of_beams": true,
+        "orientality": "oriental",
+        "motion": "swift"
+      },
+      "sect": {
+        "planet_sect": "diurnal",
+        "in_sect": true,
+        "hayz": "neutral"
+      },
+      "total_score": 4,
+      "antiscion": {
+        "longitude": 244.898174,
+        "sign": "Sagittarius",
+        "sign_index": 8,
+        "degrees": 4,
+        "minutes": 53,
+        "position": "Sag 04°53'"
+      },
+      "contra_antiscion": {
+        "longitude": 64.898174,
+        "sign": "Gemini",
+        "sign_index": 2,
+        "degrees": 4,
+        "minutes": 53,
+        "position": "Gem 04°53'"
+      }
+    },
+    {
+      "longitude": 355.925899,
+      "sign": "Pisces",
+      "sign_index": 11,
+      "degrees": 25,
+      "minutes": 55,
+      "position": "Pis 25°55'",
+      "name": "Mars",
+      "speed": 0.625035,
+      "retrograde": false,
+      "house": 7,
+      "house_raw": 6,
+      "near_next_cusp": true,
+      "above_horizon": true,
+      "essential_dignity": {
+        "dignities": [
+          "term",
+          "face"
+        ],
+        "debilities": [],
+        "peregrine": false,
+        "peregrine_cancelled_by": null,
+        "mutual_receptions": [
+          {
+            "with": "Jupiter",
+            "type": "mutual_reception_mixed"
+          }
+        ],
+        "score": 3,
+        "score_note": null,
+        "rulers_of_position": {
+          "domicile": "Jupiter",
+          "exaltation": "Venus",
+          "triplicity": "Venus",
+          "term": "Mars",
+          "face": "Mars"
+        },
+        "triplicity_rulers": {
+          "day": "Venus",
+          "night": "Mars",
+          "participating": "Moon",
+          "sect_ruler": "Venus"
+        },
+        "term_audit": {
+          "table": "ptolemaic_lilly",
+          "ruler": "Mars",
+          "differs": false,
+          "has_term": true
+        }
+      },
+      "accidental_dignity": {
+        "score": 20,
+        "items": [
+          {
+            "code": "house_7",
+            "points": 4,
+            "label_ja": "第7ハウス"
+          },
+          {
+            "code": "direct",
+            "points": 4,
+            "label_ja": "順行"
+          },
+          {
+            "code": "swift",
+            "points": 2,
+            "label_ja": "速行（平均運動以上）"
+          },
+          {
+            "code": "oriental",
+            "points": 2,
+            "label_ja": "オリエンタル"
+          },
+          {
+            "code": "free_of_beams",
+            "points": 5,
+            "label_ja": "光線から自由"
+          },
+          {
+            "code": "partile_sextile_jupiter",
+            "points": 3,
+            "label_ja": "木星と六分（パーティル）"
+          }
+        ],
+        "solar_phase": "free",
+        "distance_from_sun": 94.6,
+        "cazimi": false,
+        "combust": false,
+        "under_beams": false,
+        "free_of_beams": true,
+        "orientality": "oriental",
+        "motion": "swift"
+      },
+      "sect": {
+        "planet_sect": "nocturnal",
+        "in_sect": false,
+        "hayz": "neutral"
+      },
+      "total_score": 23,
+      "antiscion": {
+        "longitude": 184.074101,
+        "sign": "Libra",
+        "sign_index": 6,
+        "degrees": 4,
+        "minutes": 4,
+        "position": "Lib 04°04'"
+      },
+      "contra_antiscion": {
+        "longitude": 4.074101,
+        "sign": "Aries",
+        "sign_index": 0,
+        "degrees": 4,
+        "minutes": 4,
+        "position": "Ari 04°04'"
+      }
+    },
+    {
+      "longitude": 90.527886,
+      "sign": "Cancer",
+      "sign_index": 3,
+      "degrees": 0,
+      "minutes": 31,
+      "position": "Can 00°31'",
+      "name": "Sun",
+      "speed": 0.954564,
+      "retrograde": false,
+      "house": 10,
+      "house_raw": 9,
+      "near_next_cusp": true,
+      "above_horizon": true,
+      "essential_dignity": {
+        "dignities": [],
+        "debilities": [
+          "peregrine"
+        ],
+        "peregrine": true,
+        "peregrine_cancelled_by": null,
+        "mutual_receptions": [],
+        "score": -5,
+        "score_note": null,
+        "rulers_of_position": {
+          "domicile": "Moon",
+          "exaltation": "Jupiter",
+          "triplicity": "Venus",
+          "term": "Mars",
+          "face": "Venus"
+        },
+        "triplicity_rulers": {
+          "day": "Venus",
+          "night": "Mars",
+          "participating": "Moon",
+          "sect_ruler": "Venus"
+        },
+        "term_audit": {
+          "table": "ptolemaic_lilly",
+          "ruler": "Mars",
+          "differs": false,
+          "has_term": false
+        }
+      },
+      "accidental_dignity": {
+        "score": 3,
+        "items": [
+          {
+            "code": "house_10",
+            "points": 5,
+            "label_ja": "第10ハウス"
+          },
+          {
+            "code": "slow",
+            "points": -2,
+            "label_ja": "遅行（平均運動未満）"
+          }
+        ],
+        "solar_phase": "sun",
+        "distance_from_sun": 0.0,
+        "cazimi": false,
+        "combust": false,
+        "under_beams": false,
+        "free_of_beams": false,
+        "orientality": null,
+        "motion": "slow"
+      },
+      "sect": {
+        "planet_sect": "diurnal",
+        "in_sect": true,
+        "hayz": "half_hayz"
+      },
+      "total_score": -2,
+      "antiscion": {
+        "longitude": 89.472114,
+        "sign": "Gemini",
+        "sign_index": 2,
+        "degrees": 29,
+        "minutes": 28,
+        "position": "Gem 29°28'"
+      },
+      "contra_antiscion": {
+        "longitude": 269.472114,
+        "sign": "Sagittarius",
+        "sign_index": 8,
+        "degrees": 29,
+        "minutes": 28,
+        "position": "Sag 29°28'"
+      }
+    },
+    {
+      "longitude": 65.622031,
+      "sign": "Gemini",
+      "sign_index": 2,
+      "degrees": 5,
+      "minutes": 37,
+      "position": "Gem 05°37'",
+      "name": "Venus",
+      "speed": -0.150251,
+      "retrograde": true,
+      "house": 9,
+      "house_raw": 9,
+      "near_next_cusp": false,
+      "above_horizon": true,
+      "essential_dignity": {
+        "dignities": [],
+        "debilities": [
+          "peregrine"
+        ],
+        "peregrine": true,
+        "peregrine_cancelled_by": null,
+        "mutual_receptions": [],
+        "score": -5,
+        "score_note": null,
+        "rulers_of_position": {
+          "domicile": "Mercury",
+          "exaltation": null,
+          "triplicity": "Saturn",
+          "term": "Mercury",
+          "face": "Jupiter"
+        },
+        "triplicity_rulers": {
+          "day": "Saturn",
+          "night": "Mercury",
+          "participating": "Jupiter",
+          "sect_ruler": "Saturn"
+        },
+        "term_audit": {
+          "table": "ptolemaic_lilly",
+          "ruler": "Mercury",
+          "differs": false,
+          "has_term": false
+        }
+      },
+      "accidental_dignity": {
+        "score": -2,
+        "items": [
+          {
+            "code": "house_9",
+            "points": 2,
+            "label_ja": "第9ハウス"
+          },
+          {
+            "code": "retrograde",
+            "points": -5,
+            "label_ja": "逆行"
+          },
+          {
+            "code": "slow",
+            "points": -2,
+            "label_ja": "遅行（平均運動未満）"
+          },
+          {
+            "code": "oriental",
+            "points": -2,
+            "label_ja": "オリエンタル"
+          },
+          {
+            "code": "free_of_beams",
+            "points": 5,
+            "label_ja": "光線から自由"
+          }
+        ],
+        "solar_phase": "free",
+        "distance_from_sun": 24.91,
+        "cazimi": false,
+        "combust": false,
+        "under_beams": false,
+        "free_of_beams": true,
+        "orientality": "oriental",
+        "motion": "slow"
+      },
+      "sect": {
+        "planet_sect": "nocturnal",
+        "in_sect": false,
+        "hayz": "neutral"
+      },
+      "total_score": -7,
+      "antiscion": {
+        "longitude": 114.377969,
+        "sign": "Cancer",
+        "sign_index": 3,
+        "degrees": 24,
+        "minutes": 22,
+        "position": "Can 24°22'"
+      },
+      "contra_antiscion": {
+        "longitude": 294.377969,
+        "sign": "Capricorn",
+        "sign_index": 9,
+        "degrees": 24,
+        "minutes": 22,
+        "position": "Cap 24°22'"
+      }
+    },
+    {
+      "longitude": 104.374399,
+      "sign": "Cancer",
+      "sign_index": 3,
+      "degrees": 14,
+      "minutes": 22,
+      "position": "Can 14°22'",
+      "name": "Mercury",
+      "speed": -0.236048,
+      "retrograde": true,
+      "house": 10,
+      "house_raw": 10,
+      "near_next_cusp": false,
+      "above_horizon": true,
+      "essential_dignity": {
+        "dignities": [
+          "term",
+          "face"
+        ],
+        "debilities": [],
+        "peregrine": false,
+        "peregrine_cancelled_by": null,
+        "mutual_receptions": [],
+        "score": 3,
+        "score_note": null,
+        "rulers_of_position": {
+          "domicile": "Moon",
+          "exaltation": "Jupiter",
+          "triplicity": "Venus",
+          "term": "Mercury",
+          "face": "Mercury"
+        },
+        "triplicity_rulers": {
+          "day": "Venus",
+          "night": "Mars",
+          "participating": "Moon",
+          "sect_ruler": "Venus"
+        },
+        "term_audit": {
+          "table": "ptolemaic_lilly",
+          "ruler": "Mercury",
+          "differs": false,
+          "has_term": true
+        }
+      },
+      "accidental_dignity": {
+        "score": -4,
+        "items": [
+          {
+            "code": "house_10",
+            "points": 5,
+            "label_ja": "第10ハウス"
+          },
+          {
+            "code": "retrograde",
+            "points": -5,
+            "label_ja": "逆行"
+          },
+          {
+            "code": "slow",
+            "points": -2,
+            "label_ja": "遅行（平均運動未満）"
+          },
+          {
+            "code": "occidental",
+            "points": 2,
+            "label_ja": "オクシデンタル"
+          },
+          {
+            "code": "under_beams",
+            "points": -4,
+            "label_ja": "サンビームス下"
+          }
+        ],
+        "solar_phase": "under_beams",
+        "distance_from_sun": 13.85,
+        "cazimi": false,
+        "combust": false,
+        "under_beams": true,
+        "free_of_beams": false,
+        "orientality": "occidental",
+        "motion": "slow"
+      },
+      "sect": {
+        "planet_sect": "nocturnal",
+        "in_sect": false,
+        "hayz": "neutral"
+      },
+      "total_score": -1,
+      "antiscion": {
+        "longitude": 75.625601,
+        "sign": "Gemini",
+        "sign_index": 2,
+        "degrees": 15,
+        "minutes": 37,
+        "position": "Gem 15°37'"
+      },
+      "contra_antiscion": {
+        "longitude": 255.625601,
+        "sign": "Sagittarius",
+        "sign_index": 8,
+        "degrees": 15,
+        "minutes": 37,
+        "position": "Sag 15°37'"
+      }
+    },
+    {
+      "longitude": 92.681679,
+      "sign": "Cancer",
+      "sign_index": 3,
+      "degrees": 2,
+      "minutes": 40,
+      "position": "Can 02°40'",
+      "name": "Moon",
+      "speed": 12.973017,
+      "retrograde": false,
+      "house": 10,
+      "house_raw": 10,
+      "near_next_cusp": false,
+      "above_horizon": true,
+      "essential_dignity": {
+        "dignities": [
+          "domicile"
+        ],
+        "debilities": [],
+        "peregrine": false,
+        "peregrine_cancelled_by": null,
+        "mutual_receptions": [],
+        "score": 5,
+        "score_note": null,
+        "rulers_of_position": {
+          "domicile": "Moon",
+          "exaltation": "Jupiter",
+          "triplicity": "Venus",
+          "term": "Mars",
+          "face": "Venus"
+        },
+        "triplicity_rulers": {
+          "day": "Venus",
+          "night": "Mars",
+          "participating": "Moon",
+          "sect_ruler": "Venus"
+        },
+        "term_audit": {
+          "table": "ptolemaic_lilly",
+          "ruler": "Mars",
+          "differs": false,
+          "has_term": false
+        }
+      },
+      "accidental_dignity": {
+        "score": 0,
+        "items": [
+          {
+            "code": "house_10",
+            "points": 5,
+            "label_ja": "第10ハウス"
+          },
+          {
+            "code": "slow",
+            "points": -2,
+            "label_ja": "遅行（平均運動未満）"
+          },
+          {
+            "code": "increasing_light",
+            "points": 2,
+            "label_ja": "増光"
+          },
+          {
+            "code": "combust",
+            "points": -5,
+            "label_ja": "コンバスト"
+          }
+        ],
+        "solar_phase": "combust",
+        "distance_from_sun": 2.15,
+        "cazimi": false,
+        "combust": true,
+        "under_beams": false,
+        "free_of_beams": false,
+        "orientality": "occidental",
+        "motion": "slow"
+      },
+      "sect": {
+        "planet_sect": "nocturnal",
+        "in_sect": false,
+        "hayz": "neutral"
+      },
+      "total_score": 5,
+      "antiscion": {
+        "longitude": 87.318321,
+        "sign": "Gemini",
+        "sign_index": 2,
+        "degrees": 27,
+        "minutes": 19,
+        "position": "Gem 27°19'"
+      },
+      "contra_antiscion": {
+        "longitude": 267.318321,
+        "sign": "Sagittarius",
+        "sign_index": 8,
+        "degrees": 27,
+        "minutes": 19,
+        "position": "Sag 27°19'"
+      }
+    }
+  ],
+  "nodes": {
+    "used": "mean",
+    "mean": [
+      {
+        "longitude": 89.106717,
+        "sign": "Gemini",
+        "sign_index": 2,
+        "degrees": 29,
+        "minutes": 6,
+        "position": "Gem 29°06'",
+        "name": "NorthNode",
+        "house": 10,
+        "retrograde": true
+      },
+      {
+        "longitude": 269.106717,
+        "sign": "Sagittarius",
+        "sign_index": 8,
+        "degrees": 29,
+        "minutes": 6,
+        "position": "Sag 29°06'",
+        "name": "SouthNode",
+        "house": 4,
+        "retrograde": true
+      }
+    ],
+    "true": [
+      {
+        "longitude": 89.122174,
+        "sign": "Gemini",
+        "sign_index": 2,
+        "degrees": 29,
+        "minutes": 7,
+        "position": "Gem 29°07'",
+        "name": "NorthNode",
+        "house": 10,
+        "retrograde": false
+      },
+      {
+        "longitude": 269.122174,
+        "sign": "Sagittarius",
+        "sign_index": 8,
+        "degrees": 29,
+        "minutes": 7,
+        "position": "Sag 29°07'",
+        "name": "SouthNode",
+        "house": 4,
+        "retrograde": false
+      }
+    ]
+  },
+  "lots": {
+    "fortune": {
+      "longitude": 182.412417,
+      "sign": "Libra",
+      "sign_index": 6,
+      "degrees": 2,
+      "minutes": 24,
+      "position": "Lib 02°24'",
+      "house": 1,
+      "lord": "Venus"
+    },
+    "spirit": {
+      "longitude": 178.10483,
+      "sign": "Virgo",
+      "sign_index": 5,
+      "degrees": 28,
+      "minutes": 6,
+      "position": "Vir 28°06'",
+      "house": 12,
+      "lord": "Mercury"
+    }
+  },
+  "prenatal_syzygy": {
+    "type": "new",
+    "datetime_local": "2020-06-21 07:41",
+    "almuten": "Moon",
+    "almuten_tie": false,
+    "almuten_candidates": [
+      "Moon"
+    ],
+    "almuten_tie_break": null,
+    "almuten_scores": {
+      "Jupiter": 4,
+      "Mars": 2,
+      "Venus": 4,
+      "Moon": 5
+    },
+    "longitude": 90.356506,
+    "sign": "Cancer",
+    "sign_index": 3,
+    "degrees": 0,
+    "minutes": 21,
+    "position": "Can 00°21'"
+  },
+  "houses": [
+    {
+      "longitude": 180.258623,
+      "sign": "Libra",
+      "sign_index": 6,
+      "degrees": 0,
+      "minutes": 15,
+      "position": "Lib 00°15'",
+      "house": 1,
+      "lord": "Venus",
+      "lord_placement": {
+        "sign": "Gemini",
+        "position": "Gem 05°37'",
+        "house": 9,
+        "dignities": [],
+        "debilities": [
+          "peregrine"
+        ],
+        "essential_score": -5,
+        "accidental_score": -2,
+        "retrograde": true,
+        "solar_phase": "free"
+      }
+    },
+    {
+      "longitude": 191.826816,
+      "sign": "Libra",
+      "sign_index": 6,
+      "degrees": 11,
+      "minutes": 49,
+      "position": "Lib 11°49'",
+      "house": 2,
+      "lord": "Venus",
+      "lord_placement": {
+        "sign": "Gemini",
+        "position": "Gem 05°37'",
+        "house": 9,
+        "dignities": [],
+        "debilities": [
+          "peregrine"
+        ],
+        "essential_score": -5,
+        "accidental_score": -2,
+        "retrograde": true,
+        "solar_phase": "free"
+      }
+    },
+    {
+      "longitude": 211.887026,
+      "sign": "Scorpio",
+      "sign_index": 7,
+      "degrees": 1,
+      "minutes": 53,
+      "position": "Sco 01°53'",
+      "house": 3,
+      "lord": "Mars",
+      "lord_placement": {
+        "sign": "Pisces",
+        "position": "Pis 25°55'",
+        "house": 7,
+        "dignities": [
+          "term",
+          "face"
+        ],
+        "debilities": [],
+        "essential_score": 3,
+        "accidental_score": 20,
+        "retrograde": false,
+        "solar_phase": "free"
+      }
+    },
+    {
+      "longitude": 270.670267,
+      "sign": "Capricorn",
+      "sign_index": 9,
+      "degrees": 0,
+      "minutes": 40,
+      "position": "Cap 00°40'",
+      "house": 4,
+      "lord": "Saturn",
+      "lord_placement": {
+        "sign": "Aquarius",
+        "position": "Aqu 00°39'",
+        "house": 4,
+        "dignities": [
+          "domicile",
+          "triplicity"
+        ],
+        "debilities": [],
+        "essential_score": 8,
+        "accidental_score": 8,
+        "retrograde": true,
+        "solar_phase": "free"
+      }
+    },
+    {
+      "longitude": 328.855186,
+      "sign": "Aquarius",
+      "sign_index": 10,
+      "degrees": 28,
+      "minutes": 51,
+      "position": "Aqu 28°51'",
+      "house": 5,
+      "lord": "Saturn",
+      "lord_placement": {
+        "sign": "Aquarius",
+        "position": "Aqu 00°39'",
+        "house": 4,
+        "dignities": [
+          "domicile",
+          "triplicity"
+        ],
+        "debilities": [],
+        "essential_score": 8,
+        "accidental_score": 8,
+        "retrograde": true,
+        "solar_phase": "free"
+      }
+    },
+    {
+      "longitude": 348.723445,
+      "sign": "Pisces",
+      "sign_index": 11,
+      "degrees": 18,
+      "minutes": 43,
+      "position": "Pis 18°43'",
+      "house": 6,
+      "lord": "Jupiter",
+      "lord_placement": {
+        "sign": "Capricorn",
+        "position": "Cap 25°06'",
+        "house": 4,
+        "dignities": [],
+        "debilities": [
+          "fall"
+        ],
+        "essential_score": -4,
+        "accidental_score": 8,
+        "retrograde": true,
+        "solar_phase": "free"
+      }
+    },
+    {
+      "longitude": 0.258623,
+      "sign": "Aries",
+      "sign_index": 0,
+      "degrees": 0,
+      "minutes": 15,
+      "position": "Ari 00°15'",
+      "house": 7,
+      "lord": "Mars",
+      "lord_placement": {
+        "sign": "Pisces",
+        "position": "Pis 25°55'",
+        "house": 7,
+        "dignities": [
+          "term",
+          "face"
+        ],
+        "debilities": [],
+        "essential_score": 3,
+        "accidental_score": 20,
+        "retrograde": false,
+        "solar_phase": "free"
+      }
+    },
+    {
+      "longitude": 11.826816,
+      "sign": "Aries",
+      "sign_index": 0,
+      "degrees": 11,
+      "minutes": 49,
+      "position": "Ari 11°49'",
+      "house": 8,
+      "lord": "Mars",
+      "lord_placement": {
+        "sign": "Pisces",
+        "position": "Pis 25°55'",
+        "house": 7,
+        "dignities": [
+          "term",
+          "face"
+        ],
+        "debilities": [],
+        "essential_score": 3,
+        "accidental_score": 20,
+        "retrograde": false,
+        "solar_phase": "free"
+      }
+    },
+    {
+      "longitude": 31.887026,
+      "sign": "Taurus",
+      "sign_index": 1,
+      "degrees": 1,
+      "minutes": 53,
+      "position": "Tau 01°53'",
+      "house": 9,
+      "lord": "Venus",
+      "lord_placement": {
+        "sign": "Gemini",
+        "position": "Gem 05°37'",
+        "house": 9,
+        "dignities": [],
+        "debilities": [
+          "peregrine"
+        ],
+        "essential_score": -5,
+        "accidental_score": -2,
+        "retrograde": true,
+        "solar_phase": "free"
+      }
+    },
+    {
+      "longitude": 90.670267,
+      "sign": "Cancer",
+      "sign_index": 3,
+      "degrees": 0,
+      "minutes": 40,
+      "position": "Can 00°40'",
+      "house": 10,
+      "lord": "Moon",
+      "lord_placement": {
+        "sign": "Cancer",
+        "position": "Can 02°40'",
+        "house": 10,
+        "dignities": [
+          "domicile"
+        ],
+        "debilities": [],
+        "essential_score": 5,
+        "accidental_score": 0,
+        "retrograde": false,
+        "solar_phase": "combust"
+      }
+    },
+    {
+      "longitude": 148.855186,
+      "sign": "Leo",
+      "sign_index": 4,
+      "degrees": 28,
+      "minutes": 51,
+      "position": "Leo 28°51'",
+      "house": 11,
+      "lord": "Sun",
+      "lord_placement": {
+        "sign": "Cancer",
+        "position": "Can 00°31'",
+        "house": 10,
+        "dignities": [],
+        "debilities": [
+          "peregrine"
+        ],
+        "essential_score": -5,
+        "accidental_score": 3,
+        "retrograde": false,
+        "solar_phase": "sun"
+      }
+    },
+    {
+      "longitude": 168.723445,
+      "sign": "Virgo",
+      "sign_index": 5,
+      "degrees": 18,
+      "minutes": 43,
+      "position": "Vir 18°43'",
+      "house": 12,
+      "lord": "Mercury",
+      "lord_placement": {
+        "sign": "Cancer",
+        "position": "Can 14°22'",
+        "house": 10,
+        "dignities": [
+          "term",
+          "face"
+        ],
+        "debilities": [],
+        "essential_score": 3,
+        "accidental_score": -4,
+        "retrograde": true,
+        "solar_phase": "under_beams"
+      }
+    }
+  ],
+  "aspects": [
+    {
+      "from": "Sun",
+      "to": "MC",
+      "aspect": "conjunction",
+      "orb": 0.14,
+      "max_orb": 12.5,
+      "partile": true,
+      "condition": "applying",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Sun",
+      "to": "ASC",
+      "aspect": "square",
+      "orb": 0.27,
+      "max_orb": 12.5,
+      "partile": true,
+      "condition": "separating",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Moon",
+      "to": "Fortune",
+      "aspect": "square",
+      "orb": 0.27,
+      "max_orb": 11.0,
+      "partile": true,
+      "condition": "separating",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Saturn",
+      "to": "ASC",
+      "aspect": "trine",
+      "orb": 0.41,
+      "max_orb": 9.5,
+      "partile": true,
+      "condition": "applying",
+      "direction": "dexter",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "ASC",
+      "to": "MC",
+      "aspect": "square",
+      "orb": 0.41,
+      "max_orb": 10.0,
+      "partile": true,
+      "condition": "separating",
+      "direction": "dexter",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Jupiter",
+      "to": "Mars",
+      "aspect": "sextile",
+      "orb": 0.82,
+      "max_orb": 8.0,
+      "partile": true,
+      "condition": "separating",
+      "direction": "sinister",
+      "reception_from_to": [
+        "domicile"
+      ],
+      "reception_to_from": [
+        "exaltation",
+        "triplicity"
+      ],
+      "mutual_reception": true
+    },
+    {
+      "from": "MC",
+      "to": "Fortune",
+      "aspect": "square",
+      "orb": 1.74,
+      "max_orb": 10.0,
+      "partile": false,
+      "condition": "separating",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Saturn",
+      "to": "Fortune",
+      "aspect": "trine",
+      "orb": 1.75,
+      "max_orb": 9.5,
+      "partile": false,
+      "condition": "separating",
+      "direction": "dexter",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Sun",
+      "to": "Fortune",
+      "aspect": "square",
+      "orb": 1.88,
+      "max_orb": 12.5,
+      "partile": false,
+      "condition": "applying",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Moon",
+      "to": "MC",
+      "aspect": "conjunction",
+      "orb": 2.01,
+      "max_orb": 11.0,
+      "partile": false,
+      "condition": "separating",
+      "direction": "dexter",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Sun",
+      "to": "Moon",
+      "aspect": "conjunction",
+      "orb": 2.15,
+      "max_orb": 13.5,
+      "partile": false,
+      "condition": "separating",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [
+        "domicile",
+        "triplicity"
+      ],
+      "mutual_reception": false
+    },
+    {
+      "from": "ASC",
+      "to": "Fortune",
+      "aspect": "conjunction",
+      "orb": 2.15,
+      "max_orb": 10.0,
+      "partile": false,
+      "condition": "separating",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Moon",
+      "to": "ASC",
+      "aspect": "square",
+      "orb": 2.42,
+      "max_orb": 11.0,
+      "partile": false,
+      "condition": "separating",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Venus",
+      "to": "Fortune",
+      "aspect": "trine",
+      "orb": 3.21,
+      "max_orb": 8.5,
+      "partile": false,
+      "condition": "applying",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Mars",
+      "to": "ASC",
+      "aspect": "opposition",
+      "orb": 4.33,
+      "max_orb": 8.5,
+      "partile": false,
+      "condition": "applying",
+      "direction": "dexter",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Mars",
+      "to": "Sun",
+      "aspect": "square",
+      "orb": 4.6,
+      "max_orb": 11.0,
+      "partile": false,
+      "condition": "separating",
+      "direction": "sinister",
+      "reception_from_to": [
+        "term"
+      ],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Saturn",
+      "to": "Mars",
+      "aspect": "sextile",
+      "orb": 4.74,
+      "max_orb": 8.0,
+      "partile": false,
+      "condition": "applying",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Mars",
+      "to": "MC",
+      "aspect": "square",
+      "orb": 4.74,
+      "max_orb": 8.5,
+      "partile": false,
+      "condition": "applying",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Saturn",
+      "to": "Venus",
+      "aspect": "trine",
+      "orb": 4.96,
+      "max_orb": 8.0,
+      "partile": false,
+      "condition": "applying",
+      "direction": "sinister",
+      "reception_from_to": [
+        "triplicity"
+      ],
+      "reception_to_from": [
+        "face"
+      ],
+      "mutual_reception": true
+    },
+    {
+      "from": "Jupiter",
+      "to": "ASC",
+      "aspect": "trine",
+      "orb": 5.16,
+      "max_orb": 9.5,
+      "partile": false,
+      "condition": "separating",
+      "direction": "dexter",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Venus",
+      "to": "ASC",
+      "aspect": "trine",
+      "orb": 5.36,
+      "max_orb": 8.5,
+      "partile": false,
+      "condition": "applying",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Saturn",
+      "to": "Jupiter",
+      "aspect": "conjunction",
+      "orb": 5.56,
+      "max_orb": 9.0,
+      "partile": false,
+      "condition": "separating",
+      "direction": "dexter",
+      "reception_from_to": [
+        "domicile",
+        "term"
+      ],
+      "reception_to_from": [
+        "triplicity"
+      ],
+      "mutual_reception": true
+    },
+    {
+      "from": "Mars",
+      "to": "Fortune",
+      "aspect": "opposition",
+      "orb": 6.49,
+      "max_orb": 8.5,
+      "partile": false,
+      "condition": "applying",
+      "direction": "dexter",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Mars",
+      "to": "Moon",
+      "aspect": "square",
+      "orb": 6.76,
+      "max_orb": 9.5,
+      "partile": false,
+      "condition": "separating",
+      "direction": "sinister",
+      "reception_from_to": [
+        "term"
+      ],
+      "reception_to_from": [
+        "triplicity"
+      ],
+      "mutual_reception": true
+    },
+    {
+      "from": "Jupiter",
+      "to": "Fortune",
+      "aspect": "trine",
+      "orb": 7.31,
+      "max_orb": 9.5,
+      "partile": false,
+      "condition": "separating",
+      "direction": "dexter",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    }
+  ],
+  "almuten_figuris": {
+    "almutens": [
+      "Venus"
+    ],
+    "almuten": "Venus",
+    "almuten_tie": false,
+    "ranking": [
+      "Venus",
+      "Saturn",
+      "Moon",
+      "Jupiter",
+      "Mars",
+      "Sun",
+      "Mercury"
+    ],
+    "scores": {
+      "Saturn": {
+        "ascendant": 9,
+        "sun": 0,
+        "moon": 0,
+        "fortune": 9,
+        "syzygy": 0,
+        "total": 18,
+        "accidental": 8,
+        "house": 4
+      },
+      "Jupiter": {
+        "ascendant": 0,
+        "sun": 4,
+        "moon": 4,
+        "fortune": 0,
+        "syzygy": 4,
+        "total": 12,
+        "accidental": 8,
+        "house": 4
+      },
+      "Mars": {
+        "ascendant": 0,
+        "sun": 2,
+        "moon": 2,
+        "fortune": 0,
+        "syzygy": 2,
+        "total": 6,
+        "accidental": 20,
+        "house": 7
+      },
+      "Sun": {
+        "ascendant": 0,
+        "sun": 0,
+        "moon": 0,
+        "fortune": 0,
+        "syzygy": 0,
+        "total": 0,
+        "accidental": 3,
+        "house": 10
+      },
+      "Venus": {
+        "ascendant": 5,
+        "sun": 4,
+        "moon": 4,
+        "fortune": 5,
+        "syzygy": 4,
+        "total": 22,
+        "accidental": -2,
+        "house": 9
+      },
+      "Mercury": {
+        "ascendant": 0,
+        "sun": 0,
+        "moon": 0,
+        "fortune": 0,
+        "syzygy": 0,
+        "total": 0,
+        "accidental": -4,
+        "house": 10
+      },
+      "Moon": {
+        "ascendant": 1,
+        "sun": 5,
+        "moon": 5,
+        "fortune": 1,
+        "syzygy": 5,
+        "total": 17,
+        "accidental": 0,
+        "house": 10
+      }
+    }
+  },
+  "fixed_stars": {
+    "Regulus": {
+      "longitude": 150.132966,
+      "sign": "Virgo",
+      "sign_index": 5,
+      "degrees": 0,
+      "minutes": 7,
+      "position": "Vir 00°07'"
+    },
+    "Spica": {
+      "longitude": 204.124565,
+      "sign": "Libra",
+      "sign_index": 6,
+      "degrees": 24,
+      "minutes": 7,
+      "position": "Lib 24°07'"
+    },
+    "Algol": {
+      "longitude": 56.452966,
+      "sign": "Taurus",
+      "sign_index": 1,
+      "degrees": 26,
+      "minutes": 27,
+      "position": "Tau 26°27'"
+    }
+  },
+  "modern_reference": {
+    "note": "古典判断には用いない参考値 / not used in classical judgment",
+    "planets": [
+      {
+        "longitude": 39.501462,
+        "sign": "Taurus",
+        "sign_index": 1,
+        "degrees": 9,
+        "minutes": 30,
+        "position": "Tau 09°30'",
+        "name": "Uranus",
+        "speed": 0.04084,
+        "retrograde": false,
+        "house": 9
+      },
+      {
+        "longitude": 350.959284,
+        "sign": "Pisces",
+        "sign_index": 11,
+        "degrees": 20,
+        "minutes": 57,
+        "position": "Pis 20°57'",
+        "name": "Neptune",
+        "speed": 0.000949,
+        "retrograde": false,
+        "house": 6
+      },
+      {
+        "longitude": 294.305783,
+        "sign": "Capricorn",
+        "sign_index": 9,
+        "degrees": 24,
+        "minutes": 18,
+        "position": "Cap 24°18'",
+        "name": "Pluto",
+        "speed": -0.021552,
+        "retrograde": true,
+        "house": 4
+      }
+    ]
+  }
+}

@@ -1,0 +1,848 @@
+{
+  "_source": "natal_classical.py constants, exported by scripts/export_tables.py",
+  "planets": [
+    "Saturn",
+    "Jupiter",
+    "Mars",
+    "Sun",
+    "Venus",
+    "Mercury",
+    "Moon"
+  ],
+  "sign_abbrev": [
+    "Ari",
+    "Tau",
+    "Gem",
+    "Can",
+    "Leo",
+    "Vir",
+    "Lib",
+    "Sco",
+    "Sag",
+    "Cap",
+    "Aqu",
+    "Pis"
+  ],
+  "sign_full": [
+    "Aries",
+    "Taurus",
+    "Gemini",
+    "Cancer",
+    "Leo",
+    "Virgo",
+    "Libra",
+    "Scorpio",
+    "Sagittarius",
+    "Capricorn",
+    "Aquarius",
+    "Pisces"
+  ],
+  "elements": [
+    "fire",
+    "earth",
+    "air",
+    "water"
+  ],
+  "domicile_by_sign": [
+    "Mars",
+    "Venus",
+    "Mercury",
+    "Moon",
+    "Sun",
+    "Mercury",
+    "Venus",
+    "Mars",
+    "Jupiter",
+    "Saturn",
+    "Saturn",
+    "Jupiter"
+  ],
+  "detriment_by_sign": [
+    "Venus",
+    "Mars",
+    "Jupiter",
+    "Saturn",
+    "Saturn",
+    "Jupiter",
+    "Mars",
+    "Venus",
+    "Mercury",
+    "Moon",
+    "Sun",
+    "Mercury"
+  ],
+  "exaltations": {
+    "Sun": {
+      "sign": 0,
+      "degree": 19
+    },
+    "Moon": {
+      "sign": 1,
+      "degree": 3
+    },
+    "Jupiter": {
+      "sign": 3,
+      "degree": 15
+    },
+    "Mercury": {
+      "sign": 5,
+      "degree": 15
+    },
+    "Saturn": {
+      "sign": 6,
+      "degree": 21
+    },
+    "Mars": {
+      "sign": 9,
+      "degree": 28
+    },
+    "Venus": {
+      "sign": 11,
+      "degree": 27
+    }
+  },
+  "exalt_by_sign": {
+    "0": {
+      "planet": "Sun",
+      "degree": 19
+    },
+    "1": {
+      "planet": "Moon",
+      "degree": 3
+    },
+    "3": {
+      "planet": "Jupiter",
+      "degree": 15
+    },
+    "5": {
+      "planet": "Mercury",
+      "degree": 15
+    },
+    "6": {
+      "planet": "Saturn",
+      "degree": 21
+    },
+    "9": {
+      "planet": "Mars",
+      "degree": 28
+    },
+    "11": {
+      "planet": "Venus",
+      "degree": 27
+    }
+  },
+  "fall_by_sign": {
+    "6": {
+      "planet": "Sun",
+      "degree": 19
+    },
+    "7": {
+      "planet": "Moon",
+      "degree": 3
+    },
+    "9": {
+      "planet": "Jupiter",
+      "degree": 15
+    },
+    "11": {
+      "planet": "Mercury",
+      "degree": 15
+    },
+    "0": {
+      "planet": "Saturn",
+      "degree": 21
+    },
+    "3": {
+      "planet": "Mars",
+      "degree": 28
+    },
+    "5": {
+      "planet": "Venus",
+      "degree": 27
+    }
+  },
+  "node_exaltation": {
+    "sign": 2,
+    "degree": 3
+  },
+  "triplicity": {
+    "default": "dorothean",
+    "tables": {
+      "dorothean": {
+        "fire": {
+          "day": "Sun",
+          "night": "Jupiter",
+          "participating": "Saturn"
+        },
+        "earth": {
+          "day": "Venus",
+          "night": "Moon",
+          "participating": "Mars"
+        },
+        "air": {
+          "day": "Saturn",
+          "night": "Mercury",
+          "participating": "Jupiter"
+        },
+        "water": {
+          "day": "Venus",
+          "night": "Mars",
+          "participating": "Moon"
+        }
+      },
+      "lilly": {
+        "fire": {
+          "day": "Sun",
+          "night": "Jupiter",
+          "participating": null
+        },
+        "earth": {
+          "day": "Venus",
+          "night": "Moon",
+          "participating": null
+        },
+        "air": {
+          "day": "Saturn",
+          "night": "Mercury",
+          "participating": null
+        },
+        "water": {
+          "day": "Mars",
+          "night": "Mars",
+          "participating": null
+        }
+      }
+    }
+  },
+  "terms": {
+    "default": "egyptian",
+    "audit": "ptolemaic_lilly",
+    "tables": {
+      "egyptian": [
+        [
+          {
+            "until": 6,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 12,
+            "ruler": "Venus"
+          },
+          {
+            "until": 20,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 25,
+            "ruler": "Mars"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ],
+        [
+          {
+            "until": 8,
+            "ruler": "Venus"
+          },
+          {
+            "until": 14,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 22,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 27,
+            "ruler": "Saturn"
+          },
+          {
+            "until": 30,
+            "ruler": "Mars"
+          }
+        ],
+        [
+          {
+            "until": 6,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 12,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 17,
+            "ruler": "Venus"
+          },
+          {
+            "until": 24,
+            "ruler": "Mars"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ],
+        [
+          {
+            "until": 7,
+            "ruler": "Mars"
+          },
+          {
+            "until": 13,
+            "ruler": "Venus"
+          },
+          {
+            "until": 19,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 26,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ],
+        [
+          {
+            "until": 6,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 11,
+            "ruler": "Venus"
+          },
+          {
+            "until": 18,
+            "ruler": "Saturn"
+          },
+          {
+            "until": 24,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 30,
+            "ruler": "Mars"
+          }
+        ],
+        [
+          {
+            "until": 7,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 17,
+            "ruler": "Venus"
+          },
+          {
+            "until": 21,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 28,
+            "ruler": "Mars"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ],
+        [
+          {
+            "until": 6,
+            "ruler": "Saturn"
+          },
+          {
+            "until": 14,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 21,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 28,
+            "ruler": "Venus"
+          },
+          {
+            "until": 30,
+            "ruler": "Mars"
+          }
+        ],
+        [
+          {
+            "until": 7,
+            "ruler": "Mars"
+          },
+          {
+            "until": 11,
+            "ruler": "Venus"
+          },
+          {
+            "until": 19,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 24,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ],
+        [
+          {
+            "until": 12,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 17,
+            "ruler": "Venus"
+          },
+          {
+            "until": 21,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 26,
+            "ruler": "Saturn"
+          },
+          {
+            "until": 30,
+            "ruler": "Mars"
+          }
+        ],
+        [
+          {
+            "until": 7,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 14,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 22,
+            "ruler": "Venus"
+          },
+          {
+            "until": 26,
+            "ruler": "Saturn"
+          },
+          {
+            "until": 30,
+            "ruler": "Mars"
+          }
+        ],
+        [
+          {
+            "until": 7,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 13,
+            "ruler": "Venus"
+          },
+          {
+            "until": 20,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 25,
+            "ruler": "Mars"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ],
+        [
+          {
+            "until": 12,
+            "ruler": "Venus"
+          },
+          {
+            "until": 16,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 19,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 28,
+            "ruler": "Mars"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ]
+      ],
+      "ptolemaic_lilly": [
+        [
+          {
+            "until": 6,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 14,
+            "ruler": "Venus"
+          },
+          {
+            "until": 21,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 26,
+            "ruler": "Mars"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ],
+        [
+          {
+            "until": 8,
+            "ruler": "Venus"
+          },
+          {
+            "until": 15,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 22,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 26,
+            "ruler": "Saturn"
+          },
+          {
+            "until": 30,
+            "ruler": "Mars"
+          }
+        ],
+        [
+          {
+            "until": 7,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 14,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 21,
+            "ruler": "Venus"
+          },
+          {
+            "until": 25,
+            "ruler": "Mars"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ],
+        [
+          {
+            "until": 6,
+            "ruler": "Mars"
+          },
+          {
+            "until": 13,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 20,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 27,
+            "ruler": "Venus"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ],
+        [
+          {
+            "until": 6,
+            "ruler": "Saturn"
+          },
+          {
+            "until": 13,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 19,
+            "ruler": "Venus"
+          },
+          {
+            "until": 25,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 30,
+            "ruler": "Mars"
+          }
+        ],
+        [
+          {
+            "until": 7,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 13,
+            "ruler": "Venus"
+          },
+          {
+            "until": 18,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 24,
+            "ruler": "Mars"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ],
+        [
+          {
+            "until": 6,
+            "ruler": "Saturn"
+          },
+          {
+            "until": 11,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 19,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 24,
+            "ruler": "Venus"
+          },
+          {
+            "until": 30,
+            "ruler": "Mars"
+          }
+        ],
+        [
+          {
+            "until": 6,
+            "ruler": "Mars"
+          },
+          {
+            "until": 14,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 21,
+            "ruler": "Venus"
+          },
+          {
+            "until": 27,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ],
+        [
+          {
+            "until": 8,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 14,
+            "ruler": "Venus"
+          },
+          {
+            "until": 19,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 25,
+            "ruler": "Saturn"
+          },
+          {
+            "until": 30,
+            "ruler": "Mars"
+          }
+        ],
+        [
+          {
+            "until": 6,
+            "ruler": "Venus"
+          },
+          {
+            "until": 12,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 19,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 25,
+            "ruler": "Mars"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ],
+        [
+          {
+            "until": 6,
+            "ruler": "Saturn"
+          },
+          {
+            "until": 12,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 20,
+            "ruler": "Venus"
+          },
+          {
+            "until": 25,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 30,
+            "ruler": "Mars"
+          }
+        ],
+        [
+          {
+            "until": 8,
+            "ruler": "Venus"
+          },
+          {
+            "until": 14,
+            "ruler": "Jupiter"
+          },
+          {
+            "until": 20,
+            "ruler": "Mercury"
+          },
+          {
+            "until": 26,
+            "ruler": "Mars"
+          },
+          {
+            "until": 30,
+            "ruler": "Saturn"
+          }
+        ]
+      ]
+    }
+  },
+  "faces": [
+    [
+      "Mars",
+      "Sun",
+      "Venus"
+    ],
+    [
+      "Mercury",
+      "Moon",
+      "Saturn"
+    ],
+    [
+      "Jupiter",
+      "Mars",
+      "Sun"
+    ],
+    [
+      "Venus",
+      "Mercury",
+      "Moon"
+    ],
+    [
+      "Saturn",
+      "Jupiter",
+      "Mars"
+    ],
+    [
+      "Sun",
+      "Venus",
+      "Mercury"
+    ],
+    [
+      "Moon",
+      "Saturn",
+      "Jupiter"
+    ],
+    [
+      "Mars",
+      "Sun",
+      "Venus"
+    ],
+    [
+      "Mercury",
+      "Moon",
+      "Saturn"
+    ],
+    [
+      "Jupiter",
+      "Mars",
+      "Sun"
+    ],
+    [
+      "Venus",
+      "Mercury",
+      "Moon"
+    ],
+    [
+      "Saturn",
+      "Jupiter",
+      "Mars"
+    ]
+  ],
+  "chaldean_order": [
+    "Mars",
+    "Sun",
+    "Venus",
+    "Mercury",
+    "Moon",
+    "Saturn",
+    "Jupiter"
+  ],
+  "dignity_scores": {
+    "domicile": 5,
+    "exaltation": 4,
+    "triplicity": 3,
+    "term": 2,
+    "face": 1,
+    "detriment": -5,
+    "fall": -4,
+    "peregrine": -5
+  },
+  "angular_houses": [
+    1,
+    4,
+    7,
+    10
+  ],
+  "succedent_houses": [
+    2,
+    5,
+    8,
+    11
+  ]
+}

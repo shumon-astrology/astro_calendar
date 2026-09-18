@@ -1,0 +1,116 @@
+{
+  "generator": "natal_classical.py (v1 reference implementation)",
+  "schema_version": "v1",
+  "charts": {
+    "sample_tokyo_1985": {
+      "year": 1985,
+      "month": 7,
+      "day": 21,
+      "hour": 14,
+      "minute": 30,
+      "latitude": 35.6895,
+      "longitude": 139.6917,
+      "tz_offset": 9.0,
+      "note": "sample_chart_v1.json と同じ出生データ（東京）"
+    },
+    "chart_A_fukuoka_1996": {
+      "year": 1996,
+      "month": 1,
+      "day": 1,
+      "hour": 23,
+      "minute": 7,
+      "latitude": 33.6,
+      "longitude": 130.4167,
+      "tz_offset": 9.0,
+      "note": "試験図 A（福岡）。決定 C で木星が under_beams → free"
+    },
+    "chart_B_sydney_1968": {
+      "year": 1968,
+      "month": 10,
+      "day": 12,
+      "hour": 13,
+      "minute": 0,
+      "latitude": -33.8667,
+      "longitude": 151.2167,
+      "tz_offset": 10.0,
+      "note": "試験図 B（シドニー、南半球・UTC+10）"
+    },
+    "chart_C_stockholm_1915": {
+      "year": 1915,
+      "month": 8,
+      "day": 29,
+      "hour": 3,
+      "minute": 30,
+      "latitude": 59.3333,
+      "longitude": 18.05,
+      "tz_offset": 1.0,
+      "note": "試験図 C（ストックホルム、UTC+1・日の出前）"
+    },
+    "polar_1_longyearbyen_midsummer_midnight": {
+      "year": 2020,
+      "month": 6,
+      "day": 21,
+      "hour": 0,
+      "minute": 0,
+      "latitude": 78.22,
+      "longitude": 15.63,
+      "tz_offset": 1.0,
+      "note": "白夜の真夜中。地平線基準は夜図だが太陽高度は正 → sect.borderline"
+    },
+    "polar_2_longyearbyen_midsummer_noon": {
+      "year": 2020,
+      "month": 6,
+      "day": 21,
+      "hour": 12,
+      "minute": 0,
+      "latitude": 78.22,
+      "longitude": 15.63,
+      "tz_offset": 1.0,
+      "note": "白夜の正午。planetary_day_hour は null（日出没なし）"
+    },
+    "polar_3_longyearbyen_midwinter_noon": {
+      "year": 2020,
+      "month": 12,
+      "day": 21,
+      "hour": 12,
+      "minute": 0,
+      "latitude": 78.22,
+      "longitude": 15.63,
+      "tz_offset": 1.0,
+      "note": "極夜の正午。planetary_day_hour は null"
+    },
+    "polar_4_tromso_spring_morning": {
+      "year": 1985,
+      "month": 3,
+      "day": 15,
+      "hour": 9,
+      "minute": 0,
+      "latitude": 69.6496,
+      "longitude": 18.956,
+      "tz_offset": 1.0,
+      "note": "北極圏内だが日出没がある（惑星時が null にならない高緯度の例）"
+    },
+    "polar_5_utqiagvik_polar_night": {
+      "year": 1975,
+      "month": 11,
+      "day": 20,
+      "hour": 12,
+      "minute": 0,
+      "latitude": 71.2906,
+      "longitude": -156.7887,
+      "tz_offset": -9.0,
+      "note": "極夜のウトキアグヴィク（西経・UTC−9）"
+    },
+    "polar_6_mcmurdo_polar_night": {
+      "year": 2000,
+      "month": 6,
+      "day": 21,
+      "hour": 12,
+      "minute": 0,
+      "latitude": -77.8463,
+      "longitude": 166.6683,
+      "tz_offset": 13.0,
+      "note": "南半球の極圏（マクマード、UTC+13）。冬至の極夜"
+    }
+  }
+}

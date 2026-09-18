@@ -1,0 +1,2986 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traditionalchart.com/schema/chart_v1.json",
+  "title": "SCHEMA_chart_v1 — Classical natal chart JSON (AmanJyoshi / traditionalchart)",
+  "description": "Contract between the calculator (astro_calendar/natal_classical.py, branch classical) and the reading prompts (30_prompts/PROMPT_*_en_v*.md). The calculator WRITES this file; a prompt READS it and interprets only. The AI must never recompute positions, dignities, scores, houses or aspects — every needed value is present here. Conventions: tropical zodiac; seven classical planets; Regiomontanus houses with Lilly's 5° cusp rule; Dorothean triplicities (+3 to the sect ruler only); Egyptian terms (operative) with Ptolemaic/Lilly terms as audit only; Chaldean faces; mean node; chart sect by the ASC–DSC horizon; peregrine −5, cancelled by sign/exaltation/mixed mutual reception, never added on top of detriment/fall; almuten ties at a single degree resolved by house position, almuten figuris ties reported as joint almutens. Rule source: 20_method/METHOD_本質的品位表_v1.md (v1.2, 2026-09-17). Verification status: structure and dignity tables [確定・照合済み]; accidental-dignity codes, orbs, planetary-hour details [未照合 against CA Book I]; Ptolemaic term table [未照合]; house-cusp almutens [未実装・任意].",
+  "x-project": "デジタル販売 / 10_schema",
+  "x-schema_file_version": "v1 (2026-09-17, rev.2: planetary_day_hour may be null in polar regions)",
+  "x-sample": "astro_calendar/schema/sample_chart_v1.json (1985-07-21 14:30 JST, Tokyo; commit d55e83c)",
+  "x-method": "20_method/METHOD_本質的品位表_v1.md v1.2",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "generator",
+    "birth_data",
+    "tables_used",
+    "sect",
+    "angles",
+    "planets",
+    "nodes",
+    "lots",
+    "houses",
+    "aspects",
+    "almuten_figuris"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "v1",
+      "description": "A prompt must refuse any file whose schema_version is not \"v1\"."
+    },
+    "generator": {
+      "type": "string",
+      "description": "Program that wrote the file.",
+      "examples": [
+        "natal_classical.py"
+      ]
+    },
+    "birth_data": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer"
+        },
+        "month": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "day": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 31
+        },
+        "hour": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 23
+        },
+        "minute": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 59
+        },
+        "tz_offset": {
+          "type": "number",
+          "description": "Hours east of UTC used for the local time (e.g. 9.0 for JST). [v1 limitation] DST history and place-name lookup are the user's responsibility; v2 will add place name and timezone id."
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180,
+          "description": "Geographic longitude, east positive."
+        },
+        "julian_day_ut": {
+          "type": "number"
+        }
+      },
+      "description": "Birth data as entered. The prompt should echo it back to the user for confirmation before reading.",
+      "required": [
+        "year",
+        "month",
+        "day",
+        "hour",
+        "minute",
+        "tz_offset",
+        "latitude",
+        "longitude"
+      ],
+      "additionalProperties": true
+    },
+    "tables_used": {
+      "type": "object",
+      "properties": {
+        "terms": {
+          "type": "string",
+          "const": "egyptian",
+          "description": "Operative term table: Egyptian (Dorothean). METHOD §4.1, verified."
+        },
+        "terms_audit": {
+          "type": "string",
+          "const": "ptolemaic_lilly",
+          "description": "Audit-only term table (Lilly / Ptolemaic). Not scored."
+        },
+        "triplicity": {
+          "type": "string",
+          "const": "dorothean",
+          "description": "Dorothean three rulers; +3 to the sect ruler only. METHOD §3."
+        },
+        "faces": {
+          "type": "string",
+          "const": "chaldean",
+          "description": "Faces in Chaldean order. METHOD §5."
+        },
+        "house_system": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "const": "R"
+            },
+            "name": {
+              "type": "string",
+              "const": "Regiomontanus"
+            }
+          },
+          "required": [
+            "code",
+            "name"
+          ],
+          "additionalProperties": true
+        },
+        "node": {
+          "type": "string",
+          "const": "mean",
+          "description": "Mean node is the operative node; true node is also output in nodes.true."
+        },
+        "sources": {
+          "type": "object",
+          "properties": {
+            "terms": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "terms_audit": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "triplicity": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "faces": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "domicile": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "exaltation": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "detriment": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "fall": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "dignity_scores": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "peregrine": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "almuten_tie": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "sect": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "orbs": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "accidental": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "house_system": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            },
+            "node": {
+              "type": "object",
+              "properties": {
+                "table": {
+                  "type": "string"
+                },
+                "table_ja": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "プロジェクト慣行",
+                    "リリー本文",
+                    "リリー本文（要照合）"
+                  ],
+                  "description": "Provenance label per the classical-astrology project rules: rule from Lilly's text vs project convention."
+                },
+                "citation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "Section of the METHOD document (or primary source) the table was verified against; null when unverified."
+                },
+                "verified": {
+                  "type": "boolean",
+                  "description": "true only after machine comparison against the cited METHOD section."
+                },
+                "reference": {
+                  "type": "string"
+                },
+                "note": {
+                  "type": "string"
+                }
+              },
+              "description": "Provenance record for one table or rule. Prompts should treat verified:false tables as 'for comparison only'.",
+              "required": [
+                "table",
+                "label",
+                "citation",
+                "verified"
+              ],
+              "additionalProperties": true
+            }
+          },
+          "description": "Provenance of every table and rule. Use it to explain differences from astro.com / astro-seek (which default to Ptolemaic terms, Placidus houses, true node, etc.).",
+          "required": [
+            "terms",
+            "terms_audit",
+            "triplicity",
+            "faces",
+            "domicile",
+            "exaltation",
+            "detriment",
+            "fall",
+            "dignity_scores",
+            "peregrine",
+            "almuten_tie",
+            "sect"
+          ],
+          "additionalProperties": true
+        }
+      },
+      "description": "Declaration of the tables and conventions used. A prompt MUST check these constants before interpreting; if they differ, stop and tell the user the file is not a v1 chart.",
+      "required": [
+        "terms",
+        "terms_audit",
+        "triplicity",
+        "faces",
+        "house_system",
+        "node",
+        "sources"
+      ],
+      "additionalProperties": true
+    },
+    "sect": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "const": "horizon_asc_dsc",
+          "description": "Chart sect by the ASC–DSC horizon: Sun in houses 7–12 → diurnal (METHOD §9)."
+        },
+        "is_day": {
+          "type": "boolean"
+        },
+        "chart_sect": {
+          "type": "string",
+          "enum": [
+            "diurnal",
+            "nocturnal"
+          ]
+        },
+        "sun_altitude": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "True altitude of the Sun in degrees (auxiliary)."
+        },
+        "altitude_is_day": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "borderline": {
+          "type": "boolean",
+          "description": "true when the horizon method and the altitude method disagree (polar latitudes, Sun near the horizon). Mention this to the user when true."
+        },
+        "moon_increasing_light": {
+          "type": "boolean"
+        },
+        "sect_light": {
+          "type": "object",
+          "properties": {
+            "light": {
+              "type": "string",
+              "enum": [
+                "Sun",
+                "Moon"
+              ],
+              "description": "Sect light: Sun by day, Moon by night."
+            },
+            "triplicity_lords": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "order": {
+                    "type": "string",
+                    "enum": [
+                      "昼",
+                      "夜",
+                      "関与"
+                    ]
+                  },
+                  "planet": {
+                    "type": "string",
+                    "enum": [
+                      "Saturn",
+                      "Jupiter",
+                      "Mars",
+                      "Sun",
+                      "Venus",
+                      "Mercury",
+                      "Moon"
+                    ]
+                  },
+                  "house": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 12
+                  },
+                  "dignities": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "domicile",
+                        "exaltation",
+                        "triplicity",
+                        "term",
+                        "face"
+                      ]
+                    }
+                  },
+                  "score": {
+                    "type": "integer",
+                    "description": "total_score (essential + accidental) of that planet."
+                  }
+                },
+                "required": [
+                  "order",
+                  "planet",
+                  "house",
+                  "dignities",
+                  "score"
+                ],
+                "additionalProperties": true
+              },
+              "description": "The three Dorothean triplicity lords of the sect light's sign, in order day / night / participating, with their condition. Used for the 'lords of the sect light' technique (thirds of life)."
+            }
+          },
+          "required": [
+            "light",
+            "triplicity_lords"
+          ],
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "method",
+        "is_day",
+        "chart_sect",
+        "borderline",
+        "sect_light"
+      ],
+      "additionalProperties": true
+    },
+    "planetary_day_hour": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "day_ruler": {
+              "type": "string",
+              "enum": [
+                "Saturn",
+                "Jupiter",
+                "Mars",
+                "Sun",
+                "Venus",
+                "Mercury",
+                "Moon"
+              ]
+            },
+            "hour_ruler": {
+              "type": "string",
+              "enum": [
+                "Saturn",
+                "Jupiter",
+                "Mars",
+                "Sun",
+                "Venus",
+                "Mercury",
+                "Moon"
+              ]
+            },
+            "hour_index": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 24,
+              "description": "Planetary hour number counted from sunrise (1–12 day hours, 13–24 night hours)."
+            },
+            "is_daytime": {
+              "type": "boolean"
+            },
+            "sunrise": {
+              "type": "string",
+              "description": "Local time \"YYYY-MM-DD HH:MM\"."
+            },
+            "sunset": {
+              "type": "string"
+            }
+          },
+          "description": "Planetary day and hour (Chaldean order from sunrise). [未照合] sunrise/sunset definition (apparent vs true) not yet documented.",
+          "required": [
+            "day_ruler",
+            "hour_ruler",
+            "hour_index",
+            "is_daytime",
+            "sunrise",
+            "sunset"
+          ],
+          "additionalProperties": true
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Planetary day/hour object, or null when sunrise/sunset cannot be computed (polar day or night). When null, skip the planetary-hour step and say why."
+    },
+    "angles": {
+      "type": "object",
+      "properties": {
+        "ascendant": {
+          "type": "object",
+          "properties": {
+            "longitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360,
+              "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+            },
+            "sign": {
+              "type": "string",
+              "enum": [
+                "Aries",
+                "Taurus",
+                "Gemini",
+                "Cancer",
+                "Leo",
+                "Virgo",
+                "Libra",
+                "Scorpio",
+                "Sagittarius",
+                "Capricorn",
+                "Aquarius",
+                "Pisces"
+              ]
+            },
+            "sign_index": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 11,
+              "description": "0 = Aries … 11 = Pisces."
+            },
+            "degrees": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 29,
+              "description": "Whole degrees within the sign."
+            },
+            "minutes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 59
+            },
+            "position": {
+              "type": "string",
+              "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+              "examples": [
+                "Sco 28°22'"
+              ]
+            },
+            "lord": {
+              "type": "string",
+              "enum": [
+                "Saturn",
+                "Jupiter",
+                "Mars",
+                "Sun",
+                "Venus",
+                "Mercury",
+                "Moon"
+              ]
+            },
+            "almuten": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "Saturn",
+                "Jupiter",
+                "Mars",
+                "Sun",
+                "Venus",
+                "Mercury",
+                "Moon",
+                null
+              ],
+              "description": "Almuten of this degree. null only when almuten_tie is true."
+            },
+            "almuten_tie": {
+              "type": "boolean",
+              "description": "true = tie not resolvable by house position (Decision ④); the human judges among almuten_candidates."
+            },
+            "almuten_candidates": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "Saturn",
+                  "Jupiter",
+                  "Mars",
+                  "Sun",
+                  "Venus",
+                  "Mercury",
+                  "Moon"
+                ]
+              },
+              "description": "Planets sharing the highest essential score at this degree (before tie-break)."
+            },
+            "almuten_tie_break": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "house_angularity",
+                null
+              ],
+              "description": "\"house_angularity\" when a tie was resolved by house position (angular > succedent > cadent, Regiomontanus, 5° cusp rule). null when no tie occurred."
+            },
+            "almuten_scores": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Essential-dignity points each planet holds at this degree (+5/+4/+3/+2/+1; triplicity = sect ruler only; terms = Egyptian)."
+            }
+          },
+          "description": "Ascendant with its domicile lord and the almuten of the ASC degree.",
+          "required": [
+            "longitude",
+            "sign",
+            "sign_index",
+            "degrees",
+            "minutes",
+            "position",
+            "lord",
+            "almuten",
+            "almuten_tie",
+            "almuten_candidates",
+            "almuten_tie_break",
+            "almuten_scores"
+          ],
+          "additionalProperties": true
+        },
+        "midheaven": {
+          "type": "object",
+          "properties": {
+            "longitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360,
+              "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+            },
+            "sign": {
+              "type": "string",
+              "enum": [
+                "Aries",
+                "Taurus",
+                "Gemini",
+                "Cancer",
+                "Leo",
+                "Virgo",
+                "Libra",
+                "Scorpio",
+                "Sagittarius",
+                "Capricorn",
+                "Aquarius",
+                "Pisces"
+              ]
+            },
+            "sign_index": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 11,
+              "description": "0 = Aries … 11 = Pisces."
+            },
+            "degrees": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 29,
+              "description": "Whole degrees within the sign."
+            },
+            "minutes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 59
+            },
+            "position": {
+              "type": "string",
+              "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+              "examples": [
+                "Sco 28°22'"
+              ]
+            }
+          },
+          "required": [
+            "longitude",
+            "sign",
+            "sign_index",
+            "degrees",
+            "minutes",
+            "position"
+          ],
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "ascendant",
+        "midheaven"
+      ],
+      "additionalProperties": true
+    },
+    "planets": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "properties": {
+          "longitude": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMaximum": 360,
+            "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+          },
+          "sign": {
+            "type": "string",
+            "enum": [
+              "Aries",
+              "Taurus",
+              "Gemini",
+              "Cancer",
+              "Leo",
+              "Virgo",
+              "Libra",
+              "Scorpio",
+              "Sagittarius",
+              "Capricorn",
+              "Aquarius",
+              "Pisces"
+            ]
+          },
+          "sign_index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 11,
+            "description": "0 = Aries … 11 = Pisces."
+          },
+          "degrees": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 29,
+            "description": "Whole degrees within the sign."
+          },
+          "minutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 59
+          },
+          "position": {
+            "type": "string",
+            "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+            "examples": [
+              "Sco 28°22'"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "enum": [
+              "Saturn",
+              "Jupiter",
+              "Mars",
+              "Sun",
+              "Venus",
+              "Mercury",
+              "Moon"
+            ]
+          },
+          "speed": {
+            "type": "number",
+            "description": "Daily motion in degrees; negative when retrograde."
+          },
+          "retrograde": {
+            "type": "boolean"
+          },
+          "house": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12,
+            "description": "Effective house (Regiomontanus). A planet within 5° before the next cusp is counted in the next house (Lilly). USE THIS FIELD for interpretation."
+          },
+          "house_raw": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12,
+            "description": "House by cusp only, without the 5° rule. Reference only."
+          },
+          "near_next_cusp": {
+            "type": "boolean",
+            "description": "true when the 5° rule moved the planet into the next house (house ≠ house_raw)."
+          },
+          "above_horizon": {
+            "type": "boolean",
+            "description": "true when in houses 7–12 (above the ASC–DSC horizon)."
+          },
+          "essential_dignity": {
+            "type": "object",
+            "properties": {
+              "dignities": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "domicile",
+                    "exaltation",
+                    "triplicity",
+                    "term",
+                    "face"
+                  ]
+                },
+                "description": "Essential dignities the planet holds at its own position. \"triplicity\" appears only for the sect triplicity ruler."
+              },
+              "debilities": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "detriment",
+                    "fall",
+                    "peregrine"
+                  ]
+                },
+                "description": "Debilities that are actually scored. \"peregrine\" appears here only when it contributes −5; when the planet is in detriment/fall, peregrine is NOT listed here (Decision ③: no double counting)."
+              },
+              "peregrine": {
+                "type": "boolean",
+                "description": "true if the planet has no essential dignity and no sign/exaltation mutual reception (Lilly + Lehman). May be true while not scored — see debilities and score_note."
+              },
+              "peregrine_cancelled_by": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "mutual_reception_sign",
+                  "mutual_reception_exaltation",
+                  "mutual_reception_mixed",
+                  null
+                ],
+                "description": "Set when a mutual reception by sign, exaltation or mixed (sign×exaltation) cancels peregrine status (Decision ②, METHOD §8.2 v1.2)."
+              },
+              "mutual_receptions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "with": {
+                      "type": "string",
+                      "enum": [
+                        "Saturn",
+                        "Jupiter",
+                        "Mars",
+                        "Sun",
+                        "Venus",
+                        "Mercury",
+                        "Moon"
+                      ]
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "mutual_reception_sign",
+                        "mutual_reception_exaltation",
+                        "mutual_reception_mixed"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "with",
+                    "type"
+                  ],
+                  "additionalProperties": true
+                },
+                "description": "Mutual receptions by sign / exaltation / mixed with other planets. Aspect is not required."
+              },
+              "score": {
+                "type": "integer",
+                "description": "Essential dignity total: +5 domicile, +4 exaltation, +3 triplicity (sect ruler only), +2 term (Egyptian), +1 face; −5 detriment, −4 fall, −5 peregrine (not added on top of detriment/fall). METHOD §8."
+              },
+              "score_note": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Explanation when the score deviates from a naive sum (e.g. peregrine present but not scored because of detriment/fall)."
+              },
+              "rulers_of_position": {
+                "type": "object",
+                "properties": {
+                  "domicile": {
+                    "type": "string",
+                    "enum": [
+                      "Saturn",
+                      "Jupiter",
+                      "Mars",
+                      "Sun",
+                      "Venus",
+                      "Mercury",
+                      "Moon"
+                    ]
+                  },
+                  "exaltation": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "Saturn",
+                      "Jupiter",
+                      "Mars",
+                      "Sun",
+                      "Venus",
+                      "Mercury",
+                      "Moon",
+                      null
+                    ]
+                  },
+                  "triplicity": {
+                    "type": "string",
+                    "enum": [
+                      "Saturn",
+                      "Jupiter",
+                      "Mars",
+                      "Sun",
+                      "Venus",
+                      "Mercury",
+                      "Moon"
+                    ]
+                  },
+                  "term": {
+                    "type": "string",
+                    "enum": [
+                      "Saturn",
+                      "Jupiter",
+                      "Mars",
+                      "Sun",
+                      "Venus",
+                      "Mercury",
+                      "Moon"
+                    ]
+                  },
+                  "face": {
+                    "type": "string",
+                    "enum": [
+                      "Saturn",
+                      "Jupiter",
+                      "Mars",
+                      "Sun",
+                      "Venus",
+                      "Mercury",
+                      "Moon"
+                    ]
+                  }
+                },
+                "description": "Which planet rules the degree the planet occupies, by each dignity. triplicity = the sect ruler of the sign's triplicity. term = Egyptian terms (operative table).",
+                "required": [
+                  "domicile",
+                  "exaltation",
+                  "triplicity",
+                  "term",
+                  "face"
+                ],
+                "additionalProperties": true
+              },
+              "triplicity_rulers": {
+                "type": "object",
+                "properties": {
+                  "day": {
+                    "type": "string",
+                    "enum": [
+                      "Saturn",
+                      "Jupiter",
+                      "Mars",
+                      "Sun",
+                      "Venus",
+                      "Mercury",
+                      "Moon"
+                    ]
+                  },
+                  "night": {
+                    "type": "string",
+                    "enum": [
+                      "Saturn",
+                      "Jupiter",
+                      "Mars",
+                      "Sun",
+                      "Venus",
+                      "Mercury",
+                      "Moon"
+                    ]
+                  },
+                  "participating": {
+                    "type": "string",
+                    "enum": [
+                      "Saturn",
+                      "Jupiter",
+                      "Mars",
+                      "Sun",
+                      "Venus",
+                      "Mercury",
+                      "Moon"
+                    ]
+                  },
+                  "sect_ruler": {
+                    "type": "string",
+                    "enum": [
+                      "Saturn",
+                      "Jupiter",
+                      "Mars",
+                      "Sun",
+                      "Venus",
+                      "Mercury",
+                      "Moon"
+                    ]
+                  }
+                },
+                "description": "Dorothean three triplicity rulers of the sign occupied. Only sect_ruler receives +3; day/night/participating are for reception, radicality and other qualitative judgments (METHOD §3).",
+                "required": [
+                  "day",
+                  "night",
+                  "participating",
+                  "sect_ruler"
+                ],
+                "additionalProperties": true
+              },
+              "term_audit": {
+                "type": "object",
+                "properties": {
+                  "table": {
+                    "type": "string",
+                    "const": "ptolemaic_lilly"
+                  },
+                  "ruler": {
+                    "type": "string",
+                    "enum": [
+                      "Saturn",
+                      "Jupiter",
+                      "Mars",
+                      "Sun",
+                      "Venus",
+                      "Mercury",
+                      "Moon"
+                    ]
+                  },
+                  "differs": {
+                    "type": "boolean",
+                    "description": "true if the Ptolemaic (Lilly) term ruler differs from the Egyptian term ruler."
+                  },
+                  "has_term": {
+                    "type": "boolean",
+                    "description": "Whether the planet would be in its own term under the Ptolemaic table."
+                  }
+                },
+                "description": "AUDIT ONLY. Ptolemaic/Lilly term ruler for comparison with astro.com-style outputs. Never used for scoring, almutens or receptions. Table not yet verified against Christian Astrology Book I (verified:false in tables_used.sources.terms_audit).",
+                "required": [
+                  "table",
+                  "ruler",
+                  "differs",
+                  "has_term"
+                ],
+                "additionalProperties": true
+              }
+            },
+            "description": "Essential dignity of the planet at its own position (METHOD_本質的品位表_v1.md v1.2).",
+            "required": [
+              "dignities",
+              "debilities",
+              "peregrine",
+              "peregrine_cancelled_by",
+              "mutual_receptions",
+              "score",
+              "score_note",
+              "rulers_of_position",
+              "triplicity_rulers",
+              "term_audit"
+            ],
+            "additionalProperties": true
+          },
+          "accidental_dignity": {
+            "type": "object",
+            "properties": {
+              "score": {
+                "type": "integer",
+                "description": "Sum of accidental points (Lilly's table of accidental dignities/debilities, CA Book I)."
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "points": {
+                      "type": "integer"
+                    },
+                    "label_ja": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "points",
+                    "label_ja"
+                  ],
+                  "additionalProperties": true
+                },
+                "description": "Itemised accidental points. code examples: house_1 … house_12, direct, retrograde, swift, slow, oriental, occidental, increasing_light, decreasing_light, cazimi, combust, under_beams, free_of_beams, partile_conjunction_north_node, partile_conjunction_south_node, besieged_saturn_mars, conjunct_regulus, conjunct_spica, conjunct_algol. [未照合] the full code list and point values are Lilly's table as implemented in natal_classical.py; not yet machine-verified against CA Book I."
+              },
+              "solar_phase": {
+                "type": "string",
+                "enum": [
+                  "cazimi",
+                  "combust",
+                  "under_beams",
+                  "free",
+                  "sun"
+                ],
+                "description": "Relation to the Sun (Lilly): cazimi ≤ 0°17', combust ≤ 8°30', under the Sun's beams ≤ 17°, else free. \"sun\" for the Sun itself."
+              },
+              "distance_from_sun": {
+                "type": "number",
+                "description": "Angular distance from the Sun in degrees."
+              },
+              "cazimi": {
+                "type": "boolean"
+              },
+              "combust": {
+                "type": "boolean"
+              },
+              "under_beams": {
+                "type": "boolean"
+              },
+              "free_of_beams": {
+                "type": "boolean"
+              },
+              "orientality": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "oriental",
+                  "occidental",
+                  null
+                ],
+                "description": "Oriental/occidental of the Sun (Lilly). null for the Sun."
+              },
+              "motion": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "direct",
+                  "retrograde",
+                  "swift",
+                  "slow",
+                  null
+                ],
+                "description": "Motion class relative to mean daily motion. null when not applicable (Sun/Moon per implementation)."
+              }
+            },
+            "description": "Accidental dignity (Lilly). Interpretation-only; values come from the calculator.",
+            "required": [
+              "score",
+              "items",
+              "solar_phase",
+              "distance_from_sun"
+            ],
+            "additionalProperties": true
+          },
+          "sect": {
+            "type": "object",
+            "properties": {
+              "planet_sect": {
+                "type": "string",
+                "enum": [
+                  "diurnal",
+                  "nocturnal",
+                  "neutral"
+                ],
+                "description": "Sect the planet belongs to. Mercury is neutral (follows its orientality per implementation)."
+              },
+              "in_sect": {
+                "type": "boolean",
+                "description": "true when the planet's sect matches the chart sect."
+              },
+              "hayz": {
+                "type": "string",
+                "enum": [
+                  "hayz",
+                  "half_hayz",
+                  "contrary",
+                  "neutral",
+                  ""
+                ],
+                "description": "hayz = in sect, on the matching side of the horizon, and in a sign of matching gender; half_hayz = partially; contrary = opposite. Empty string when not evaluated."
+              }
+            },
+            "required": [
+              "planet_sect",
+              "in_sect",
+              "hayz"
+            ],
+            "additionalProperties": true
+          },
+          "total_score": {
+            "type": "integer",
+            "description": "essential_dignity.score + accidental_dignity.score."
+          },
+          "antiscion": {
+            "type": "object",
+            "properties": {
+              "longitude": {
+                "type": "number",
+                "minimum": 0,
+                "exclusiveMaximum": 360,
+                "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+              },
+              "sign": {
+                "type": "string",
+                "enum": [
+                  "Aries",
+                  "Taurus",
+                  "Gemini",
+                  "Cancer",
+                  "Leo",
+                  "Virgo",
+                  "Libra",
+                  "Scorpio",
+                  "Sagittarius",
+                  "Capricorn",
+                  "Aquarius",
+                  "Pisces"
+                ]
+              },
+              "sign_index": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 11,
+                "description": "0 = Aries … 11 = Pisces."
+              },
+              "degrees": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 29,
+                "description": "Whole degrees within the sign."
+              },
+              "minutes": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 59
+              },
+              "position": {
+                "type": "string",
+                "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+                "examples": [
+                  "Sco 28°22'"
+                ]
+              }
+            },
+            "description": "Antiscion (mirror across 0° Cancer–0° Capricorn).",
+            "required": [
+              "longitude",
+              "sign",
+              "sign_index",
+              "degrees",
+              "minutes",
+              "position"
+            ],
+            "additionalProperties": true
+          },
+          "contra_antiscion": {
+            "type": "object",
+            "properties": {
+              "longitude": {
+                "type": "number",
+                "minimum": 0,
+                "exclusiveMaximum": 360,
+                "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+              },
+              "sign": {
+                "type": "string",
+                "enum": [
+                  "Aries",
+                  "Taurus",
+                  "Gemini",
+                  "Cancer",
+                  "Leo",
+                  "Virgo",
+                  "Libra",
+                  "Scorpio",
+                  "Sagittarius",
+                  "Capricorn",
+                  "Aquarius",
+                  "Pisces"
+                ]
+              },
+              "sign_index": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 11,
+                "description": "0 = Aries … 11 = Pisces."
+              },
+              "degrees": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 29,
+                "description": "Whole degrees within the sign."
+              },
+              "minutes": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 59
+              },
+              "position": {
+                "type": "string",
+                "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+                "examples": [
+                  "Sco 28°22'"
+                ]
+              }
+            },
+            "description": "Contra-antiscion (opposite of the antiscion).",
+            "required": [
+              "longitude",
+              "sign",
+              "sign_index",
+              "degrees",
+              "minutes",
+              "position"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "description": "One of the seven classical planets. Order in the array: Saturn, Jupiter, Mars, Sun, Venus, Mercury, Moon.",
+        "required": [
+          "longitude",
+          "sign",
+          "sign_index",
+          "degrees",
+          "minutes",
+          "position",
+          "name",
+          "speed",
+          "retrograde",
+          "house",
+          "house_raw",
+          "near_next_cusp",
+          "above_horizon",
+          "essential_dignity",
+          "accidental_dignity",
+          "sect",
+          "total_score",
+          "antiscion",
+          "contra_antiscion"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "nodes": {
+      "type": "object",
+      "properties": {
+        "used": {
+          "type": "string",
+          "const": "mean"
+        },
+        "mean": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "properties": {
+              "longitude": {
+                "type": "number",
+                "minimum": 0,
+                "exclusiveMaximum": 360,
+                "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+              },
+              "sign": {
+                "type": "string",
+                "enum": [
+                  "Aries",
+                  "Taurus",
+                  "Gemini",
+                  "Cancer",
+                  "Leo",
+                  "Virgo",
+                  "Libra",
+                  "Scorpio",
+                  "Sagittarius",
+                  "Capricorn",
+                  "Aquarius",
+                  "Pisces"
+                ]
+              },
+              "sign_index": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 11,
+                "description": "0 = Aries … 11 = Pisces."
+              },
+              "degrees": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 29,
+                "description": "Whole degrees within the sign."
+              },
+              "minutes": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 59
+              },
+              "position": {
+                "type": "string",
+                "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+                "examples": [
+                  "Sco 28°22'"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "enum": [
+                  "NorthNode",
+                  "SouthNode"
+                ]
+              },
+              "house": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              },
+              "retrograde": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "longitude",
+              "sign",
+              "sign_index",
+              "degrees",
+              "minutes",
+              "position",
+              "name",
+              "house",
+              "retrograde"
+            ],
+            "additionalProperties": true
+          },
+          "description": "Operative node positions (North, South)."
+        },
+        "true": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "properties": {
+              "longitude": {
+                "type": "number",
+                "minimum": 0,
+                "exclusiveMaximum": 360,
+                "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+              },
+              "sign": {
+                "type": "string",
+                "enum": [
+                  "Aries",
+                  "Taurus",
+                  "Gemini",
+                  "Cancer",
+                  "Leo",
+                  "Virgo",
+                  "Libra",
+                  "Scorpio",
+                  "Sagittarius",
+                  "Capricorn",
+                  "Aquarius",
+                  "Pisces"
+                ]
+              },
+              "sign_index": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 11,
+                "description": "0 = Aries … 11 = Pisces."
+              },
+              "degrees": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 29,
+                "description": "Whole degrees within the sign."
+              },
+              "minutes": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 59
+              },
+              "position": {
+                "type": "string",
+                "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+                "examples": [
+                  "Sco 28°22'"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "enum": [
+                  "NorthNode",
+                  "SouthNode"
+                ]
+              },
+              "house": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              },
+              "retrograde": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "longitude",
+              "sign",
+              "sign_index",
+              "degrees",
+              "minutes",
+              "position",
+              "name",
+              "house",
+              "retrograde"
+            ],
+            "additionalProperties": true
+          },
+          "description": "True node for comparison with other software."
+        }
+      },
+      "description": "Lunar nodes. No exaltation/fall is assigned to the nodes (METHOD §2, §7).",
+      "required": [
+        "used",
+        "mean",
+        "true"
+      ],
+      "additionalProperties": true
+    },
+    "lots": {
+      "type": "object",
+      "properties": {
+        "fortune": {
+          "type": "object",
+          "properties": {
+            "longitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360,
+              "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+            },
+            "sign": {
+              "type": "string",
+              "enum": [
+                "Aries",
+                "Taurus",
+                "Gemini",
+                "Cancer",
+                "Leo",
+                "Virgo",
+                "Libra",
+                "Scorpio",
+                "Sagittarius",
+                "Capricorn",
+                "Aquarius",
+                "Pisces"
+              ]
+            },
+            "sign_index": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 11,
+              "description": "0 = Aries … 11 = Pisces."
+            },
+            "degrees": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 29,
+              "description": "Whole degrees within the sign."
+            },
+            "minutes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 59
+            },
+            "position": {
+              "type": "string",
+              "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+              "examples": [
+                "Sco 28°22'"
+              ]
+            },
+            "house": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "lord": {
+              "type": "string",
+              "enum": [
+                "Saturn",
+                "Jupiter",
+                "Mars",
+                "Sun",
+                "Venus",
+                "Mercury",
+                "Moon"
+              ]
+            }
+          },
+          "description": "Lot position with effective house and domicile lord. Lot of Fortune = ASC + Moon − Sun by day, reversed by night; Spirit reversed (implementation per natal_classical.py). No dignity scoring is applied to lots.",
+          "required": [
+            "longitude",
+            "sign",
+            "sign_index",
+            "degrees",
+            "minutes",
+            "position",
+            "house",
+            "lord"
+          ],
+          "additionalProperties": true
+        },
+        "spirit": {
+          "type": "object",
+          "properties": {
+            "longitude": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 360,
+              "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+            },
+            "sign": {
+              "type": "string",
+              "enum": [
+                "Aries",
+                "Taurus",
+                "Gemini",
+                "Cancer",
+                "Leo",
+                "Virgo",
+                "Libra",
+                "Scorpio",
+                "Sagittarius",
+                "Capricorn",
+                "Aquarius",
+                "Pisces"
+              ]
+            },
+            "sign_index": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 11,
+              "description": "0 = Aries … 11 = Pisces."
+            },
+            "degrees": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 29,
+              "description": "Whole degrees within the sign."
+            },
+            "minutes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 59
+            },
+            "position": {
+              "type": "string",
+              "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+              "examples": [
+                "Sco 28°22'"
+              ]
+            },
+            "house": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "lord": {
+              "type": "string",
+              "enum": [
+                "Saturn",
+                "Jupiter",
+                "Mars",
+                "Sun",
+                "Venus",
+                "Mercury",
+                "Moon"
+              ]
+            }
+          },
+          "description": "Lot position with effective house and domicile lord. Lot of Fortune = ASC + Moon − Sun by day, reversed by night; Spirit reversed (implementation per natal_classical.py). No dignity scoring is applied to lots.",
+          "required": [
+            "longitude",
+            "sign",
+            "sign_index",
+            "degrees",
+            "minutes",
+            "position",
+            "house",
+            "lord"
+          ],
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "fortune",
+        "spirit"
+      ],
+      "additionalProperties": true
+    },
+    "prenatal_syzygy": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "new",
+            "full"
+          ],
+          "description": "Last new or full Moon before birth."
+        },
+        "datetime_local": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 360,
+          "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+        },
+        "sign": {
+          "type": "string",
+          "enum": [
+            "Aries",
+            "Taurus",
+            "Gemini",
+            "Cancer",
+            "Leo",
+            "Virgo",
+            "Libra",
+            "Scorpio",
+            "Sagittarius",
+            "Capricorn",
+            "Aquarius",
+            "Pisces"
+          ]
+        },
+        "sign_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 11,
+          "description": "0 = Aries … 11 = Pisces."
+        },
+        "degrees": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 29,
+          "description": "Whole degrees within the sign."
+        },
+        "minutes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 59
+        },
+        "position": {
+          "type": "string",
+          "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+          "examples": [
+            "Sco 28°22'"
+          ]
+        },
+        "almuten": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "Saturn",
+            "Jupiter",
+            "Mars",
+            "Sun",
+            "Venus",
+            "Mercury",
+            "Moon",
+            null
+          ],
+          "description": "Almuten of this degree. null only when almuten_tie is true."
+        },
+        "almuten_tie": {
+          "type": "boolean",
+          "description": "true = tie not resolvable by house position (Decision ④); the human judges among almuten_candidates."
+        },
+        "almuten_candidates": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Saturn",
+              "Jupiter",
+              "Mars",
+              "Sun",
+              "Venus",
+              "Mercury",
+              "Moon"
+            ]
+          },
+          "description": "Planets sharing the highest essential score at this degree (before tie-break)."
+        },
+        "almuten_tie_break": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "house_angularity",
+            null
+          ],
+          "description": "\"house_angularity\" when a tie was resolved by house position (angular > succedent > cadent, Regiomontanus, 5° cusp rule). null when no tie occurred."
+        },
+        "almuten_scores": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "description": "Essential-dignity points each planet holds at this degree (+5/+4/+3/+2/+1; triplicity = sect ruler only; terms = Egyptian)."
+        }
+      },
+      "required": [
+        "type",
+        "longitude",
+        "sign",
+        "position",
+        "almuten",
+        "almuten_tie"
+      ],
+      "additionalProperties": true
+    },
+    "houses": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "properties": {
+          "longitude": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMaximum": 360,
+            "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+          },
+          "sign": {
+            "type": "string",
+            "enum": [
+              "Aries",
+              "Taurus",
+              "Gemini",
+              "Cancer",
+              "Leo",
+              "Virgo",
+              "Libra",
+              "Scorpio",
+              "Sagittarius",
+              "Capricorn",
+              "Aquarius",
+              "Pisces"
+            ]
+          },
+          "sign_index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 11,
+            "description": "0 = Aries … 11 = Pisces."
+          },
+          "degrees": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 29,
+            "description": "Whole degrees within the sign."
+          },
+          "minutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 59
+          },
+          "position": {
+            "type": "string",
+            "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+            "examples": [
+              "Sco 28°22'"
+            ]
+          },
+          "house": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "lord": {
+            "type": "string",
+            "enum": [
+              "Saturn",
+              "Jupiter",
+              "Mars",
+              "Sun",
+              "Venus",
+              "Mercury",
+              "Moon"
+            ]
+          },
+          "lord_placement": {
+            "type": "object",
+            "properties": {
+              "sign": {
+                "type": "string",
+                "enum": [
+                  "Aries",
+                  "Taurus",
+                  "Gemini",
+                  "Cancer",
+                  "Leo",
+                  "Virgo",
+                  "Libra",
+                  "Scorpio",
+                  "Sagittarius",
+                  "Capricorn",
+                  "Aquarius",
+                  "Pisces"
+                ]
+              },
+              "position": {
+                "type": "string"
+              },
+              "house": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              },
+              "dignities": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "domicile",
+                    "exaltation",
+                    "triplicity",
+                    "term",
+                    "face"
+                  ]
+                }
+              },
+              "debilities": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "detriment",
+                    "fall",
+                    "peregrine"
+                  ]
+                }
+              },
+              "essential_score": {
+                "type": "integer"
+              },
+              "accidental_score": {
+                "type": "integer"
+              },
+              "retrograde": {
+                "type": "boolean"
+              },
+              "solar_phase": {
+                "type": "string"
+              }
+            },
+            "description": "Where the house lord sits and in what condition — the primary tool for judging a house's affairs.",
+            "required": [
+              "sign",
+              "position",
+              "house",
+              "dignities",
+              "debilities",
+              "essential_score",
+              "accidental_score",
+              "retrograde",
+              "solar_phase"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "description": "Regiomontanus house cusp with its lord. [任意・未実装] almuten of the cusp (METHOD §10) is not yet output; when added it will follow the same almuten_* keys as angles.ascendant.",
+        "required": [
+          "longitude",
+          "sign",
+          "sign_index",
+          "degrees",
+          "minutes",
+          "position",
+          "house",
+          "lord",
+          "lord_placement"
+        ],
+        "additionalProperties": true
+      },
+      "description": "Cusps 1–12 in order (Regiomontanus)."
+    },
+    "aspects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Planet, or \"ASC\" / \"MC\"."
+          },
+          "to": {
+            "type": "string"
+          },
+          "aspect": {
+            "type": "string",
+            "enum": [
+              "conjunction",
+              "sextile",
+              "square",
+              "trine",
+              "opposition"
+            ],
+            "description": "Ptolemaic aspects only."
+          },
+          "orb": {
+            "type": "number",
+            "description": "Actual orb in degrees."
+          },
+          "max_orb": {
+            "type": "number",
+            "description": "Allowed orb = half the sum of the two bodies' moieties (Lilly)."
+          },
+          "partile": {
+            "type": "boolean",
+            "description": "Same degree number in both signs."
+          },
+          "condition": {
+            "type": "string",
+            "enum": [
+              "applying",
+              "separating"
+            ],
+            "description": "Whether the faster body is applying to or separating from the exact aspect."
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "sinister",
+              "dexter"
+            ],
+            "description": "Sinister = cast forward in zodiacal order; dexter = cast backward."
+          },
+          "reception_from_to": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "domicile",
+                "exaltation",
+                "triplicity",
+                "term",
+                "face"
+              ]
+            },
+            "description": "Dignities by which `from` receives `to` (i.e. `from` rules the degree `to` occupies). Triplicity reception counts all three Dorothean rulers."
+          },
+          "reception_to_from": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "domicile",
+                "exaltation",
+                "triplicity",
+                "term",
+                "face"
+              ]
+            }
+          },
+          "mutual_reception": {
+            "type": "boolean",
+            "description": "Both lists non-empty."
+          }
+        },
+        "description": "Aspect by Lilly's moieties, with reception. Aspects to ASC/MC included. Whole-sign aspects (sign-to-sign) are NOT listed; derive them from signs if a technique needs them.",
+        "required": [
+          "from",
+          "to",
+          "aspect",
+          "orb",
+          "max_orb",
+          "partile",
+          "condition",
+          "direction",
+          "reception_from_to",
+          "reception_to_from",
+          "mutual_reception"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "almuten_figuris": {
+      "type": "object",
+      "properties": {
+        "almutens": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Saturn",
+              "Jupiter",
+              "Mars",
+              "Sun",
+              "Venus",
+              "Mercury",
+              "Moon"
+            ]
+          },
+          "minItems": 1,
+          "description": "Planet(s) with the highest total. More than one = joint almutens; read BOTH as rulers of the geniture (Decision ⑤, METHOD §10 v1.2). Ties are NOT broken by house position here."
+        },
+        "almuten": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "Saturn",
+            "Jupiter",
+            "Mars",
+            "Sun",
+            "Venus",
+            "Mercury",
+            "Moon",
+            null
+          ],
+          "description": "Single almuten, or null when almutens has more than one entry."
+        },
+        "almuten_tie": {
+          "type": "boolean"
+        },
+        "ranking": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Saturn",
+              "Jupiter",
+              "Mars",
+              "Sun",
+              "Venus",
+              "Mercury",
+              "Moon"
+            ]
+          },
+          "minItems": 7,
+          "maxItems": 7,
+          "description": "All seven planets by total, descending (ties keep table order; do not read the order within a tie as a ranking)."
+        },
+        "scores": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "ascendant": {
+                "type": "integer"
+              },
+              "sun": {
+                "type": "integer"
+              },
+              "moon": {
+                "type": "integer"
+              },
+              "fortune": {
+                "type": "integer"
+              },
+              "syzygy": {
+                "type": "integer"
+              },
+              "total": {
+                "type": "integer"
+              },
+              "accidental": {
+                "type": "integer",
+                "description": "Reference only; not used for ranking."
+              },
+              "house": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              }
+            },
+            "required": [
+              "ascendant",
+              "sun",
+              "moon",
+              "fortune",
+              "syzygy",
+              "total",
+              "accidental",
+              "house"
+            ],
+            "additionalProperties": true
+          }
+        }
+      },
+      "description": "Almuten figuris: essential-dignity points summed over the five hylegical places (ASC, Sun, Moon, Fortune, prenatal syzygy). Project convention (Ibn Ezra); Lilly's 'Lord of the Geniture' is a judgment, for which this table is evidence, not the verdict.",
+      "required": [
+        "almutens",
+        "almuten",
+        "almuten_tie",
+        "ranking",
+        "scores"
+      ],
+      "additionalProperties": true
+    },
+    "fixed_stars": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "longitude": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMaximum": 360,
+            "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+          },
+          "sign": {
+            "type": "string",
+            "enum": [
+              "Aries",
+              "Taurus",
+              "Gemini",
+              "Cancer",
+              "Leo",
+              "Virgo",
+              "Libra",
+              "Scorpio",
+              "Sagittarius",
+              "Capricorn",
+              "Aquarius",
+              "Pisces"
+            ]
+          },
+          "sign_index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 11,
+            "description": "0 = Aries … 11 = Pisces."
+          },
+          "degrees": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 29,
+            "description": "Whole degrees within the sign."
+          },
+          "minutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 59
+          },
+          "position": {
+            "type": "string",
+            "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+            "examples": [
+              "Sco 28°22'"
+            ]
+          }
+        },
+        "required": [
+          "longitude",
+          "sign",
+          "sign_index",
+          "degrees",
+          "minutes",
+          "position"
+        ],
+        "additionalProperties": true
+      },
+      "description": "Regulus, Spica, Algol (others may be added). Conjunction flags appear in accidental_dignity.items. Fixed stars are a correction layer, not a primary factor."
+    },
+    "modern_reference": {
+      "type": "object",
+      "properties": {
+        "note": {
+          "type": "string"
+        },
+        "planets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "longitude": {
+                "type": "number",
+                "minimum": 0,
+                "exclusiveMaximum": 360,
+                "description": "Ecliptic longitude in decimal degrees (tropical zodiac, 0 = 0° Aries)."
+              },
+              "sign": {
+                "type": "string",
+                "enum": [
+                  "Aries",
+                  "Taurus",
+                  "Gemini",
+                  "Cancer",
+                  "Leo",
+                  "Virgo",
+                  "Libra",
+                  "Scorpio",
+                  "Sagittarius",
+                  "Capricorn",
+                  "Aquarius",
+                  "Pisces"
+                ]
+              },
+              "sign_index": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 11,
+                "description": "0 = Aries … 11 = Pisces."
+              },
+              "degrees": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 29,
+                "description": "Whole degrees within the sign."
+              },
+              "minutes": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 59
+              },
+              "position": {
+                "type": "string",
+                "description": "Human-readable position, e.g. \"Sco 28°22'\". Use this string verbatim when quoting a position; never recompute it.",
+                "examples": [
+                  "Sco 28°22'"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "enum": [
+                  "Uranus",
+                  "Neptune",
+                  "Pluto"
+                ]
+              },
+              "speed": {
+                "type": "number"
+              },
+              "retrograde": {
+                "type": "boolean"
+              },
+              "house": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 12
+              }
+            },
+            "required": [
+              "longitude",
+              "sign",
+              "sign_index",
+              "degrees",
+              "minutes",
+              "position",
+              "name",
+              "speed",
+              "retrograde",
+              "house"
+            ],
+            "additionalProperties": true
+          }
+        }
+      },
+      "description": "Uranus, Neptune, Pluto for reference ONLY. A classical reading prompt must not use them as rulers, in dignities, or in the almuten; at most mention them if the user asks.",
+      "required": [
+        "note",
+        "planets"
+      ],
+      "additionalProperties": true
+    }
+  }
+}

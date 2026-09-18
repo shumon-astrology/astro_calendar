@@ -1,0 +1,148 @@
+{
+  "_source": "natal_classical.py TABLE_SOURCES, exported by scripts/export_tables.py",
+  "table_sources": {
+    "terms": {
+      "table": "Egyptian (Dorothean) terms",
+      "table_ja": "エジプト式ターム（ドロテウス版）",
+      "label": "プロジェクト慣行",
+      "citation": "METHOD_本質的品位表_v1.md §4.1",
+      "verified": true,
+      "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+      "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）。初版の Ari〜Leo の5行（Lilly 値の混入）を置換済み。鑑定実務（鑑定依頼人台帳/出生図鑑定_Case003_20260901.md）がエジプト式のため運用値とする"
+    },
+    "terms_audit": {
+      "table": "Ptolemaic terms (Lilly) — audit only, not scored",
+      "table_ja": "プトレマイオス式ターム（Lilly 版）— 監査専用・得点に不使用",
+      "label": "リリー本文",
+      "citation": null,
+      "verified": false,
+      "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2) §4.2",
+      "note": "値は METHOD §4.2 に一致。CA Book I 品位表（KB索引 CA_DH pp.45–47）との照合が済むまで verified=false。Case003（出生図鑑定_Case003_20260901.md §ターム）の2例で本表の判定と一致：M の☿♏15°41′（エジプト式＝☿自ターム／本表＝♀ターム→ペレグリン）、M の♂♑28°30′（エジプト式＝♂自ターム／本表＝♄ターム）"
+    },
+    "triplicity": {
+      "table": "Dorothean triplicity rulers (day / night / participating)",
+      "table_ja": "ドロセウス式トリプリシティ（昼・夜・関与）",
+      "label": "プロジェクト慣行",
+      "citation": "METHOD_本質的品位表_v1.md §3",
+      "verified": true,
+      "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+      "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）。得点はセクト主星のみ +3、関与星は加点なし（3主星は triplicity_rulers に出力）。関与星はホラリー実務のレセプション判定で用いる（ケースNo002_失せ物_バイオリン弓_20260827.md §ラディカリティ①・§Collection）。Lilly 版2主星表は triplicity='lilly' で選択可（こちらは未照合）"
+    },
+    "faces": {
+      "table": "Faces (Chaldean order)",
+      "table_ja": "フェイス（カルデア順）",
+      "label": "リリー本文",
+      "citation": "METHOD_本質的品位表_v1.md §5",
+      "verified": true,
+      "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+      "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）"
+    },
+    "domicile": {
+      "table": "Domicile (rulership)",
+      "table_ja": "ルーラーシップ",
+      "label": "リリー本文",
+      "citation": "METHOD_本質的品位表_v1.md §1",
+      "verified": true,
+      "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+      "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）"
+    },
+    "exaltation": {
+      "table": "Exaltation (with degrees)",
+      "table_ja": "イグザルテーション（度数つき）",
+      "label": "リリー本文",
+      "citation": "METHOD_本質的品位表_v1.md §2",
+      "verified": true,
+      "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+      "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）（7天体・度数を含む）。ノードの高揚は得点に用いない"
+    },
+    "detriment": {
+      "table": "Detriment",
+      "table_ja": "デトリメント",
+      "label": "リリー本文",
+      "citation": "METHOD_本質的品位表_v1.md §6",
+      "verified": true,
+      "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+      "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）"
+    },
+    "fall": {
+      "table": "Fall",
+      "table_ja": "フォール",
+      "label": "リリー本文",
+      "citation": "METHOD_本質的品位表_v1.md §7",
+      "verified": true,
+      "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+      "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）（7天体のみ）"
+    },
+    "dignity_scores": {
+      "table": "Essential dignity scores (5/4/3/2/1, -5/-4/-5)",
+      "table_ja": "本質的品位の得点",
+      "label": "リリー本文",
+      "citation": "METHOD_本質的品位表_v1.md §8.1",
+      "verified": true,
+      "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+      "note": "METHOD_本質的品位表_v1.md（v1.2）と機械照合し全行一致（2026-09-17）。ペレグリンの扱いは §8.2 の決定①〜③に従う"
+    },
+    "peregrine": {
+      "table": "Peregrine rule (Lilly + Lehman)",
+      "table_ja": "ペレグリンの定義（Lilly＋Lehman）",
+      "label": "プロジェクト慣行",
+      "citation": "METHOD_本質的品位表_v1.md §8.2",
+      "verified": true,
+      "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+      "note": "決定①〜③（2026-09-17）：−5／サインまたはイグザルテーションのミューチュアル・レセプションで解除／デトリメント・フォールと重複加算しない。サイン×イグザルテーションの mixed レセプション（mutual_reception_mixed）による解除も含める：METHOD §8.2（v1.2）で確定"
+    },
+    "almuten_tie": {
+      "table": "Almuten ties (house position for single degrees / joint almutens for figuris)",
+      "table_ja": "アルムテン同点時の扱い（単一度数＝ハウス位置／フィギュリス＝共同アルムテン）",
+      "label": "プロジェクト慣行",
+      "citation": "METHOD_本質的品位表_v1.md §10",
+      "verified": true,
+      "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+      "note": "決定④（2026-09-17）：単一度数のアルムテン（ASC・シジジー等）の同点はアングル＞サクシーデント＞ケーデント（カスプ手前5°の繰り上げ適用）で決め、なお同点なら almuten_tie=true で候補を列挙。決定⑤（2026-09-17、METHOD §10 v1.2）：アルムテン・フィギュリスの同点はハウス位置で決着させず、同点の全天体を almutens に列挙して共同アルムテンとする"
+    },
+    "sect": {
+      "table": "Sect by horizon (ASC–DSC)",
+      "table_ja": "昼夜判定（ASC–DSC 地平線基準）",
+      "label": "プロジェクト慣行",
+      "citation": "METHOD_本質的品位表_v1.md §9",
+      "verified": true,
+      "reference": "~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md (v1.2)",
+      "note": "太陽が ASC–DSC 軸より上（第7〜12ハウス側）なら昼図。太陽の実高度は sun_altitude に併記し、判定が食い違えば borderline=true"
+    },
+    "orbs": {
+      "table": "Planetary orbs and moieties",
+      "table_ja": "惑星のオーブとモイエティ",
+      "label": "リリー本文",
+      "citation": null,
+      "verified": false,
+      "note": "ケースNo002 のモイエティ運用（§月・§Collection）と整合。CA Book I 本文とは未照合"
+    },
+    "accidental": {
+      "table": "Accidental fortitudes and debilities",
+      "table_ja": "偶発的品位・偶発的debility の表",
+      "label": "リリー本文",
+      "citation": null,
+      "verified": false,
+      "note": "CA Book I 品位表（KB索引では CA_DH pp.45–47）と未照合。値は一般に流布する Lilly 版の表に基づく"
+    },
+    "house_system": {
+      "table": "Regiomontanus houses",
+      "table_ja": "レジオモンタナス式ハウス",
+      "label": "プロジェクト慣行",
+      "citation": null,
+      "verified": true,
+      "note": "Lilly が CA の全図で用いた方式。プロジェクト運用文書でも必須指定（鑑定受付フォーム_v1.md 必須4／ケースファイル雛形_ホラリー.md）"
+    },
+    "node": {
+      "table": "Mean Node (true node reported for reference)",
+      "table_ja": "平均ノード（トゥルーノードは参考値として併記）",
+      "label": "プロジェクト慣行",
+      "citation": null,
+      "verified": true,
+      "note": "古典のエフェメリスは平均値を掲載するため mean を既定とする。natal.py（モダン）は True Node を用いる"
+    }
+  },
+  "schema_version_v1": "v1",
+  "sect_method": "horizon_asc_dsc",
+  "peregrine_score_note": "peregrine but not scored: detriment/fall already counted (no double penalty, METHOD §8.2 decision 3)"
+}
