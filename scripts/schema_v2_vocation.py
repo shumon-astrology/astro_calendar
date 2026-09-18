@@ -193,6 +193,12 @@ def vocation_schema(planets):
                                 "reason": {"type": "array",
                                            "items": {"type": "string", "enum": REASONS}},
                                 "value": {"type": ["string", "number", "null"]},
+                                "debilities": {
+                                    "type": "array",
+                                    "items": {"type": "string"},
+                                    "description": ("Copy of the candidate's "
+                                                    "essential.debilities, for audit."),
+                                },
                             },
                             "required": ["planet", "rule", "reason"],
                             "additionalProperties": True,
@@ -224,8 +230,10 @@ def vocation_schema(planets):
             "not_excluded": {
                 "type": "array",
                 "items": candidate_enum,
-                "description": ("Candidates other than the significator that no rule excluded; "
-                                "the prompt must not dismiss them."),
+                "description": ("Candidates other than the significator that the Sun has not "
+                                "excluded (neither combust nor under the beams). The failures "
+                                "recorded in excluded[] are audit information and are not used "
+                                "here. The prompt must not dismiss these candidates."),
             },
             "ptolemy_method": {
                 "type": "object",
@@ -394,9 +402,16 @@ def vocation_schema(planets):
                         "star": {"type": "string"},
                         "body": {"type": "string"},
                         "orb": {"type": "number"},
+                        "orb_dms": {"type": "string"},
+                        "grade": {
+                            "type": "string",
+                            "enum": ["judging", "reference"],
+                            "description": ("judging when the orb is 1° or less, reference "
+                                            "when it is 2° or less."),
+                        },
                         "body_is_weakest": {"type": "boolean"},
                     },
-                    "required": ["star", "body", "orb"],
+                    "required": ["star", "body", "orb", "grade"],
                     "additionalProperties": True,
                 },
             },

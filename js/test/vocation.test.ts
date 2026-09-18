@@ -3,8 +3,13 @@
  * GT-4：較正例 No.001（Ms. Marie）。期待値は設計提案書 §7-1（凍結前。監修待ち）。
  * GT-5(d)：三候補がすべて燃焼する合成入力で no_significator。
  */
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { computeChart, type ChartInput } from "../src/index.ts";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
 
 const FIXED_TIME = "2026-09-19T00:00:00.000Z";
 
@@ -16,9 +21,32 @@ const CALIBRATION: ChartInput = {
   generatedAt: FIXED_TIME,
 };
 
-describe("GT-4：較正例 No.001", () => {
+describe("GT-4：較正例 No.001（2026-09-19 三河監修により凍結）", () => {
   const doc = computeChart(CALIBRATION) as any;
   const v = doc.vocation;
+
+  it("凍結したゴールデン（calibration_No001_vocation.json）と完全一致する", () => {
+    const golden = JSON.parse(
+      readFileSync(join(HERE, "golden", "calibration_No001_vocation.json"), "utf8"));
+    expect(v).toEqual(golden);
+  });
+
+  it("not_excluded は燃焼も光線下もない候補（火星）", () => {
+    expect(v.not_excluded).toEqual(["Mars"]);
+  });
+
+  it("excluded の各要素に debilities が付く", () => {
+    const byPlanet = Object.fromEntries(
+      v.significator.excluded.map((e: any) => [e.planet, e.debilities]));
+    expect(byPlanet.Mars).toEqual(["detriment"]);
+    expect(byPlanet.Mercury).toEqual(["peregrine"]);
+  });
+
+  it("恒星の接触に grade が付く（1°以内は judging）", () => {
+    const spica = v.fixed_stars.find((s: any) => s.star === "Spica");
+    expect(spica.grade).toBe("judging");
+    expect(spica.orb).toBeLessThanOrEqual(1);
+  });
 
   it("夜図である", () => {
     expect(doc.sect.chart_sect).toBe("nocturnal");

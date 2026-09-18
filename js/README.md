@@ -5,16 +5,27 @@ Python の `natal_classical.py`（タグ `v1-reference`）を移植したもの�
 
 - 契約：`../schema/SCHEMA_chart_v2.json`（型は `src/types/chart_v2.d.ts` に自動生成）
 - 規則の正本：`~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md`（v1.2＋決定 C）
-- 要件：`~/Documents/デジタル販売/10_schema/SCHEMA_v2_要件書_20260918.md`（v0.4）
+- 要件：`~/Documents/デジタル販売/10_schema/SCHEMA_v2_要件書_20260918.md`（v0.7）
 - 依存：`astronomy-engine`（MIT）のみ。外部通信なし・DOM 非依存
 
-## 現在地（Phase 3）
+## 現在地（Phase 5）
 
-ネイタル側の v2 出力（`derived`・`houses_summary`・`boundary_warnings`・`summary`・
-`reading_notes`・`provenance`・`moon_range`・`time_unknown` モード）まで実装した。
-`vocation` と `timing` はキーだけ出して null（Phase 4）。
-`computeChart()` は `schema_version: "v2"` を書き、戻り値の型は
-`src/types/chart_v2.d.ts`（スキーマから生成）。
+SCHEMA v2 rev.4 のネイタル側と適職側（`vocation`）を実装済み。`computeChart()` は
+`schema_version: "v2"` を書き、戻り値の型は `src/types/chart_v2.d.ts`（スキーマから生成）。
+
+- **参照実装（Python）のタグ：`v1-reference` = `db69a92`**（決定 C・決定 D 改まで）。
+  GT-2 はこのタグの出力をゴールデンとして比較する。
+- **凍結したゴールデン**：較正例 No.001（`test/golden/calibration_No001_vocation.json`、
+  2026-09-19 三河監修）。この出力が変われば回帰であり、再監修が要る。
+
+### 未実装（意図的に残しているもの）
+
+| 項目 | 状態 |
+|---|---|
+| 恒星カタログ（ロイヤルスター 6＋その他 4〜6） | **保留**（付録 A #16）。`fixed_star_contacts` は null、v1 の 3 星のみ使う |
+| `timing`（フィルダリア・プロフェクション・トランジット） | **null**。METHOD_timing の作成待ち。`vocation.timing_slice` も null |
+| `system_divergence` のプトレマイオス式による全ルール走行 | 未実装（付録 A #38）。候補星の品位と②-B の勝者までを比較し、`significator_ptolemaic` は null |
+| Python への v2 実装 | 任意（付録 A #14）。Python は v1 リファレンスとして凍結 |
 
 ## 使い方
 

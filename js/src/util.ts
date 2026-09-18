@@ -34,14 +34,21 @@ export function angularDistance(lonFrom: number, lonTo: number): number {
   return norm360(lonTo - lonFrom);
 }
 
+/** メジャー・アスペクトの角度（パーティル判定用） */
+const MAJOR_ASPECT_ANGLES = [0, 60, 90, 120, 180];
+
+/** パーティルの閾値（度）。正確なアスペクトからのずれ */
+export const PARTILE_TOLERANCE = 1.0;
+
 /**
- * パーティル（同度数での正確なアスペクト）か ＝ 決定 D（2026-09-19 三河）。
- * 両天体のサイン内の整数度が同じときだけ真。サインが違っても同じ度数なら成立する
- * （例：牡羊 12°40′ と蟹 12°05′ のスクエア）。オーブ 1° 以内では判定しない。
- * 典拠：CA I ll.8985–9033（古典職業鑑定マニュアル v11 §2）
+ * パーティルか ＝ 決定 D 改（2026-09-19 三河）。
+ * メジャー・アスペクト（合・六分・矩・三分・衝）の正確な角度からのずれが
+ * 1°以内なら真。サインは問わない（例：牡羊 12°40′ と蟹 11°40′〜13°40′ は矩で成立）。
+ * 一時採用した「両天体の整数度が同じ」は撤回した。
  */
 export function isPartile(lon1: number, lon2: number): boolean {
-  return Math.floor(degInSign(lon1)) === Math.floor(degInSign(lon2));
+  const sep = Math.abs(signedSep(lon1, lon2));
+  return MAJOR_ASPECT_ANGLES.some((angle) => Math.abs(sep - angle) <= PARTILE_TOLERANCE);
 }
 
 export function elementOf(signIndex: number): string {

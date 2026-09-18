@@ -345,29 +345,33 @@ class TestSolarPhaseSameSign(unittest.TestCase):
 
 
 class TestPartile(unittest.TestCase):
-    """決定 D（2026-09-19）：パーティルは両天体の度数が同じときだけ"""
+    """
+    決定 D 改（2026-09-19 三河）：パーティルは正確なアスペクトからのずれが 1°以内。
+    サインは問わない。一時採用した「両天体の度数が同じ」は撤回した
+    """
 
-    def test_same_degree_across_signs(self):
-        # 牡羊 12°40′ と蟹 12°05′ のスクエアはパーティル
-        self.assertTrue(nc.is_partile(lon("Ari", 12 + 40 / 60), lon("Can", 12 + 5 / 60)))
+    def test_within_one_degree_across_signs(self):
+        # 牡羊 12°40′ と蟹 12°05′：スクエアから 0.58° → パーティル
+        a, b = lon("Ari", 12 + 40 / 60), lon("Can", 12 + 5 / 60)
+        self.assertAlmostEqual(abs(abs(((b - a + 180) % 360) - 180) - 90), 0.58, places=2)
+        self.assertTrue(nc.is_partile(a, b))
 
-    def test_within_one_degree_but_different_degree_is_not_partile(self):
-        # サンプル図の太陽 蟹 28°24′ と火星 蟹 27°27′（離角 0.95°）はパーティルでない
-        sun = lon("Can", 28 + 24 / 60)
-        mars = lon("Can", 27 + 27 / 60)
-        self.assertLess(abs(((mars - sun + 180) % 360) - 180), 1.0)
-        self.assertFalse(nc.is_partile(sun, mars))
+    def test_beyond_one_degree_is_not_partile(self):
+        # 牡羊 12°40′ と蟹 13°50′：スクエアから 1.17° → パーティルでない
+        a, b = lon("Ari", 12 + 40 / 60), lon("Can", 13 + 50 / 60)
+        self.assertAlmostEqual(abs(abs(((b - a + 180) % 360) - 180) - 90), 1.17, places=2)
+        self.assertFalse(nc.is_partile(a, b))
 
-    def test_sample_chart_sun_mars_conjunction_is_not_partile(self):
+    def test_sample_chart_sun_mars_conjunction_is_partile(self):
+        # サンプル図の太陽 蟹 28°24′ と火星 蟹 27°27′（0.95°）はパーティルの合
         c = nc.calculate_classical_chart(1985, 7, 21, 14, 30, 35.6895, 139.6917)
         conj = [a for a in c["aspects"]
                 if {a["planet1"], a["planet2"]} == {"Sun", "Mars"}][0]
         self.assertEqual(conj["aspect"], "conjunction")
         self.assertLess(conj["orb"], 1.0)
-        self.assertFalse(conj["partile"])
+        self.assertTrue(conj["partile"])
 
     def test_synthetic_square_is_partile(self):
-        # 合成：両者とも 12 度（牡羊 12°40′ と蟹 12°05′）
         bodies = [
             {"name_en": "Mars", "longitude": lon("Ari", 12 + 40 / 60), "speed": 0.5},
             {"name_en": "Venus", "longitude": lon("Can", 12 + 5 / 60), "speed": 1.0},

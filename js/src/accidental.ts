@@ -7,7 +7,7 @@ import {
   BENEFICS, CAZIMI_ORB, COMBUST_ORB, DIURNAL_PLANETS, HOUSE_SCORE, LUMINARIES,
   MEAN_MOTION, NOCTURNAL_PLANETS, PARTILE_ORB, PLANET_JA, UNDER_BEAMS_ORB,
 } from "./tables.ts";
-import { isPartile, norm360, roundTo, signOf, signedSep } from "./util.ts";
+import { norm360, roundTo, signOf, signedSep } from "./util.ts";
 
 export type SolarState = "sun" | "cazimi" | "combust" | "under_beams" | "free";
 
@@ -160,26 +160,23 @@ export function accidentalDignity(
     const benefic = BENEFICS.includes(other);
     const ol = other.toLowerCase();
     const ja = PLANET_JA[other];
-    // 決定 D：同度数であることを要する（PARTILE_ORB はどのアスペクトかを選ぶ窓）
-    const samePartile = isPartile(lon, ctx.lons[other]);
-    if (d <= PARTILE_ORB && samePartile) {
+    if (d <= PARTILE_ORB) {
       push(`partile_conjunction_${ol}`, `${ja}と合（パーティル）`, benefic ? 5 : -5);
-    } else if (Math.abs(d - 120) <= PARTILE_ORB && samePartile && benefic) {
+    } else if (Math.abs(d - 120) <= PARTILE_ORB && benefic) {
       push(`partile_trine_${ol}`, `${ja}と三分（パーティル）`, 4);
-    } else if (Math.abs(d - 60) <= PARTILE_ORB && samePartile && benefic) {
+    } else if (Math.abs(d - 60) <= PARTILE_ORB && benefic) {
       push(`partile_sextile_${ol}`, `${ja}と六分（パーティル）`, 3);
-    } else if (Math.abs(d - 180) <= PARTILE_ORB && samePartile && !benefic) {
+    } else if (Math.abs(d - 180) <= PARTILE_ORB && !benefic) {
       push(`partile_opposition_${ol}`, `${ja}と衝（パーティル）`, -4);
-    } else if (Math.abs(d - 90) <= PARTILE_ORB && samePartile && !benefic) {
+    } else if (Math.abs(d - 90) <= PARTILE_ORB && !benefic) {
       push(`partile_square_${ol}`, `${ja}と矩（パーティル）`, -3);
     }
   }
 
-  if (Math.abs(signedSep(lon, ctx.nodeLon)) <= PARTILE_ORB && isPartile(lon, ctx.nodeLon)) {
+  if (Math.abs(signedSep(lon, ctx.nodeLon)) <= PARTILE_ORB) {
     push("partile_conjunction_north_node", "ドラゴンヘッドと合", 4);
   }
-  if (Math.abs(signedSep(lon, ctx.southNodeLon)) <= PARTILE_ORB
-    && isPartile(lon, ctx.southNodeLon)) {
+  if (Math.abs(signedSep(lon, ctx.southNodeLon)) <= PARTILE_ORB) {
     push("partile_conjunction_south_node", "ドラゴンテイルと合", -4);
   }
 
@@ -189,12 +186,10 @@ export function accidentalDignity(
     }
   }
 
-  if (Math.abs(signedSep(lon, ctx.stars.Regulus)) <= PARTILE_ORB
-    && isPartile(lon, ctx.stars.Regulus)) {
+  if (Math.abs(signedSep(lon, ctx.stars.Regulus)) <= PARTILE_ORB) {
     push("conjunct_regulus", "レグルスと合", 6);
   }
-  if (Math.abs(signedSep(lon, ctx.stars.Spica)) <= PARTILE_ORB
-    && isPartile(lon, ctx.stars.Spica)) {
+  if (Math.abs(signedSep(lon, ctx.stars.Spica)) <= PARTILE_ORB) {
     push("conjunct_spica", "スピカと合", 5);
   }
   if (Math.abs(signedSep(lon, ctx.stars.Algol)) <= 5.0) {

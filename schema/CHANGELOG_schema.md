@@ -81,18 +81,31 @@ rev.1 では null を許していなかったため追補した。型の追加�
 ## 参照実装（Python）の記録
 
 - **タグ `v1-reference`**：GT-2 の基準となる Python 実装。
-  - 2026-09-19 に 2 度打ち直した。**現在は commit `db69a92`**（決定 D まで）。
-    - 旧タグ其の一 `1f813ff`（決定 C まで）→ 其の二 `226e8d6`（朔望の日時を現地時刻に）。
+  - 2026-09-19 に 3 度打ち直した。**現在は commit `NEW_HASH`**（決定 D 改まで）。
+    - 旧タグ：`1f813ff`（決定 C まで）→ `226e8d6`（朔望の日時を現地時刻に）→
+      `db69a92`（決定 D＝同度数。**撤回済み**）。
     - 1 度目：`prenatal_syzygy.datetime_local` が tz_offset によらず常に JST だった不具合の
       修正（付録 A #19）。値が変わったのは tz≠9 の 8 図の当該キーのみ。
-    - 2 度目：**決定 D**（パーティル＝同度数。付録 A #24）。`is_partile()` を新設し、
-      `aspects[].partile`・偶発的品位のパーティル項目（惑星・ノード・恒星）に適用した。
-      ゴールデン 10 図と v1 サンプルで 73 箇所が変わった（内訳は Phase 4 報告）。
+    - 2 度目：決定 D（パーティル＝同度数）。ゴールデン 73 箇所が変わった。
+    - 3 度目：**決定 D の撤回（決定 D 改）**。パーティルは「正確なアスペクトから 1°以内、
+      サイン不問」に戻した。`is_partile()` はこの定義で残し、73 箇所は元の値に戻った
+      （決定 D 前の内容と完全一致を機械確認済み）。
   - 暦は Swiss Ephemeris の Moshier フォールバック（se1 未配置、付録 A #17）。
 - **実装候補（保留）**：恒星 Spica は Python が Swiss の内蔵値（視位置）、JS が線形近似で
   約 18″ ずれる。Astronomy Engine の `DefineStar` に ICRS 座標を与えて視位置を計算すれば
   数秒角まで寄せられる見込み。新しい星集合（ロイヤルスター 6＋4〜6）を決めるときに
   併せて検討する（付録 A #16・#21）。
+
+## v2 rev.4（2026-09-19）— rev.3 からの差分
+
+- **決定 D の撤回**：`aspects[].partile` の description を
+  「Partile aspect: within 1° of the exact aspect, in any sign (Lilly: partill).」に戻した。
+  「両天体の整数度が同じ」という読みは 2026-09-19 に撤回された（付録 A #24）。
+  実装（Python・JS）も元の 1° 判定に戻し、ゴールデン 73 箇所が決定 D 前の値に戻った。
+- `vocation.not_excluded` の定義を「主星以外で、燃焼も光線下もない候補」に変更
+  （`excluded[]` は監査用で判定に使わない）。
+- `vocation.significator.excluded[]` に `debilities[]`（候補の essential.debilities の写し）を追加。
+- `vocation.fixed_stars[]` に `grade`（`judging` ≤1°／`reference` ≤2°）を追加し、必須にした。
 
 ## v2 rev.3（2026-09-19）— rev.2 からの差分
 

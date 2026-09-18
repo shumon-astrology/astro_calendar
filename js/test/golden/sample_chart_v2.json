@@ -749,7 +749,7 @@
         }
       },
       "accidental_dignity": {
-        "score": 0,
+        "score": -5,
         "items": [
           {
             "code": "house_9",
@@ -762,6 +762,12 @@
             "points": -2,
             "label_ja": "遅行（平均運動未満）",
             "label_en": "slow (slower than mean motion)"
+          },
+          {
+            "code": "partile_conjunction_mars",
+            "points": -5,
+            "label_ja": "火星と合（パーティル）",
+            "label_en": "partile conjunction with Mars"
           }
         ],
         "solar_phase": "sun",
@@ -778,7 +784,7 @@
         "in_sect": true,
         "hayz": "half_hayz"
       },
-      "total_score": -5,
+      "total_score": -10,
       "antiscion": {
         "longitude": 61.595966,
         "sign": "Gemini",
@@ -1551,7 +1557,7 @@
           "peregrine"
         ],
         "essential_score": -5,
-        "accidental_score": 0,
+        "accidental_score": -5,
         "retrograde": false,
         "solar_phase": "sun"
       },
@@ -1740,7 +1746,7 @@
       "aspect": "trine",
       "orb": 0.93,
       "max_orb": 8.5,
-      "partile": false,
+      "partile": true,
       "condition": "applying",
       "direction": "sinister",
       "reception_from_to": [],
@@ -1756,7 +1762,7 @@
       "aspect": "conjunction",
       "orb": 0.95,
       "max_orb": 11,
-      "partile": false,
+      "partile": true,
       "condition": "separating",
       "direction": "sinister",
       "reception_from_to": [],
@@ -1998,7 +2004,7 @@
         "fortune": 0,
         "syzygy": 0,
         "total": 1,
-        "accidental": 0,
+        "accidental": -5,
         "house": 9
       },
       "Venus": {
@@ -2158,9 +2164,9 @@
       {
         "rank": 6,
         "planet": "Sun",
-        "total_score": -5,
+        "total_score": -10,
         "essential_score": -5,
-        "accidental_score": 0,
+        "accidental_score": -5,
         "house": 9,
         "house_class": "cadent",
         "tie": false
@@ -2206,8 +2212,8 @@
       "house": 9,
       "house_class": "cadent",
       "essential_score": -5,
-      "accidental_score": 0,
-      "total_score": -5,
+      "accidental_score": -5,
+      "total_score": -10,
       "dignities": [],
       "debilities": [
         "peregrine"
@@ -2222,7 +2228,7 @@
           "by": "Mars",
           "aspect": "conjunction",
           "orb": 0.95,
-          "partile": false,
+          "partile": true,
           "reception_softens": false
         }
       ],
@@ -2444,7 +2450,7 @@
         "lord": "Sun",
         "lord_house": 9,
         "essential_score": -5,
-        "accidental_score": 0,
+        "accidental_score": -5,
         "classification": "effort",
         "lord_in_aversion": true
       },
@@ -2775,7 +2781,10 @@
             "no_essential_dignity",
             "combust"
           ],
-          "value": "0°57'"
+          "value": "0°57'",
+          "debilities": [
+            "fall"
+          ]
         },
         {
           "planet": "Mercury",
@@ -2783,7 +2792,8 @@
           "reason": [
             "not_in_10_1_7"
           ],
-          "value": null
+          "value": null,
+          "debilities": []
         }
       ],
       "multiple_qualified": [],
@@ -2799,7 +2809,9 @@
       "tie": false
     },
     "settlement_tier": "A",
-    "not_excluded": [],
+    "not_excluded": [
+      "Mercury"
+    ],
     "ptolemy_method": {
       "rising_before_sun": "Mars",
       "mc_lord_or_occupant": [
@@ -3165,8 +3177,8 @@
         "house": 9,
         "house_class": "cadent",
         "essential_score": -5,
-        "accidental_score": 0,
-        "total_score": -5,
+        "accidental_score": -5,
+        "total_score": -10,
         "dignities": [],
         "debilities": [
           "peregrine"
@@ -3181,7 +3193,7 @@
             "by": "Mars",
             "aspect": "conjunction",
             "orb": 0.95,
-            "partile": false,
+            "partile": true,
             "reception_softens": false
           }
         ],
@@ -3249,8 +3261,8 @@
         "house": 9,
         "house_class": "cadent",
         "essential_score": -5,
-        "accidental_score": 0,
-        "total_score": -5,
+        "accidental_score": -5,
+        "total_score": -10,
         "dignities": [],
         "debilities": [
           "peregrine"
@@ -3265,7 +3277,7 @@
             "by": "Mars",
             "aspect": "conjunction",
             "orb": 0.95,
-            "partile": false,
+            "partile": true,
             "reception_softens": false
           }
         ],
@@ -3379,7 +3391,7 @@
   },
   "vocation_blocked_reason": null,
   "timing": null,
-  "summary": "Diurnal chart (sect by ASC–DSC horizon). Sect light Sun in Cancer (9h), essential -5, accidental +0.\nAscendant Scorpio 28°22'; lord Mars in Cancer (9h), fall, peregrine; almuten Mars.\nLord of the Geniture: Venus (almuten figuris 18); highest total score Venus (+15).\nStrongest planet Venus (+15); weakest Saturn (-14).\nOut-of-sect malefic Mars in Cancer (9h), neutral.\nFortune Capricorn 09°12' (2h, lord Saturn); Spirit Libra 17°32' (11h, lord Venus).\nFlags: asc_near_sign_boundary, planet_near_cusp.\nBirth time known; schema v2; traditionalchart-js 0.1.0.",
+  "summary": "Diurnal chart (sect by ASC–DSC horizon). Sect light Sun in Cancer (9h), essential -5, accidental -5.\nAscendant Scorpio 28°22'; lord Mars in Cancer (9h), fall, peregrine; almuten Mars.\nLord of the Geniture: Venus (almuten figuris 18); highest total score Venus (+15).\nStrongest planet Venus (+15); weakest Saturn (-14).\nOut-of-sect malefic Mars in Cancer (9h), neutral.\nFortune Capricorn 09°12' (2h, lord Saturn); Spirit Libra 17°32' (11h, lord Venus).\nFlags: asc_near_sign_boundary, planet_near_cusp.\nBirth time known; schema v2; traditionalchart-js 0.1.0.",
   "reading_notes": [
     "All positions, dignities, scores, houses and aspects in this file are computed. Do not recompute or re-derive any of them; quote `position` strings verbatim.",
     "If `summary` or `derived` appears to disagree with a raw field, the raw field is correct. Report the discrepancy; do not resolve it by reasoning.",

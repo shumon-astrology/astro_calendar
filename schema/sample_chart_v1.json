@@ -601,7 +601,7 @@
         }
       },
       "accidental_dignity": {
-        "score": 0,
+        "score": -5,
         "items": [
           {
             "code": "house_9",
@@ -612,6 +612,11 @@
             "code": "slow",
             "points": -2,
             "label_ja": "遅行（平均運動未満）"
+          },
+          {
+            "code": "partile_conjunction_mars",
+            "points": -5,
+            "label_ja": "火星と合（パーティル）"
           }
         ],
         "solar_phase": "sun",
@@ -628,7 +633,7 @@
         "in_sect": true,
         "hayz": "half_hayz"
       },
-      "total_score": -5,
+      "total_score": -10,
       "antiscion": {
         "longitude": 61.595847,
         "sign": "Gemini",
@@ -1255,7 +1260,7 @@
           "peregrine"
         ],
         "essential_score": -5,
-        "accidental_score": 0,
+        "accidental_score": -5,
         "retrograde": false,
         "solar_phase": "sun"
       }
@@ -1389,7 +1394,7 @@
       "aspect": "trine",
       "orb": 0.93,
       "max_orb": 8.5,
-      "partile": false,
+      "partile": true,
       "condition": "applying",
       "direction": "sinister",
       "reception_from_to": [],
@@ -1402,7 +1407,7 @@
       "aspect": "conjunction",
       "orb": 0.95,
       "max_orb": 11.0,
-      "partile": false,
+      "partile": true,
       "condition": "separating",
       "direction": "sinister",
       "reception_from_to": [],
@@ -1611,7 +1616,7 @@
         "fortune": 0,
         "syzygy": 0,
         "total": 1,
-        "accidental": 0,
+        "accidental": -5,
         "house": 9
       },
       "Venus": {

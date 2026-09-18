@@ -4,7 +4,7 @@
   "title": "SCHEMA_chart_v2 — Classical natal chart JSON (AmanJyoshi / traditionalchart)",
   "description": "Contract between the calculator (astro_calendar/natal_classical.py, branch classical) and the reading prompts (30_prompts/PROMPT_*_en_v*.md). The calculator WRITES this file; a prompt READS it and interprets only. The AI must never recompute positions, dignities, scores, houses or aspects — every needed value is present here. Conventions: tropical zodiac; seven classical planets; Regiomontanus houses with Lilly's 5° cusp rule; Dorothean triplicities (+3 to the sect ruler only); Egyptian terms (operative) with Ptolemaic/Lilly terms as audit only; Chaldean faces; mean node; chart sect by the ASC–DSC horizon; peregrine −5, cancelled by sign/exaltation/mixed mutual reception, never added on top of detriment/fall; almuten ties at a single degree resolved by house position, almuten figuris ties reported as joint almutens. Rule source: 20_method/METHOD_本質的品位表_v1.md (v1.2, 2026-09-17). Verification status: structure and dignity tables [確定・照合済み]; accidental-dignity codes, orbs, planetary-hour details [未照合 against CA Book I]; Ptolemaic term table [未照合]; house-cusp almutens [未実装・任意]. v2 (additive superset of v1 rev.2): every v1 key keeps its place, type and meaning; new blocks (derived, houses_summary, fixed_star_contacts, boundary_warnings, vocation, timing, summary, reading_notes, provenance) carry pre-computed judgement material so that the reading prompt never recomputes anything. Items that cannot exist when the birth time is unknown (time_known: false) are nullable. Solar conditions (cazimi / combust / under beams) additionally require the planet to be in the same sign as the Sun (decision C, 2026-09-18).",
   "x-project": "デジタル販売 / 10_schema",
-  "x-schema_file_version": "v2 (2026-09-19, rev.3)",
+  "x-schema_file_version": "v2 (2026-09-19, rev.4)",
   "x-sample": "astro_calendar/schema/sample_chart_v1.json is the v1 sample; a v2 sample is produced in Phase 3",
   "x-method": "METHOD_本質的品位表_v1.md v1.2 (+ decision C pending v1.3) / METHOD_natal_v1.md v1.3 / 古典職業鑑定マニュアル v11 + 再基底化差分 2026-09-18",
   "type": "object",
@@ -3156,7 +3156,7 @@
           },
           "partile": {
             "type": "boolean",
-            "description": "Partile aspect (decision D, 2026-09-19): true only when both bodies have the same integer degree within their signs; it holds across signs (for example Aries 12°40' square Cancer 12°05'). It is not an orb of 1°. Source: CA I ll.8985-9033."
+            "description": "Partile aspect: within 1° of the exact aspect, in any sign (Lilly: partill). The reading that both bodies must share the same integer degree was withdrawn on 2026-09-19."
           },
           "condition": {
             "type": "string",
@@ -4541,6 +4541,13 @@
                           "number",
                           "null"
                         ]
+                      },
+                      "debilities": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Copy of the candidate's essential.debilities, for audit."
                       }
                     },
                     "required": [
@@ -4613,7 +4620,7 @@
                   "Mercury"
                 ]
               },
-              "description": "Candidates other than the significator that no rule excluded; the prompt must not dismiss them."
+              "description": "Candidates other than the significator that the Sun has not excluded (neither combust nor under the beams). The failures recorded in excluded[] are audit information and are not used here. The prompt must not dismiss these candidates."
             },
             "ptolemy_method": {
               "type": "object",
@@ -5135,6 +5142,17 @@
                   "orb": {
                     "type": "number"
                   },
+                  "orb_dms": {
+                    "type": "string"
+                  },
+                  "grade": {
+                    "type": "string",
+                    "enum": [
+                      "judging",
+                      "reference"
+                    ],
+                    "description": "judging when the orb is 1° or less, reference when it is 2° or less."
+                  },
                   "body_is_weakest": {
                     "type": "boolean"
                   }
@@ -5142,7 +5160,8 @@
                 "required": [
                   "star",
                   "body",
-                  "orb"
+                  "orb",
+                  "grade"
                 ],
                 "additionalProperties": true
               }

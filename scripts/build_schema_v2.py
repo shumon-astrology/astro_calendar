@@ -19,7 +19,7 @@ V1 = os.path.join(ROOT, "schema", "SCHEMA_chart_v1.json")
 OUT = os.path.join(ROOT, "schema", "SCHEMA_chart_v2.json")
 
 DRAFT_DATE = "2026-09-18"
-REVISION_DATE = "2026-09-19"   # rev.3：vocation の組合せ（2〜4 天体）と auxiliary の oneOf を修正
+REVISION_DATE = "2026-09-19"   # rev.4：決定 D 撤回（partile の定義）＋ vocation の 3 点
 
 PLANETS = ["Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury", "Moon"]
 HOUSE_CLASS = ["angular", "succedent", "cadent"]
@@ -85,7 +85,7 @@ def build():
     schema["$id"] = "https://traditionalchart.com/schema/chart_v2.json"
     schema["title"] = ("SCHEMA_chart_v2 — Classical natal chart JSON "
                        "(AmanJyoshi / traditionalchart)")
-    schema["x-schema_file_version"] = f"v2 ({REVISION_DATE}, rev.3)"
+    schema["x-schema_file_version"] = f"v2 ({REVISION_DATE}, rev.4)"
     schema["x-method"] = ("METHOD_本質的品位表_v1.md v1.2 (+ decision C pending v1.3) / "
                           "METHOD_natal_v1.md v1.3 / "
                           "古典職業鑑定マニュアル v11 + 再基底化差分 2026-09-18")
@@ -430,9 +430,9 @@ def build():
     # ------------------------------------------------------------------ aspects 追加
     ap_ = "properties/aspects/items/properties"
     node_at(schema, f"{ap_}/partile")["description"] = (
-        "Partile aspect (decision D, 2026-09-19): true only when both bodies have the same "
-        "integer degree within their signs; it holds across signs (for example Aries 12°40' "
-        "square Cancer 12°05'). It is not an orb of 1°. Source: CA I ll.8985-9033.")
+        "Partile aspect: within 1° of the exact aspect, in any sign (Lilly: partill). "
+        "The reading that both bodies must share the same integer degree was withdrawn "
+        "on 2026-09-19.")
     add(f"{ap_}/reception_softens", {
         "type": "boolean",
         "description": ("For squares and oppositions: true when there is mutual reception or "

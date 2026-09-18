@@ -378,15 +378,26 @@ export function buildVocation(src: VocationSource): Record<string, unknown> {
       } else if (codes.includes("score_below_4")) {
         value = String(mcAlmutenThree.scores[c.planet]);
       }
-      return { planet: c.planet, rule: failedRule, reason: codes, value };
+      return {
+        planet: c.planet,
+        rule: failedRule,
+        reason: codes,
+        value,
+        debilities: c.essential.debilities,
+      };
     })
     .filter((x): x is NonNullable<typeof x> => x !== null);
 
   const settlementTier = ruleFired === null ? null
     : (["1", "2A"].includes(ruleFired) ? "A" : ruleFired === "2B" ? "B" : "C");
 
-  const notExcluded = CANDIDATES.filter((n) =>
-    n !== significatorPlanet && !excluded.some((e) => e.planet === n));
+  // 主星以外で、太陽による排除（燃焼・光線下）を受けていない候補。
+  // excluded[] は監査用でこの判定には使わない（要件書 I-3-4、Phase 4 報告 b）
+  const notExcluded = CANDIDATES.filter((n) => {
+    if (n === significatorPlanet) return false;
+    const c = candidateOf(n);
+    return !c.solar.combust && !c.solar.under_beams;
+  });
 
   const significator = {
     planet: significatorPlanet,
@@ -541,7 +552,8 @@ export function buildVocation(src: VocationSource): Record<string, unknown> {
     src.conditionOf(DOMICILE_BY_SIGN[signOf(planetOf(n).longitude)]));
 
   // --- 恒星（候補星と最弱天体。v1 の 3 星のみ） ----------------------------
-  const STAR_ORB = 2.0;
+  const STAR_ORB = 2.0;        // 参考の上限
+  const STAR_JUDGING_ORB = 1.0; // 判定用の上限
   const starBodies = [...new Set([...CANDIDATES, ...(src.weakestPlanet ? [src.weakestPlanet] : [])])];
   const fixedStars: Record<string, unknown>[] = [];
   for (const [star, starLon] of Object.entries(src.stars)) {
@@ -553,6 +565,7 @@ export function buildVocation(src: VocationSource): Record<string, unknown> {
           body,
           orb: Math.round(orb * 100) / 100,
           orb_dms: dms(orb),
+          grade: orb <= STAR_JUDGING_ORB ? "judging" : "reference",
           body_is_weakest: body === src.weakestPlanet,
         });
       }
