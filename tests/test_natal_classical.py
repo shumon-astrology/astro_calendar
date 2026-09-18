@@ -302,6 +302,48 @@ class TestSect(unittest.TestCase):
         self.assertEqual(nc.to_json(c)["sect"]["borderline"], True)
 
 
+class TestSolarPhaseSameSign(unittest.TestCase):
+    """決定 C（2026-09-18）：カジミ・燃焼・光線下は太陽と同一サインを要する"""
+
+    def test_different_sign_is_free(self):
+        # 太陽 Cap 10°、木星 Sag 29°36'（離角 10.83°）→ 別サインなので free
+        sun = lon("Cap", 10 + 26 / 60)
+        jup = lon("Sag", 29 + 36 / 60)
+        self.assertLess(abs(((jup - sun + 180) % 360) - 180), nc.UNDER_BEAMS_ORB)
+        sp = nc.solar_phase(jup, sun, "Jupiter")
+        self.assertEqual(sp["state"], "free")
+        self.assertFalse(sp["same_sign_as_sun"])
+
+    def test_within_combust_orb_but_other_sign_is_free(self):
+        # 合成入力：太陽 Leo 01°、金星 Can 28°（離角 3°）→ 別サインなので free
+        sun, ven = lon("Leo", 1), lon("Can", 28)
+        self.assertAlmostEqual(nc.solar_phase(ven, sun, "Venus")["distance"], 3.0, places=6)
+        self.assertEqual(nc.solar_phase(ven, sun, "Venus")["state"], "free")
+        # 同サインに寄せれば燃焼（太陽 Leo 01°、金星 Leo 04°）
+        self.assertEqual(nc.solar_phase(lon("Leo", 4), sun, "Venus")["state"], "combust")
+
+    def test_same_sign_cases_unchanged(self):
+        sun = lon("Can", 28 + 24 / 60)
+        self.assertEqual(nc.solar_phase(lon("Can", 27 + 26 / 60), sun, "Mars")["state"],
+                         "combust")
+        self.assertEqual(nc.solar_phase(lon("Can", 28 + 30 / 60), sun, "Mercury")["state"],
+                         "cazimi")
+        self.assertEqual(nc.solar_phase(lon("Can", 18), sun, "Mercury")["state"],
+                         "under_beams")
+
+    def test_chart_a_jupiter_is_free(self):
+        # 試験図 A（福岡 1996-01-01 23:07 JST）：木星は決定 C で under_beams → free
+        c = nc.calculate_classical_chart(1996, 1, 1, 23, 7, 33.6, 130.4167, tz_offset=9.0)
+        jup = [p for p in c["planets"] if p["name_en"] == "Jupiter"][0]
+        self.assertEqual(jup["position_str"], "Sag 29°36'")
+        self.assertEqual(jup["solar_phase"]["state"], "free")
+        self.assertGreater(jup["solar_phase"]["distance"], 8.5)
+        self.assertLess(jup["solar_phase"]["distance"], 17.0)
+        codes = {it[0] for it in jup["accidental"]["items"]}
+        self.assertIn("free_of_beams", codes)
+        self.assertNotIn("under_beams", codes)
+
+
 class TestPlanetaryHour(unittest.TestCase):
     """日の出・日の入と曜日は出生地の現地時刻（tz_offset）で扱う"""
 

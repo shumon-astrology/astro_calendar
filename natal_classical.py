@@ -724,11 +724,21 @@ def solar_phase(planet_lon, sun_lon, planet_name):
     """
     太陽光線との関係を判定 ＝ リリー本文
     カジミ（17分以内）／コンバスト（8°30'以内）／サンビームス下（17°以内）／自由
+
+    決定 C（2026-09-18 三河）：カジミ・コンバスト・サンビームス下はいずれも
+    太陽と同一サインにあることを要する。サインが違えば離角が 8°30' 以内でも
+    17° 以内でも「光線から自由」とする。
+    典拠：CA I ll.9344–9353（燃焼の同サイン条件）。カジミ・サンビームス下への
+    拡張はプロジェクトの決定（METHOD_本質的品位表 v1.3 への追記待ち）
     """
     if planet_name == "Sun":
-        return {"state": "sun", "state_ja": "—", "distance": 0.0}
+        return {"state": "sun", "state_ja": "—", "distance": 0.0,
+                "same_sign_as_sun": True}
     dist = abs(((planet_lon - sun_lon + 180.0) % 360.0) - 180.0)
-    if dist <= CAZIMI_ORB:
+    same_sign = sign_of(planet_lon) == sign_of(sun_lon)
+    if not same_sign:
+        state, ja = "free", "光線から自由"
+    elif dist <= CAZIMI_ORB:
         state, ja = "cazimi", "カジミ"
     elif dist <= COMBUST_ORB:
         state, ja = "combust", "コンバスト"
@@ -736,7 +746,8 @@ def solar_phase(planet_lon, sun_lon, planet_name):
         state, ja = "under_beams", "サンビームス下"
     else:
         state, ja = "free", "光線から自由"
-    return {"state": state, "state_ja": ja, "distance": round(dist, 2)}
+    return {"state": state, "state_ja": ja, "distance": round(dist, 2),
+            "same_sign_as_sun": same_sign}
 
 
 def orientality(planet_lon, sun_lon, planet_name):
