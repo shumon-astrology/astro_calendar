@@ -4,7 +4,7 @@
   "title": "SCHEMA_chart_v2 — Classical natal chart JSON (AmanJyoshi / traditionalchart)",
   "description": "Contract between the calculator (astro_calendar/natal_classical.py, branch classical) and the reading prompts (30_prompts/PROMPT_*_en_v*.md). The calculator WRITES this file; a prompt READS it and interprets only. The AI must never recompute positions, dignities, scores, houses or aspects — every needed value is present here. Conventions: tropical zodiac; seven classical planets; Regiomontanus houses with Lilly's 5° cusp rule; Dorothean triplicities (+3 to the sect ruler only); Egyptian terms (operative) with Ptolemaic/Lilly terms as audit only; Chaldean faces; mean node; chart sect by the ASC–DSC horizon; peregrine −5, cancelled by sign/exaltation/mixed mutual reception, never added on top of detriment/fall; almuten ties at a single degree resolved by house position, almuten figuris ties reported as joint almutens. Rule source: 20_method/METHOD_本質的品位表_v1.md (v1.2, 2026-09-17). Verification status: structure and dignity tables [確定・照合済み]; accidental-dignity codes, orbs, planetary-hour details [未照合 against CA Book I]; Ptolemaic term table [未照合]; house-cusp almutens [未実装・任意]. v2 (additive superset of v1 rev.2): every v1 key keeps its place, type and meaning; new blocks (derived, houses_summary, fixed_star_contacts, boundary_warnings, vocation, timing, summary, reading_notes, provenance) carry pre-computed judgement material so that the reading prompt never recomputes anything. Items that cannot exist when the birth time is unknown (time_known: false) are nullable. Solar conditions (cazimi / combust / under beams) additionally require the planet to be in the same sign as the Sun (decision C, 2026-09-18).",
   "x-project": "デジタル販売 / 10_schema",
-  "x-schema_file_version": "v2 (2026-09-19, rev.2)",
+  "x-schema_file_version": "v2 (2026-09-19, rev.3)",
   "x-sample": "astro_calendar/schema/sample_chart_v1.json is the v1 sample; a v2 sample is produced in Phase 3",
   "x-method": "METHOD_本質的品位表_v1.md v1.2 (+ decision C pending v1.3) / METHOD_natal_v1.md v1.3 / 古典職業鑑定マニュアル v11 + 再基底化差分 2026-09-18",
   "type": "object",
@@ -4798,7 +4798,7 @@
                       ]
                     },
                     "minItems": 2,
-                    "maxItems": 2
+                    "maxItems": 4
                   },
                   "aspect": {
                     "type": "string",
@@ -4857,7 +4857,7 @@
                       ]
                     },
                     "minItems": 2,
-                    "maxItems": 2
+                    "maxItems": 4
                   },
                   "rule_key": {
                     "type": "string"
@@ -4925,7 +4925,10 @@
               "additionalProperties": true
             },
             "sign_attributes": {
-              "type": "object",
+              "type": [
+                "object",
+                "null"
+              ],
               "description": "Attributes of the significator's sign from the procedure's tables (verified: false). Attributes only, no selection.",
               "properties": {
                 "sign": {
@@ -4959,15 +4962,14 @@
                   ]
                 }
               },
-              "required": [
-                "sign",
-                "element",
-                "mode"
-              ],
+              "required": [],
               "additionalProperties": true
             },
             "success": {
-              "type": "object",
+              "type": [
+                "object",
+                "null"
+              ],
               "description": "Four conditions of success. strong_essential means essential score >= 3; grade is high for 4, mid for 2-3, low for 0-1. Project convention.",
               "properties": {
                 "conditions": {
@@ -5021,12 +5023,7 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "conditions",
-                "conditions_met",
-                "of",
-                "grade"
-              ],
+              "required": [],
               "additionalProperties": true
             },
             "auxiliary": {
@@ -5039,9 +5036,6 @@
                       "$ref": "#/$defs/condition"
                     },
                     {
-                      "type": "object"
-                    },
-                    {
                       "type": "null"
                     }
                   ]
@@ -5050,9 +5044,6 @@
                   "oneOf": [
                     {
                       "$ref": "#/$defs/condition"
-                    },
-                    {
-                      "type": "object"
                     },
                     {
                       "type": "null"
@@ -5065,9 +5056,6 @@
                       "$ref": "#/$defs/condition"
                     },
                     {
-                      "type": "object"
-                    },
-                    {
                       "type": "null"
                     }
                   ]
@@ -5076,9 +5064,6 @@
                   "oneOf": [
                     {
                       "$ref": "#/$defs/condition"
-                    },
-                    {
-                      "type": "object"
                     },
                     {
                       "type": "null"
@@ -5091,9 +5076,6 @@
                       "$ref": "#/$defs/condition"
                     },
                     {
-                      "type": "object"
-                    },
-                    {
                       "type": "null"
                     }
                   ]
@@ -5102,9 +5084,6 @@
                   "oneOf": [
                     {
                       "$ref": "#/$defs/condition"
-                    },
-                    {
-                      "type": "object"
                     },
                     {
                       "type": "null"
@@ -5117,9 +5096,6 @@
                       "$ref": "#/$defs/condition"
                     },
                     {
-                      "type": "object"
-                    },
-                    {
                       "type": "null"
                     }
                   ]
@@ -5128,9 +5104,6 @@
                   "oneOf": [
                     {
                       "$ref": "#/$defs/condition"
-                    },
-                    {
-                      "type": "object"
                     },
                     {
                       "type": "null"

@@ -1,0 +1,66 @@
+{
+  "_source": "古典職業鑑定マニュアル_20260809_v11.md §4-1（組合せ表）・§5-1〜5-3（サイン属性）",
+  "_note": "職業語（professions）は入れない。語彙は LEXICON 側。表は写した時点で verified:false",
+  "verified": false,
+  "combinations": [
+    { "rule_key": "mercury_venus", "pair": ["Mercury", "Venus"], "citation": "CA III p.146, ll.7922–7927" },
+    { "rule_key": "mercury_venus_saturn", "pair": ["Mercury", "Venus", "Saturn"], "citation": "CA III ll.7928–7929" },
+    { "rule_key": "jupiter_venus_mercury", "pair": ["Jupiter", "Venus", "Mercury"], "citation": "CA III ll.7930–7932" },
+    { "rule_key": "jupiter_venus_mercury_moon", "pair": ["Jupiter", "Venus", "Mercury", "Moon"], "citation": "CA III ll.7933–7934" },
+    { "rule_key": "mars_venus_mercury", "pair": ["Mars", "Venus", "Mercury"], "citation": "CA III l.7935" },
+    { "rule_key": "mercury_saturn", "pair": ["Mercury", "Saturn"], "citation": "CA III ll.7836–7839" },
+    { "rule_key": "mercury_mars", "pair": ["Mercury", "Mars"], "citation": "CA III ll.7840–7842 / ll.7938–7941" },
+    { "rule_key": "mercury_jupiter", "pair": ["Mercury", "Jupiter"], "citation": "CA III ll.7843–7846" },
+    { "rule_key": "mercury_sun", "pair": ["Mercury", "Sun"], "citation": "CA III ll.7847–7851" },
+    { "rule_key": "mercury_moon", "pair": ["Mercury", "Moon"], "citation": "CA III ll.7859–7865" },
+    { "rule_key": "venus_saturn", "pair": ["Venus", "Saturn"], "citation": "CA III ll.7876–7880" },
+    { "rule_key": "venus_jupiter", "pair": ["Venus", "Jupiter"], "citation": "CA III ll.7880–7882" },
+    { "rule_key": "mars_saturn", "pair": ["Mars", "Saturn"], "citation": "CA III ll.7902–7908" },
+    { "rule_key": "mars_jupiter", "pair": ["Mars", "Jupiter"], "citation": "CA III ll.7908–7910" },
+    { "rule_key": "mars_sun", "pair": ["Mars", "Sun"], "citation": "CA III ll.7911–7919" },
+    { "rule_key": "mars_moon", "pair": ["Mars", "Moon"], "citation": "CA III ll.7920–7921" },
+    { "rule_key": "mars_venus", "pair": ["Mars", "Venus"], "citation": "CA III ll.7954–7958" },
+    { "rule_key": "mars_venus_saturn", "pair": ["Mars", "Venus", "Saturn"], "citation": "CA III ll.7959–7961" },
+    { "rule_key": "mars_venus_jupiter", "pair": ["Mars", "Venus", "Jupiter"], "citation": "CA III ll.7962–7963" },
+    { "rule_key": "mars_mercury_saturn", "pair": ["Mars", "Mercury", "Saturn"], "citation": "CA III ll.7948–7949" },
+    { "rule_key": "mars_mercury_jupiter", "pair": ["Mars", "Mercury", "Jupiter"], "citation": "CA III ll.7949–7951" }
+  ],
+  "special_condition_citations": {
+    "mercury_yields_to_mars": "CA III ll.7808–7811",
+    "mercury_retro_conj_venus_same_sign": "CA III l.7936",
+    "mercury_moon_by_sign": "CA III ll.7859–7865",
+    "venus_combust": "CA III ll.7888–7890",
+    "venus_cazimi": "CA III ll.7888–7890",
+    "mars_with_saturn": "CA III ll.7902–7908",
+    "mercury_jupiter_aspect": "CA III ll.7833–7834 / Firmicus VII.11"
+  },
+  "warning_citations": {
+    "mercury_jupiter_no_aspect": ["CA III ll.7833–7834", "Firmicus VII.11"],
+    "venus_combust_no_profession": ["CA III ll.7888–7890"],
+    "mars_saturn_loses_rule": ["CA III ll.7902–7908"],
+    "mercury_yields_to_mars": ["CA III ll.7808–7811"]
+  },
+  "sign_attributes": {
+    "_source": "§5-1 リリー（CA III ll.7986–7996）／§5-2 アブー・マアシャル（ll.7997–8009）／§5-3 Coley（p.564）",
+    "modes": {
+      "movable": ["Aries", "Cancer", "Libra", "Capricorn"],
+      "fixed": ["Taurus", "Leo", "Scorpio", "Aquarius"],
+      "common": ["Gemini", "Virgo", "Sagittarius", "Pisces"]
+    },
+    "humane": ["Gemini", "Virgo", "Libra", "Aquarius"],
+    "four_footed": ["Aries", "Leo", "Sagittarius"],
+    "water_or_earth_group": ["Cancer", "Scorpio", "Pisces", "Taurus", "Capricorn"],
+    "fixed_learning_excludes": ["Scorpio"],
+    "notes": {
+      "movable": "機知を要する職業（幾何学・医学・占星術など）",
+      "fixed": "学識・教育を要する（蠍座を除く）",
+      "humane": "自由学芸的で人間生活に有用、権威をもって教授される職業",
+      "water_or_earth_group": "水と土に関わる職業",
+      "four_footed": "機械的職業",
+      "element_fire": "火に関わる職業（アブー・マアシャル／Coley）",
+      "element_earth": "土に由来する職業",
+      "element_air": "リリー（アブー・マアシャル系）は Singers（声楽）、Coley は Musitioners（器楽を含む）",
+      "element_water": "水に関わる職業"
+    }
+  }
+}

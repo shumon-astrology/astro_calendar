@@ -270,8 +270,9 @@ def vocation_schema(planets):
                 "items": {
                     "type": "object",
                     "properties": {
+                        # 手順書 §4-1 の組合せは 2〜4 天体（例：木星＋金星＋水星＋月）
                         "pair": {"type": "array", "items": planet_enum,
-                                 "minItems": 2, "maxItems": 2},
+                                 "minItems": 2, "maxItems": 4},
                         "aspect": {"type": "string", "enum": ASPECTS},
                         "orb": {"type": "number"},
                         "applying": {"type": "boolean"},
@@ -290,7 +291,7 @@ def vocation_schema(planets):
                     "type": "object",
                     "properties": {
                         "pair": {"type": "array", "items": planet_enum,
-                                 "minItems": 2, "maxItems": 2},
+                                 "minItems": 2, "maxItems": 4},
                         "rule_key": {"type": "string"},
                         "citation": {"type": "string"},
                     },
@@ -325,7 +326,7 @@ def vocation_schema(planets):
                 "additionalProperties": True,
             },
             "sign_attributes": {
-                "type": "object",
+                "type": ["object", "null"],
                 "description": ("Attributes of the significator's sign from the procedure's "
                                 "tables (verified: false). Attributes only, no selection."),
                 "properties": {
@@ -337,11 +338,11 @@ def vocation_schema(planets):
                     "humane": {"type": "boolean"},
                     "voice": {"type": ["string", "boolean", "null"]},
                 },
-                "required": ["sign", "element", "mode"],
+                "required": [],   # 主星が決まらなければ null
                 "additionalProperties": True,
             },
             "success": {
-                "type": "object",
+                "type": ["object", "null"],
                 "description": ("Four conditions of success. strong_essential means essential "
                                 "score >= 3; grade is high for 4, mid for 2-3, low for 0-1. "
                                 "Project convention."),
@@ -364,15 +365,14 @@ def vocation_schema(planets):
                     "malefic_afflictions": {"type": "array", "items": _aspect_contact()},
                     "citation": {"type": "string"},
                 },
-                "required": ["conditions", "conditions_met", "of", "grade"],
+                "required": [],   # 主星が決まらなければ null
                 "additionalProperties": True,
             },
             "auxiliary": {
                 "type": "object",
                 "description": ("Conditions of the auxiliary places: houses 10, 2, 6 and 11, "
                                 "the two lots, the Moon and the Sun."),
-                "properties": {k: {"oneOf": [_condition_ref(), {"type": "object"},
-                                             {"type": "null"}]}
+                "properties": {k: {"oneOf": [_condition_ref(), {"type": "null"}]}
                                for k in ["h10", "h2", "h6", "h11", "fortune", "spirit",
                                          "moon", "sun"]},
                 "additionalProperties": True,

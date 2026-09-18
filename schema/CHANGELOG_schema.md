@@ -94,6 +94,17 @@ rev.1 では null を許していなかったため追補した。型の追加�
   数秒角まで寄せられる見込み。新しい星集合（ロイヤルスター 6＋4〜6）を決めるときに
   併せて検討する（付録 A #16・#21）。
 
+## v2 rev.3（2026-09-19）— rev.2 からの差分
+
+Phase 4（`vocation` の実装）で判明した型の不備を直した。値の意味は変えていない。
+
+- `vocation.combinations[].pair` と `absent_combinations[].pair` を 2〜4 天体に
+  （手順書 §4-1 の組合せには「木星＋金星＋水星＋月」のような 3〜4 天体のものがある）。
+- `vocation.auxiliary.*` の `oneOf` が condition と汎用オブジェクトの両方に一致して
+  壊れていたので、`oneOf [condition, null]` に直した。
+- `vocation.sign_attributes` と `vocation.success` を nullable に
+  （どのルールでも主星が決まらない図では null になる）。
+
 ## 説明の更新（rev は上げない）
 
 - 2026-09-19：`aspects[].partile` の description を決定 D の定義（両天体の整数度が同じ。

@@ -133,6 +133,8 @@ export function mutualReceptions(
 
 export interface EssentialOptions {
   tripTable?: Record<string, TriplicityRow>;
+  /** 体系差分（I-3-9）で監査用のターム表に差し替えるときだけ渡す */
+  termTable?: TermCell[][];
   receptions?: MutualReception[];
   /** セクト不明（time_known:false）。Phase 3 で使う */
   sectUnknown?: boolean;
@@ -149,7 +151,7 @@ export function essentialDignity(
 
   const trip = triplicityRulers(si, tripTable);
   const sectRuler = options.sectUnknown ? null : (isDay ? trip.day : trip.night);
-  const term = termRuler(lon);
+  const term = termRuler(lon, options.termTable);
   const auditRuler = termRuler(lon, TERMS_TABLES[TERMS_AUDIT]);
   const face = faceRuler(lon);
 
@@ -332,9 +334,15 @@ function resolveVocation2B(
 /** ルール④専用のモイエティ（月のオーブ 12°30′ の半分）。一般オーブとは別の規則 */
 export const MOON_MOIETY_DEG = 6.25;
 
-/** 候補星が月から 6°15′ 以内にあるか（ルール④専用） */
-export function withinMoonMoiety(candidateLon: number, moonLon: number): boolean {
-  return Math.abs(((candidateLon - moonLon + 540) % 360) - 180) <= MOON_MOIETY_DEG;
+/**
+ * ルール④：月とのアスペクトが月のモイエティ（6°15′）以内か。
+ * 測るのは「アスペクトのオーブ」であって天体間の離角ではない。候補星側の moiety は
+ * 加算しない（CA III l.7780 を文字どおり。手順書 v10 §2）。
+ * 較正例 No.001 の金星（月からのディソシエイトなスクエア、オーブ 6°04′）が
+ * この規則に該当すると較正メモが記しており、オーブで測ることの裏づけになる。
+ */
+export function withinMoonMoiety(aspectOrbDeg: number): boolean {
+  return aspectOrbDeg <= MOON_MOIETY_DEG;
 }
 
 export function almutenOfDegree(

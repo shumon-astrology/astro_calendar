@@ -9,7 +9,7 @@ import {
 } from "./accidental.ts";
 import { ACCIDENTAL_LABELS_EN } from "./labels.ts";
 import { antiscia, findClassicalAspects, receptionSoftening, type AspectBody } from "./aspects.ts";
-import { buildDerived, type Condition, type DerivedInput } from "./derived.ts";
+import { buildDerived, conditionOf, type Condition, type DerivedInput } from "./derived.ts";
 import {
   almutenFiguris, almutenOfDegree, essentialDignity, mutualReceptions, triplicityRulers,
   type AlmutenResult, type EssentialDignity,
@@ -32,6 +32,7 @@ import {
 } from "./tables.ts";
 import { formatLocalDateTime, localToJd } from "./time.ts";
 import { isKnownTimezone, resolveTimezone } from "./timezone.ts";
+import { buildVocation, type VocationSource } from "./vocation.ts";
 import type {
   SCHEMAChartV2ClassicalNatalChartJSONAmanJyoshiTraditionalchart as ChartV2,
 } from "./types/chart_v2.d.ts";
@@ -478,6 +479,62 @@ export function computeChart(input: ChartInput): ChartV2 {
   };
   const derived = buildDerived(derivedInput);
 
+  // --- 適職（I-3）。時刻が不明なら作らない ---
+  const vocation = (timeKnown && cusps && housesJson && mcLon !== null && ascLon !== null
+    && fortuneLon !== null && spiritLon !== null && isDay !== null)
+    ? buildVocation({
+      isDay,
+      tripTable,
+      planets: planets.map((p) => ({
+        name: p.name,
+        longitude: p.longitude,
+        sign: SIGN_FULL[signOf(p.longitude)],
+        signIndex: signOf(p.longitude),
+        position: jsonPoint(p.longitude).position,
+        house: p.houseEffective,
+        houseRaw: p.house,
+        nearNextCusp: p.nearCusp,
+        retrograde: p.retrograde,
+        essential: p.essential,
+        accidentalScore: p.accidental ? p.accidental.score : null,
+        totalScore: p.totalScore,
+        solar: {
+          state: p.solarPhase.state,
+          distance: p.solarPhase.distance,
+          sameSign: p.solarPhase.same_sign_as_sun,
+          orientality: p.orientality,
+        },
+      })),
+      aspects: aspects.map((a) => ({
+        from: a.planet1,
+        to: a.planet2,
+        aspect: a.aspect,
+        orb: a.orb,
+        partile: a.partile,
+        condition: a.state,
+        direction: a.direction,
+        mutual_reception: a.mutual_reception,
+        reception_from_to: a.reception_1to2,
+        reception_to_from: a.reception_2to1,
+      })),
+      mcLongitude: mcLon,
+      ascLongitude: ascLon,
+      houses: housesJson.map((h) => ({
+        house: h.house, lord: h.lord, signIndex: h.sign_index,
+      })),
+      lots: {
+        fortune: { lord: DOMICILE_BY_SIGN[signOf(fortuneLon)] },
+        spirit: { lord: DOMICILE_BY_SIGN[signOf(spiritLon)] },
+      },
+      houseOf,
+      conditionOf: (name: string) => conditionOf(name, derivedInput),
+      stars,
+      weakestPlanet: derived.weakest_planet.planet,
+      moonLongitude: moonLon,
+      sunLongitude: sunLon,
+    } satisfies VocationSource)
+    : null;
+
   // --- summary ---
   const sectLightState = light ? byName[light] : null;
   const ascLordName = ascLon === null ? null : DOMICILE_BY_SIGN[signOf(ascLon)];
@@ -780,10 +837,10 @@ export function computeChart(input: ChartInput): ChartV2 {
     houses_summary: housesSummary,
     fixed_star_contacts: null,
     boundary_warnings: warnings,
-    vocation: null,
-    vocation_blocked_reason: timeKnown
-      ? "vocation is implemented in a later phase"
-      : "birth time unknown",
+    vocation,
+    vocation_blocked_reason: vocation === null
+      ? (timeKnown ? "chart is incomplete" : "birth time unknown")
+      : null,
     timing: null,
     summary,
     reading_notes: buildReadingNotes(timeKnown),

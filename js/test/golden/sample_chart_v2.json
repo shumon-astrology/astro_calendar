@@ -2564,8 +2564,820 @@
       "message_en": "Moon is within 1° of the cusp of house 10; it is counted in that house by the 5° rule."
     }
   ],
-  "vocation": null,
-  "vocation_blocked_reason": "vocation is implemented in a later phase",
+  "vocation": {
+    "rules_version": "古典職業鑑定マニュアル v11 (2026-08-09) + 再基底化差分 2026-09-18 (決定 A・B) + 決定 C・D (2026-09-18/19)",
+    "thresholds": {
+      "combust_deg": 8.5,
+      "under_beams_deg": 17,
+      "cazimi_deg": 0.2833,
+      "rule4_moiety_deg": 6.25,
+      "rule4_citation": "CA III l.7780 'within the mediety of her Orbs' — Moon's orb 12°30' halved; candidate's moiety NOT added (手順書 v10 §2)",
+      "general_orb_note": "aspects[].max_orb (sum of moieties, CA I) is a different rule and is not used for rule 4"
+    },
+    "candidates": [
+      {
+        "planet": "Mars",
+        "position": "Can 27°27'",
+        "house": 9,
+        "house_raw": 8,
+        "near_next_cusp": true,
+        "essential": {
+          "dignities": [],
+          "debilities": [
+            "fall"
+          ],
+          "score": -4,
+          "has_dignity": false,
+          "peregrine": true,
+          "peregrine_cancelled_by": null
+        },
+        "solar": {
+          "distance_from_sun": 0.95,
+          "same_sign_as_sun": true,
+          "cazimi": false,
+          "combust": true,
+          "under_beams": false,
+          "orientality": "oriental"
+        },
+        "angular": false,
+        "in_house_10_1_7": false,
+        "retrograde": false,
+        "malefic_afflictions": [],
+        "moon_aspect": null,
+        "eligibility": {
+          "rule1": false,
+          "rule2a": false,
+          "rule2b": false,
+          "rule3": false,
+          "rule4": false,
+          "rule5": true
+        },
+        "eligibility_reasons": {
+          "rule1": "not_in_10_1_7, no_essential_dignity, combust",
+          "rule2a": "not_mc_domicile_lord, no_essential_dignity, in_fall",
+          "rule2b": "not_mc_almuten_three, no_essential_dignity",
+          "rule3": "no_partile_moon_aspect",
+          "rule4": "outside_moon_moiety",
+          "rule5": null
+        }
+      },
+      {
+        "planet": "Venus",
+        "position": "Gem 16°17'",
+        "house": 7,
+        "house_raw": 7,
+        "near_next_cusp": false,
+        "essential": {
+          "dignities": [
+            "term"
+          ],
+          "debilities": [],
+          "score": 2,
+          "has_dignity": true,
+          "peregrine": false,
+          "peregrine_cancelled_by": null
+        },
+        "solar": {
+          "distance_from_sun": 42.11,
+          "same_sign_as_sun": false,
+          "cazimi": false,
+          "combust": false,
+          "under_beams": false,
+          "orientality": "oriental"
+        },
+        "angular": true,
+        "in_house_10_1_7": true,
+        "retrograde": false,
+        "malefic_afflictions": [],
+        "moon_aspect": {
+          "aspect": "square",
+          "orb": 7.06,
+          "partile": false,
+          "within_moon_moiety": false,
+          "dissociate": false,
+          "direction": "sinister"
+        },
+        "eligibility": {
+          "rule1": true,
+          "rule2a": false,
+          "rule2b": false,
+          "rule3": false,
+          "rule4": false,
+          "rule5": false
+        },
+        "eligibility_reasons": {
+          "rule1": null,
+          "rule2a": "not_mc_domicile_lord",
+          "rule2b": "not_mc_almuten_three",
+          "rule3": "no_partile_moon_aspect",
+          "rule4": "outside_moon_moiety",
+          "rule5": "ptolemy_no_candidate"
+        }
+      },
+      {
+        "planet": "Mercury",
+        "position": "Leo 23°27'",
+        "house": 9,
+        "house_raw": 9,
+        "near_next_cusp": false,
+        "essential": {
+          "dignities": [
+            "term"
+          ],
+          "debilities": [],
+          "score": 2,
+          "has_dignity": true,
+          "peregrine": false,
+          "peregrine_cancelled_by": null
+        },
+        "solar": {
+          "distance_from_sun": 25.06,
+          "same_sign_as_sun": false,
+          "cazimi": false,
+          "combust": false,
+          "under_beams": false,
+          "orientality": "occidental"
+        },
+        "angular": false,
+        "in_house_10_1_7": false,
+        "retrograde": false,
+        "malefic_afflictions": [
+          {
+            "by": "Saturn",
+            "aspect": "square",
+            "orb": 1.98,
+            "partile": false
+          }
+        ],
+        "moon_aspect": null,
+        "eligibility": {
+          "rule1": false,
+          "rule2a": true,
+          "rule2b": true,
+          "rule3": false,
+          "rule4": false,
+          "rule5": false
+        },
+        "eligibility_reasons": {
+          "rule1": "not_in_10_1_7",
+          "rule2a": null,
+          "rule2b": null,
+          "rule3": "no_partile_moon_aspect",
+          "rule4": "outside_moon_moiety, afflicted_by_malefic",
+          "rule5": "ptolemy_no_candidate"
+        }
+      }
+    ],
+    "mc_almuten_all": {
+      "almuten": "Mercury",
+      "almuten_tie": false,
+      "almuten_candidates": [
+        "Mercury"
+      ],
+      "almuten_tie_break": null,
+      "almuten_scores": {
+        "Sun": 1,
+        "Venus": 5,
+        "Mercury": 9
+      }
+    },
+    "mc_almuten_three": {
+      "scores": {
+        "Mars": 0,
+        "Venus": 5,
+        "Mercury": 9
+      },
+      "winner": "Mercury",
+      "tie": false,
+      "tie_break_used": null,
+      "winner_score": 9,
+      "exaltation_or_better": true
+    },
+    "significator": {
+      "planet": "Venus",
+      "rule_fired": "1",
+      "rule_label": "Candidate in house 10, 1 or 7 with its own essential dignity, not combust and not under the beams",
+      "basis": {
+        "has_dignity": true,
+        "dignities": [
+          "term"
+        ],
+        "almuten_score": null,
+        "competitors": {},
+        "tie_break_used": null
+      },
+      "excluded": [
+        {
+          "planet": "Mars",
+          "rule": "1",
+          "reason": [
+            "not_in_10_1_7",
+            "no_essential_dignity",
+            "combust"
+          ],
+          "value": "0°57'"
+        },
+        {
+          "planet": "Mercury",
+          "rule": "1",
+          "reason": [
+            "not_in_10_1_7"
+          ],
+          "value": null
+        }
+      ],
+      "multiple_qualified": [],
+      "citations": [
+        "CA III pp.140–141 ll.7766–7802",
+        "Bonatti Liber Astronomiae ch.XV (almuten concept)"
+      ],
+      "extension_flag": false,
+      "notes": [
+        "rule 3 priority order and rule 4 affliction orb are project conventions",
+        "rule 3 uses decision D (partile = same degree)"
+      ],
+      "tie": false
+    },
+    "settlement_tier": "A",
+    "not_excluded": [],
+    "ptolemy_method": {
+      "rising_before_sun": "Mars",
+      "mc_lord_or_occupant": [
+        "Mercury",
+        "Moon"
+      ],
+      "agree": false,
+      "result": "Mars"
+    },
+    "coley_method": {
+      "h10_cusp_sign": "Virgo",
+      "h10_lord": "Mercury",
+      "h10_occupants": [
+        "Moon"
+      ],
+      "candidates_in_h10": [],
+      "candidates_good_aspect_to_h10_lord": [],
+      "result": [
+        "Mercury"
+      ],
+      "agrees_with_lilly": false
+    },
+    "anima_124": {
+      "h10_lord": "Mercury",
+      "asc_lord": "Mars",
+      "note": "reference only (Anima Astrologiae 124)"
+    },
+    "combinations": [
+      {
+        "pair": [
+          "Venus",
+          "Jupiter"
+        ],
+        "aspect": "trine",
+        "orb": 2.46,
+        "applying": false,
+        "partile": false,
+        "same_sign": false,
+        "rule_key": "venus_jupiter",
+        "citation": "CA III ll.7880–7882"
+      }
+    ],
+    "absent_combinations": [
+      {
+        "pair": [
+          "Mercury",
+          "Venus"
+        ],
+        "rule_key": "mercury_venus",
+        "citation": "CA III p.146, ll.7922–7927"
+      },
+      {
+        "pair": [
+          "Mercury",
+          "Venus",
+          "Saturn"
+        ],
+        "rule_key": "mercury_venus_saturn",
+        "citation": "CA III ll.7928–7929"
+      },
+      {
+        "pair": [
+          "Jupiter",
+          "Venus",
+          "Mercury"
+        ],
+        "rule_key": "jupiter_venus_mercury",
+        "citation": "CA III ll.7930–7932"
+      },
+      {
+        "pair": [
+          "Jupiter",
+          "Venus",
+          "Mercury",
+          "Moon"
+        ],
+        "rule_key": "jupiter_venus_mercury_moon",
+        "citation": "CA III ll.7933–7934"
+      },
+      {
+        "pair": [
+          "Mars",
+          "Venus",
+          "Mercury"
+        ],
+        "rule_key": "mars_venus_mercury",
+        "citation": "CA III l.7935"
+      },
+      {
+        "pair": [
+          "Venus",
+          "Saturn"
+        ],
+        "rule_key": "venus_saturn",
+        "citation": "CA III ll.7876–7880"
+      },
+      {
+        "pair": [
+          "Mars",
+          "Venus"
+        ],
+        "rule_key": "mars_venus",
+        "citation": "CA III ll.7954–7958"
+      },
+      {
+        "pair": [
+          "Mars",
+          "Venus",
+          "Saturn"
+        ],
+        "rule_key": "mars_venus_saturn",
+        "citation": "CA III ll.7959–7961"
+      },
+      {
+        "pair": [
+          "Mars",
+          "Venus",
+          "Jupiter"
+        ],
+        "rule_key": "mars_venus_jupiter",
+        "citation": "CA III ll.7962–7963"
+      }
+    ],
+    "special_conditions": {
+      "mercury_yields_to_mars": false,
+      "mercury_retro_conj_venus_same_sign": false,
+      "mercury_moon_by_sign": null,
+      "venus_combust": false,
+      "venus_cazimi": false,
+      "mars_with_saturn": false,
+      "mercury_jupiter_aspect": false
+    },
+    "sign_attributes": {
+      "sign": "Gemini",
+      "element": "air",
+      "mode": "mutable",
+      "humane": true,
+      "four_footed": false,
+      "water_or_earth_group": false,
+      "voice": null,
+      "note": "attributes only; the selection of professions belongs to the prompt (LEXICON)"
+    },
+    "success": {
+      "conditions": {
+        "strong_essential": false,
+        "not_afflicted_partile_malefic": true,
+        "angular": true,
+        "oriental": true
+      },
+      "conditions_met": 3,
+      "of": 4,
+      "grade": "mid",
+      "malefic_afflictions": [],
+      "citation": "CA III pp.146–147 ll.7964–7981"
+    },
+    "auxiliary": {
+      "h10": {
+        "planet": "Mercury",
+        "sign": "Leo",
+        "position": "Leo 23°27'",
+        "house": 9,
+        "house_class": "cadent",
+        "essential_score": 2,
+        "accidental_score": 11,
+        "total_score": 13,
+        "dignities": [
+          "term"
+        ],
+        "debilities": [],
+        "peregrine": false,
+        "peregrine_cancelled_by": null,
+        "retrograde": false,
+        "solar_phase": "free",
+        "in_sect": false,
+        "afflicted_by": [
+          {
+            "by": "Saturn",
+            "aspect": "square",
+            "orb": 1.98,
+            "partile": false,
+            "reception_softens": false
+          }
+        ],
+        "assisted_by": [],
+        "classification": "neutral"
+      },
+      "h2": {
+        "planet": "Jupiter",
+        "sign": "Aquarius",
+        "position": "Aqu 13°50'",
+        "house": 3,
+        "house_class": "cadent",
+        "essential_score": 2,
+        "accidental_score": 5,
+        "total_score": 7,
+        "dignities": [
+          "term"
+        ],
+        "debilities": [],
+        "peregrine": false,
+        "peregrine_cancelled_by": null,
+        "retrograde": true,
+        "solar_phase": "free",
+        "in_sect": true,
+        "afflicted_by": [
+          {
+            "by": "Saturn",
+            "aspect": "square",
+            "orb": 7.65,
+            "partile": false,
+            "reception_softens": true
+          }
+        ],
+        "assisted_by": [
+          {
+            "by": "Venus",
+            "aspect": "trine",
+            "orb": 2.46,
+            "partile": false,
+            "reception_softens": false
+          }
+        ],
+        "classification": "neutral"
+      },
+      "h6": {
+        "planet": "Venus",
+        "sign": "Gemini",
+        "position": "Gem 16°17'",
+        "house": 7,
+        "house_class": "angular",
+        "essential_score": 2,
+        "accidental_score": 13,
+        "total_score": 15,
+        "dignities": [
+          "term"
+        ],
+        "debilities": [],
+        "peregrine": false,
+        "peregrine_cancelled_by": null,
+        "retrograde": false,
+        "solar_phase": "free",
+        "in_sect": false,
+        "afflicted_by": [],
+        "assisted_by": [
+          {
+            "by": "Jupiter",
+            "aspect": "trine",
+            "orb": 2.46,
+            "partile": false,
+            "reception_softens": false
+          }
+        ],
+        "classification": "neutral"
+      },
+      "h11": {
+        "planet": "Venus",
+        "sign": "Gemini",
+        "position": "Gem 16°17'",
+        "house": 7,
+        "house_class": "angular",
+        "essential_score": 2,
+        "accidental_score": 13,
+        "total_score": 15,
+        "dignities": [
+          "term"
+        ],
+        "debilities": [],
+        "peregrine": false,
+        "peregrine_cancelled_by": null,
+        "retrograde": false,
+        "solar_phase": "free",
+        "in_sect": false,
+        "afflicted_by": [],
+        "assisted_by": [
+          {
+            "by": "Jupiter",
+            "aspect": "trine",
+            "orb": 2.46,
+            "partile": false,
+            "reception_softens": false
+          }
+        ],
+        "classification": "neutral"
+      },
+      "fortune": {
+        "planet": "Saturn",
+        "sign": "Scorpio",
+        "position": "Sco 21°29'",
+        "house": 12,
+        "house_class": "cadent",
+        "essential_score": -5,
+        "accidental_score": -9,
+        "total_score": -14,
+        "dignities": [],
+        "debilities": [
+          "peregrine"
+        ],
+        "peregrine": true,
+        "peregrine_cancelled_by": null,
+        "retrograde": true,
+        "solar_phase": "free",
+        "in_sect": true,
+        "afflicted_by": [],
+        "assisted_by": [],
+        "classification": "effort"
+      },
+      "spirit": {
+        "planet": "Venus",
+        "sign": "Gemini",
+        "position": "Gem 16°17'",
+        "house": 7,
+        "house_class": "angular",
+        "essential_score": 2,
+        "accidental_score": 13,
+        "total_score": 15,
+        "dignities": [
+          "term"
+        ],
+        "debilities": [],
+        "peregrine": false,
+        "peregrine_cancelled_by": null,
+        "retrograde": false,
+        "solar_phase": "free",
+        "in_sect": false,
+        "afflicted_by": [],
+        "assisted_by": [
+          {
+            "by": "Jupiter",
+            "aspect": "trine",
+            "orb": 2.46,
+            "partile": false,
+            "reception_softens": false
+          }
+        ],
+        "classification": "neutral"
+      },
+      "moon": {
+        "planet": "Moon",
+        "sign": "Virgo",
+        "position": "Vir 09°14'",
+        "house": 10,
+        "house_class": "angular",
+        "essential_score": -5,
+        "accidental_score": 14,
+        "total_score": 9,
+        "dignities": [],
+        "debilities": [
+          "peregrine"
+        ],
+        "peregrine": true,
+        "peregrine_cancelled_by": null,
+        "retrograde": false,
+        "solar_phase": "free",
+        "in_sect": false,
+        "afflicted_by": [],
+        "assisted_by": [],
+        "classification": "neutral"
+      },
+      "sun": {
+        "planet": "Sun",
+        "sign": "Cancer",
+        "position": "Can 28°24'",
+        "house": 9,
+        "house_class": "cadent",
+        "essential_score": -5,
+        "accidental_score": 0,
+        "total_score": -5,
+        "dignities": [],
+        "debilities": [
+          "peregrine"
+        ],
+        "peregrine": true,
+        "peregrine_cancelled_by": null,
+        "retrograde": false,
+        "solar_phase": "sun",
+        "in_sect": true,
+        "afflicted_by": [
+          {
+            "by": "Mars",
+            "aspect": "conjunction",
+            "orb": 0.95,
+            "partile": false,
+            "reception_softens": false
+          }
+        ],
+        "assisted_by": [],
+        "classification": "effort"
+      }
+    },
+    "dispositors": [
+      {
+        "planet": "Moon",
+        "sign": "Virgo",
+        "position": "Vir 09°14'",
+        "house": 10,
+        "house_class": "angular",
+        "essential_score": -5,
+        "accidental_score": 14,
+        "total_score": 9,
+        "dignities": [],
+        "debilities": [
+          "peregrine"
+        ],
+        "peregrine": true,
+        "peregrine_cancelled_by": null,
+        "retrograde": false,
+        "solar_phase": "free",
+        "in_sect": false,
+        "afflicted_by": [],
+        "assisted_by": [],
+        "classification": "neutral"
+      },
+      {
+        "planet": "Mercury",
+        "sign": "Leo",
+        "position": "Leo 23°27'",
+        "house": 9,
+        "house_class": "cadent",
+        "essential_score": 2,
+        "accidental_score": 11,
+        "total_score": 13,
+        "dignities": [
+          "term"
+        ],
+        "debilities": [],
+        "peregrine": false,
+        "peregrine_cancelled_by": null,
+        "retrograde": false,
+        "solar_phase": "free",
+        "in_sect": false,
+        "afflicted_by": [
+          {
+            "by": "Saturn",
+            "aspect": "square",
+            "orb": 1.98,
+            "partile": false,
+            "reception_softens": false
+          }
+        ],
+        "assisted_by": [],
+        "classification": "neutral"
+      },
+      {
+        "planet": "Sun",
+        "sign": "Cancer",
+        "position": "Can 28°24'",
+        "house": 9,
+        "house_class": "cadent",
+        "essential_score": -5,
+        "accidental_score": 0,
+        "total_score": -5,
+        "dignities": [],
+        "debilities": [
+          "peregrine"
+        ],
+        "peregrine": true,
+        "peregrine_cancelled_by": null,
+        "retrograde": false,
+        "solar_phase": "sun",
+        "in_sect": true,
+        "afflicted_by": [
+          {
+            "by": "Mars",
+            "aspect": "conjunction",
+            "orb": 0.95,
+            "partile": false,
+            "reception_softens": false
+          }
+        ],
+        "assisted_by": [],
+        "classification": "effort"
+      }
+    ],
+    "fixed_stars": [],
+    "warnings": [
+      {
+        "id": "mercury_jupiter_no_aspect",
+        "citations": [
+          "CA III ll.7833–7834",
+          "Firmicus VII.11"
+        ]
+      }
+    ],
+    "durability_layer": {
+      "verified": false,
+      "note": "Bonatti ll.3012–3016 via Dorotheus I.1 ordered triplicity; NOT added to any score",
+      "mc_sign": "Virgo",
+      "element": "earth",
+      "lords": [
+        {
+          "rank": 1,
+          "role": "day",
+          "planet": "Venus",
+          "house": 7,
+          "essential_score": 2,
+          "accidental_score": 13,
+          "retrograde": false,
+          "combust": false,
+          "malefic_afflictions": []
+        },
+        {
+          "rank": 2,
+          "role": "night",
+          "planet": "Moon",
+          "house": 10,
+          "essential_score": -5,
+          "accidental_score": 14,
+          "retrograde": false,
+          "combust": false,
+          "malefic_afflictions": []
+        },
+        {
+          "rank": 3,
+          "role": "participating",
+          "planet": "Mars",
+          "house": 9,
+          "essential_score": -4,
+          "accidental_score": 5,
+          "retrograde": false,
+          "combust": true,
+          "malefic_afflictions": []
+        }
+      ]
+    },
+    "system_divergence": {
+      "level": 2,
+      "compared_against": {
+        "bounds": "ptolemaic",
+        "triplicity": "ptolemaic",
+        "source": "体系差分検出_実装仕様_20260808.md §5.3（tables_used.sources.triplicity_audit）"
+      },
+      "differences": [
+        {
+          "field": "candidates.Mars.has_dignity",
+          "operative": false,
+          "ptolemaic": true,
+          "level": 2,
+          "note": "the eligibility of rules 1 and 2A depends on this"
+        },
+        {
+          "field": "candidates.Mercury.term_ruler",
+          "operative": "Mercury",
+          "ptolemaic": "Jupiter",
+          "level": 1,
+          "note": "Mercury at Leo 23°27'"
+        },
+        {
+          "field": "candidates.Mercury.has_dignity",
+          "operative": true,
+          "ptolemaic": false,
+          "level": 2,
+          "note": "the eligibility of rules 1 and 2A depends on this"
+        }
+      ],
+      "significator_ptolemaic": null,
+      "settlement_tier_ptolemaic": null
+    },
+    "boundary_warnings": [
+      {
+        "id": "planet_near_cusp",
+        "level": 2,
+        "target": "Mars",
+        "value": null,
+        "threshold": 5,
+        "message_en": "Mars is a vocational candidate within 5° of the next cusp."
+      },
+      {
+        "id": "system_divergence",
+        "level": 2,
+        "target": "vocation",
+        "value": 2,
+        "threshold": 2,
+        "message_en": "The Ptolemaic audit tables would change the vocational judgement."
+      }
+    ],
+    "timing_slice": null
+  },
+  "vocation_blocked_reason": null,
   "timing": null,
   "summary": "Diurnal chart (sect by ASC–DSC horizon). Sect light Sun in Cancer (9h), essential -5, accidental +0.\nAscendant Scorpio 28°22'; lord Mars in Cancer (9h), fall, peregrine; almuten Mars.\nLord of the Geniture: Venus (almuten figuris 18); highest total score Venus (+15).\nStrongest planet Venus (+15); weakest Saturn (-14).\nOut-of-sect malefic Mars in Cancer (9h), neutral.\nFortune Capricorn 09°12' (2h, lord Saturn); Spirit Libra 17°32' (11h, lord Venus).\nFlags: asc_near_sign_boundary, planet_near_cusp.\nBirth time known; schema v2; traditionalchart-js 0.1.0.",
   "reading_notes": [
