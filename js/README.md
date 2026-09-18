@@ -13,7 +13,7 @@ Python の `natal_classical.py`（タグ `v1-reference`）を移植したもの�
 SCHEMA v2 rev.4 のネイタル側と適職側（`vocation`）を実装済み。`computeChart()` は
 `schema_version: "v2"` を書き、戻り値の型は `src/types/chart_v2.d.ts`（スキーマから生成）。
 
-- **参照実装（Python）のタグ：`v1-reference` = `db69a92`**（決定 C・決定 D 改まで）。
+- **参照実装（Python）のタグ：`v1-reference` = `016fe2c`**（決定 C・決定 D 改まで）。
   GT-2 はこのタグの出力をゴールデンとして比較する。
 - **凍結したゴールデン**：較正例 No.001（`test/golden/calibration_No001_vocation.json`、
   2026-09-19 三河監修）。この出力が変われば回帰であり、再監修が要る。
