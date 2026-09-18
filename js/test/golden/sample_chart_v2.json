@@ -749,7 +749,7 @@
         }
       },
       "accidental_dignity": {
-        "score": -5,
+        "score": 0,
         "items": [
           {
             "code": "house_9",
@@ -762,12 +762,6 @@
             "points": -2,
             "label_ja": "遅行（平均運動未満）",
             "label_en": "slow (slower than mean motion)"
-          },
-          {
-            "code": "partile_conjunction_mars",
-            "points": -5,
-            "label_ja": "火星と合（パーティル）",
-            "label_en": "partile conjunction with Mars"
           }
         ],
         "solar_phase": "sun",
@@ -784,7 +778,7 @@
         "in_sect": true,
         "hayz": "half_hayz"
       },
-      "total_score": -10,
+      "total_score": -5,
       "antiscion": {
         "longitude": 61.595966,
         "sign": "Gemini",
@@ -1557,7 +1551,7 @@
           "peregrine"
         ],
         "essential_score": -5,
-        "accidental_score": -5,
+        "accidental_score": 0,
         "retrograde": false,
         "solar_phase": "sun"
       },
@@ -1746,7 +1740,7 @@
       "aspect": "trine",
       "orb": 0.93,
       "max_orb": 8.5,
-      "partile": true,
+      "partile": false,
       "condition": "applying",
       "direction": "sinister",
       "reception_from_to": [],
@@ -1762,7 +1756,7 @@
       "aspect": "conjunction",
       "orb": 0.95,
       "max_orb": 11,
-      "partile": true,
+      "partile": false,
       "condition": "separating",
       "direction": "sinister",
       "reception_from_to": [],
@@ -2004,7 +1998,7 @@
         "fortune": 0,
         "syzygy": 0,
         "total": 1,
-        "accidental": -5,
+        "accidental": 0,
         "house": 9
       },
       "Venus": {
@@ -2164,9 +2158,9 @@
       {
         "rank": 6,
         "planet": "Sun",
-        "total_score": -10,
+        "total_score": -5,
         "essential_score": -5,
-        "accidental_score": -5,
+        "accidental_score": 0,
         "house": 9,
         "house_class": "cadent",
         "tie": false
@@ -2212,8 +2206,8 @@
       "house": 9,
       "house_class": "cadent",
       "essential_score": -5,
-      "accidental_score": -5,
-      "total_score": -10,
+      "accidental_score": 0,
+      "total_score": -5,
       "dignities": [],
       "debilities": [
         "peregrine"
@@ -2228,7 +2222,7 @@
           "by": "Mars",
           "aspect": "conjunction",
           "orb": 0.95,
-          "partile": true,
+          "partile": false,
           "reception_softens": false
         }
       ],
@@ -2450,7 +2444,7 @@
         "lord": "Sun",
         "lord_house": 9,
         "essential_score": -5,
-        "accidental_score": -5,
+        "accidental_score": 0,
         "classification": "effort",
         "lord_in_aversion": true
       },
@@ -2573,7 +2567,7 @@
   "vocation": null,
   "vocation_blocked_reason": "vocation is implemented in a later phase",
   "timing": null,
-  "summary": "Diurnal chart (sect by ASC–DSC horizon). Sect light Sun in Cancer (9h), essential -5, accidental -5.\nAscendant Scorpio 28°22'; lord Mars in Cancer (9h), peregrine; almuten Mars.\nLord of the Geniture: Venus (almuten figuris 18); highest total score Venus (+15).\nStrongest planet Venus (+15); weakest Saturn (-14).\nOut-of-sect malefic Mars in Cancer (9h), neutral.\nFortune Capricorn 09°12' (2h, lord Saturn); Spirit Libra 17°32' (11h, lord Venus).\nFlags: asc_near_sign_boundary, planet_near_cusp.\nBirth time known; schema v2; traditionalchart-js 0.1.0.",
+  "summary": "Diurnal chart (sect by ASC–DSC horizon). Sect light Sun in Cancer (9h), essential -5, accidental +0.\nAscendant Scorpio 28°22'; lord Mars in Cancer (9h), fall, peregrine; almuten Mars.\nLord of the Geniture: Venus (almuten figuris 18); highest total score Venus (+15).\nStrongest planet Venus (+15); weakest Saturn (-14).\nOut-of-sect malefic Mars in Cancer (9h), neutral.\nFortune Capricorn 09°12' (2h, lord Saturn); Spirit Libra 17°32' (11h, lord Venus).\nFlags: asc_near_sign_boundary, planet_near_cusp.\nBirth time known; schema v2; traditionalchart-js 0.1.0.",
   "reading_notes": [
     "All positions, dignities, scores, houses and aspects in this file are computed. Do not recompute or re-derive any of them; quote `position` strings verbatim.",
     "If `summary` or `derived` appears to disagree with a raw field, the raw field is correct. Report the discrepancy; do not resolve it by reasoning.",

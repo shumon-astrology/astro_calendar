@@ -99,7 +99,9 @@ CLASSICAL_ASPECTS = [
     (180.0, "opposition",  "Opp", "衝"),
 ]
 
-# パーティル（同度数＝1°以内）の閾値 ＝ リリー本文
+# パーティルの補助窓（度）。決定 D 以降、パーティルの判定そのものは
+# is_partile()（両天体のサイン内の整数度が同じ）で行い、この値は
+# 「どのアスペクトの同度数か」を選ぶためだけに使う ＝ リリー本文
 PARTILE_ORB = 1.0
 
 # 太陽光線の状態（度）＝ リリー本文
@@ -126,6 +128,17 @@ def sign_of(lon):
 def deg_in_sign(lon):
     """黄経 → サイン内度数（0.0〜30.0）"""
     return (lon % 360.0) - sign_of(lon) * 30.0
+
+
+def is_partile(lon1, lon2):
+    """
+    パーティル（同度数での正確なアスペクト）か ＝ 決定 D（2026-09-19 三河）
+
+    両天体のサイン内の整数度が同じときだけ真。サインが違っても同じ度数なら成立する
+    （例：牡羊 12°40′ と蟹 12°05′ のスクエア）。オーブ 1° 以内では判定しない。
+    典拠：CA I ll.8985–9033（古典職業鑑定マニュアル v11 §2「パーティル＝同度数」）
+    """
+    return int(deg_in_sign(lon1)) == int(deg_in_sign(lon2))
 
 
 def element_of(si):
@@ -887,7 +900,7 @@ def find_classical_aspects(bodies, is_day, trip_table=None):
                 spd1 = b1.get("speed", 0.0)
                 spd2 = b2.get("speed", 0.0)
                 state = _aspect_state(lon1, spd1, lon2, spd2, angle)
-                partile = dev <= PARTILE_ORB
+                partile = is_partile(lon1, lon2)
 
                 # デクスター／シニスター（速い側＝b1 が投げる向き）
                 forward = (_signed_sep(lon1, lon2) > 0)
@@ -938,7 +951,8 @@ def antiscia(lon):
 
 def part_of_fortune(asc_lon, sun_lon, moon_lon, is_day):
     """
-    フォーチュン（Pars Fortunae）＝ リリー本文（CA Ch.XXIII）
+    フォーチュン（Pars Fortunae）＝ プロジェクト慣行（Dorotheus 式）
+      典拠：Dorotheus I.28,11 / I.9,1（Dykes 訳）。METHOD_natal_v1 STEP 8-6
       昼： ASC ＋ ☽ − ☉ ／ 夜： ASC ＋ ☉ − ☽
     """
     if is_day:
@@ -1178,27 +1192,28 @@ def accidental_dignity(planet, ctx):
         d = abs(_signed_sep(lon, o_lon))
         benefic = other in BENEFICS
         ol = other.lower()
-        if d <= PARTILE_ORB:
+        if d <= PARTILE_ORB and is_partile(lon, o_lon):
             items.append((f"partile_conjunction_{ol}",
                           f"{PLANET_JA[other]}と合（パーティル）",
                           5 if benefic else -5))
-        elif abs(d - 120.0) <= PARTILE_ORB and benefic:
+        elif abs(d - 120.0) <= PARTILE_ORB and is_partile(lon, o_lon) and benefic:
             items.append((f"partile_trine_{ol}",
                           f"{PLANET_JA[other]}と三分（パーティル）", 4))
-        elif abs(d - 60.0) <= PARTILE_ORB and benefic:
+        elif abs(d - 60.0) <= PARTILE_ORB and is_partile(lon, o_lon) and benefic:
             items.append((f"partile_sextile_{ol}",
                           f"{PLANET_JA[other]}と六分（パーティル）", 3))
-        elif abs(d - 180.0) <= PARTILE_ORB and not benefic:
+        elif abs(d - 180.0) <= PARTILE_ORB and is_partile(lon, o_lon) and not benefic:
             items.append((f"partile_opposition_{ol}",
                           f"{PLANET_JA[other]}と衝（パーティル）", -4))
-        elif abs(d - 90.0) <= PARTILE_ORB and not benefic:
+        elif abs(d - 90.0) <= PARTILE_ORB and is_partile(lon, o_lon) and not benefic:
             items.append((f"partile_square_{ol}",
                           f"{PLANET_JA[other]}と矩（パーティル）", -3))
 
     # --- ノードとの合 ---
-    if abs(_signed_sep(lon, ctx["node_lon"])) <= PARTILE_ORB:
+    if abs(_signed_sep(lon, ctx["node_lon"])) <= PARTILE_ORB and is_partile(lon, ctx["node_lon"]):
         items.append(("partile_conjunction_north_node", "ドラゴンヘッドと合", 4))
-    if abs(_signed_sep(lon, ctx["south_node_lon"])) <= PARTILE_ORB:
+    if (abs(_signed_sep(lon, ctx["south_node_lon"])) <= PARTILE_ORB
+            and is_partile(lon, ctx["south_node_lon"])):
         items.append(("partile_conjunction_south_node", "ドラゴンテイルと合", -4))
 
     # --- 挟撃（besieged）---
@@ -1208,9 +1223,9 @@ def accidental_dignity(planet, ctx):
 
     # --- 恒星 ---
     stars = ctx["stars"]
-    if abs(_signed_sep(lon, stars["Regulus"])) <= PARTILE_ORB:
+    if abs(_signed_sep(lon, stars["Regulus"])) <= PARTILE_ORB and is_partile(lon, stars["Regulus"]):
         items.append(("conjunct_regulus", "レグルスと合", 6))
-    if abs(_signed_sep(lon, stars["Spica"])) <= PARTILE_ORB:
+    if abs(_signed_sep(lon, stars["Spica"])) <= PARTILE_ORB and is_partile(lon, stars["Spica"]):
         items.append(("conjunct_spica", "スピカと合", 5))
     if abs(_signed_sep(lon, stars["Algol"])) <= 5.0:
         items.append(("conjunct_algol", "アルゴルと合（5°以内）", -5))

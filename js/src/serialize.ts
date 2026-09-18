@@ -53,7 +53,8 @@ export interface SummaryInput {
   sectLight: { planet: string; sign: string; house: number | null;
     essential: number; accidental: number | null } | null;
   ascendant: { sign: string; position: string; lord: string; lordSign: string;
-    lordHouse: number | null; lordDignities: string[]; lordPeregrine: boolean | null;
+    lordHouse: number | null; lordDignities: string[]; lordDebilities: string[];
+    lordPeregrine: boolean | null;
     almuten: string | null; almutenIsCoSignificator: boolean } | null;
   lordOfGeniture: { primary: string[]; score: number | null;
     secondary: string | null; secondaryScore: number | null };
@@ -89,8 +90,11 @@ export function buildSummary(input: SummaryInput): string {
 
   if (input.timeKnown && input.ascendant) {
     const a = input.ascendant;
-    const dignities = a.lordDignities.length ? a.lordDignities.join(", ")
-      : (a.lordPeregrine ? "peregrine" : "no dignity");
+    // 品位と欠陥をこの順でカンマ結合（例 "fall, peregrine"）。両方空なら no dignity。
+    // 決定③で debilities から外れたペレグリンも状態としては併記する
+    const state = [...a.lordDignities, ...a.lordDebilities];
+    if (a.lordPeregrine && !state.includes("peregrine")) state.push("peregrine");
+    const dignities = state.length ? state.join(", ") : "no dignity";
     const co = a.almutenIsCoSignificator ? " (co-significator)" : "";
     lines.push(
       `Ascendant ${signAndDegrees(a.sign, a.position)}; `

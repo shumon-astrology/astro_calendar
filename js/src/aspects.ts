@@ -6,7 +6,7 @@ import { essentialDignity } from "./dignity.ts";
 import {
   CLASSICAL_ASPECTS, MOIETY, PARTILE_ORB, POINT_MOIETY, type TriplicityRow,
 } from "./tables.ts";
-import { roundTo, signedSep } from "./util.ts";
+import { isPartile, roundTo, signedSep } from "./util.ts";
 
 export interface AspectBody {
   name: string;
@@ -90,7 +90,7 @@ export function findClassicalAspects(
           aspect: name,
           orb: roundTo(dev, 2),
           max_orb: roundTo(maxOrb, 2),
-          partile: dev <= PARTILE_ORB,
+          partile: isPartile(b1.longitude, b2.longitude),
           state,
           direction: forward ? "sinister" : "dexter",
           reception_1to2: rec1,

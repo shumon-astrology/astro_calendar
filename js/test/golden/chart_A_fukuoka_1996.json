@@ -1386,7 +1386,7 @@
       "aspect": "trine",
       "orb": 0.82,
       "max_orb": 9.5,
-      "partile": true,
+      "partile": false,
       "condition": "applying",
       "direction": "sinister",
       "reception_from_to": [
@@ -1403,7 +1403,7 @@
       "aspect": "trine",
       "orb": 0.82,
       "max_orb": 8.5,
-      "partile": true,
+      "partile": false,
       "condition": "separating",
       "direction": "dexter",
       "reception_from_to": [],

@@ -34,6 +34,16 @@ export function angularDistance(lonFrom: number, lonTo: number): number {
   return norm360(lonTo - lonFrom);
 }
 
+/**
+ * パーティル（同度数での正確なアスペクト）か ＝ 決定 D（2026-09-19 三河）。
+ * 両天体のサイン内の整数度が同じときだけ真。サインが違っても同じ度数なら成立する
+ * （例：牡羊 12°40′ と蟹 12°05′ のスクエア）。オーブ 1° 以内では判定しない。
+ * 典拠：CA I ll.8985–9033（古典職業鑑定マニュアル v11 §2）
+ */
+export function isPartile(lon1: number, lon2: number): boolean {
+  return Math.floor(degInSign(lon1)) === Math.floor(degInSign(lon2));
+}
+
 export function elementOf(signIndex: number): string {
   return ELEMENTS[signIndex % 4];
 }

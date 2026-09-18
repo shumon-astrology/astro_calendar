@@ -344,6 +344,39 @@ class TestSolarPhaseSameSign(unittest.TestCase):
         self.assertNotIn("under_beams", codes)
 
 
+class TestPartile(unittest.TestCase):
+    """決定 D（2026-09-19）：パーティルは両天体の度数が同じときだけ"""
+
+    def test_same_degree_across_signs(self):
+        # 牡羊 12°40′ と蟹 12°05′ のスクエアはパーティル
+        self.assertTrue(nc.is_partile(lon("Ari", 12 + 40 / 60), lon("Can", 12 + 5 / 60)))
+
+    def test_within_one_degree_but_different_degree_is_not_partile(self):
+        # サンプル図の太陽 蟹 28°24′ と火星 蟹 27°27′（離角 0.95°）はパーティルでない
+        sun = lon("Can", 28 + 24 / 60)
+        mars = lon("Can", 27 + 27 / 60)
+        self.assertLess(abs(((mars - sun + 180) % 360) - 180), 1.0)
+        self.assertFalse(nc.is_partile(sun, mars))
+
+    def test_sample_chart_sun_mars_conjunction_is_not_partile(self):
+        c = nc.calculate_classical_chart(1985, 7, 21, 14, 30, 35.6895, 139.6917)
+        conj = [a for a in c["aspects"]
+                if {a["planet1"], a["planet2"]} == {"Sun", "Mars"}][0]
+        self.assertEqual(conj["aspect"], "conjunction")
+        self.assertLess(conj["orb"], 1.0)
+        self.assertFalse(conj["partile"])
+
+    def test_synthetic_square_is_partile(self):
+        # 合成：両者とも 12 度（牡羊 12°40′ と蟹 12°05′）
+        bodies = [
+            {"name_en": "Mars", "longitude": lon("Ari", 12 + 40 / 60), "speed": 0.5},
+            {"name_en": "Venus", "longitude": lon("Can", 12 + 5 / 60), "speed": 1.0},
+        ]
+        aspects = nc.find_classical_aspects(bodies, is_day=True)
+        square = [a for a in aspects if a["aspect"] == "square"][0]
+        self.assertTrue(square["partile"])
+
+
 class TestPlanetaryHour(unittest.TestCase):
     """日の出・日の入と曜日は出生地の現地時刻（tz_offset）で扱う"""
 

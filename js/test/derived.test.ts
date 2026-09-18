@@ -176,9 +176,9 @@ function recomputeSummary(doc: any): string {
   if (doc.angles) {
     const asc = doc.angles.ascendant;
     const lord = find(asc.lord);
-    const dignities = lord.essential_dignity.dignities.length
-      ? lord.essential_dignity.dignities.join(", ")
-      : (lord.essential_dignity.peregrine ? "peregrine" : "no dignity");
+    const state = [...lord.essential_dignity.dignities, ...lord.essential_dignity.debilities];
+    if (lord.essential_dignity.peregrine && !state.includes("peregrine")) state.push("peregrine");
+    const dignities = state.length ? state.join(", ") : "no dignity";
     const co = asc.almuten && asc.almuten !== asc.lord ? " (co-significator)" : "";
     lines.push(`Ascendant ${asc.sign} ${degrees(asc.position)}; lord ${asc.lord} in `
       + `${lord.sign} (${lord.house}h), ${dignities}; almuten ${asc.almuten ?? "none"}${co}.`);

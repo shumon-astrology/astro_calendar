@@ -502,6 +502,7 @@ export function computeChart(input: ChartInput): ChartV2 {
         lordSign: SIGN_FULL[signOf(byName[ascLordName].longitude)],
         lordHouse: byName[ascLordName].houseEffective,
         lordDignities: byName[ascLordName].essential.labels,
+        lordDebilities: byName[ascLordName].essential.debilities,
         lordPeregrine: byName[ascLordName].essential.peregrine,
         almuten: ascAlmuten.almuten,
         almutenIsCoSignificator: ascAlmuten.almuten !== null

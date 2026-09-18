@@ -615,7 +615,7 @@
         }
       },
       "accidental_dignity": {
-        "score": 7,
+        "score": 3,
         "items": [
           {
             "code": "house_1",
@@ -626,11 +626,6 @@
             "code": "slow",
             "points": -2,
             "label_ja": "遅行（平均運動未満）"
-          },
-          {
-            "code": "partile_conjunction_north_node",
-            "points": 4,
-            "label_ja": "ドラゴンヘッドと合"
           }
         ],
         "solar_phase": "sun",
@@ -647,7 +642,7 @@
         "in_sect": false,
         "hayz": "neutral"
       },
-      "total_score": 2,
+      "total_score": -2,
       "antiscion": {
         "longitude": 89.949411,
         "sign": "Gemini",
@@ -929,7 +924,7 @@
         }
       },
       "accidental_dignity": {
-        "score": 3,
+        "score": 6,
         "items": [
           {
             "code": "house_1",
@@ -950,11 +945,6 @@
             "code": "free_of_beams",
             "points": 5,
             "label_ja": "光線から自由"
-          },
-          {
-            "code": "partile_square_mars",
-            "points": -3,
-            "label_ja": "火星と矩（パーティル）"
           }
         ],
         "solar_phase": "free",
@@ -971,7 +961,7 @@
         "in_sect": true,
         "hayz": "half_hayz"
       },
-      "total_score": 3,
+      "total_score": 6,
       "antiscion": {
         "longitude": 93.772953,
         "sign": "Cancer",
@@ -1267,7 +1257,7 @@
           "peregrine"
         ],
         "essential_score": -5,
-        "accidental_score": 7,
+        "accidental_score": 3,
         "retrograde": false,
         "solar_phase": "sun"
       }
@@ -1288,7 +1278,7 @@
         "dignities": [],
         "debilities": [],
         "essential_score": 0,
-        "accidental_score": 3,
+        "accidental_score": 6,
         "retrograde": false,
         "solar_phase": "free"
       }
@@ -1309,7 +1299,7 @@
         "dignities": [],
         "debilities": [],
         "essential_score": 0,
-        "accidental_score": 3,
+        "accidental_score": 6,
         "retrograde": false,
         "solar_phase": "free"
       }
@@ -1377,19 +1367,6 @@
       "mutual_reception": false
     },
     {
-      "from": "Sun",
-      "to": "ASC",
-      "aspect": "square",
-      "orb": 0.29,
-      "max_orb": 12.5,
-      "partile": true,
-      "condition": "separating",
-      "direction": "dexter",
-      "reception_from_to": [],
-      "reception_to_from": [],
-      "mutual_reception": false
-    },
-    {
       "from": "Jupiter",
       "to": "Mars",
       "aspect": "sextile",
@@ -1408,12 +1385,25 @@
       "mutual_reception": true
     },
     {
+      "from": "Sun",
+      "to": "ASC",
+      "aspect": "square",
+      "orb": 0.29,
+      "max_orb": 12.5,
+      "partile": false,
+      "condition": "separating",
+      "direction": "dexter",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
       "from": "ASC",
       "to": "MC",
       "aspect": "square",
       "orb": 0.46,
       "max_orb": 10.0,
-      "partile": true,
+      "partile": false,
       "condition": "separating",
       "direction": "sinister",
       "reception_from_to": [],
@@ -1426,7 +1416,7 @@
       "aspect": "square",
       "orb": 0.61,
       "max_orb": 9.5,
-      "partile": true,
+      "partile": false,
       "condition": "separating",
       "direction": "sinister",
       "reception_from_to": [],
@@ -1441,7 +1431,7 @@
       "aspect": "sextile",
       "orb": 0.93,
       "max_orb": 9.5,
-      "partile": true,
+      "partile": false,
       "condition": "applying",
       "direction": "sinister",
       "reception_from_to": [],
@@ -1764,7 +1754,7 @@
         "fortune": 4,
         "syzygy": 0,
         "total": 5,
-        "accidental": 7,
+        "accidental": 3,
         "house": 1
       },
       "Venus": {
@@ -1794,7 +1784,7 @@
         "fortune": 0,
         "syzygy": 1,
         "total": 6,
-        "accidental": 3,
+        "accidental": 6,
         "house": 1
       }
     }

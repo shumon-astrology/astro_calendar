@@ -1363,7 +1363,7 @@
       "aspect": "sextile",
       "orb": 0.94,
       "max_orb": 10.5,
-      "partile": true,
+      "partile": false,
       "condition": "applying",
       "direction": "sinister",
       "reception_from_to": [

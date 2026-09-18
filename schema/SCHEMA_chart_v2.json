@@ -3156,7 +3156,7 @@
           },
           "partile": {
             "type": "boolean",
-            "description": "Same degree number in both signs."
+            "description": "Partile aspect (decision D, 2026-09-19): true only when both bodies have the same integer degree within their signs; it holds across signs (for example Aries 12°40' square Cancer 12°05'). It is not an orb of 1°. Source: CA I ll.8985-9033."
           },
           "condition": {
             "type": "string",

@@ -429,6 +429,10 @@ def build():
 
     # ------------------------------------------------------------------ aspects 追加
     ap_ = "properties/aspects/items/properties"
+    node_at(schema, f"{ap_}/partile")["description"] = (
+        "Partile aspect (decision D, 2026-09-19): true only when both bodies have the same "
+        "integer degree within their signs; it holds across signs (for example Aries 12°40' "
+        "square Cancer 12°05'). It is not an orb of 1°. Source: CA I ll.8985-9033.")
     add(f"{ap_}/reception_softens", {
         "type": "boolean",
         "description": ("For squares and oppositions: true when there is mutual reception or "

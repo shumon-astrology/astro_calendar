@@ -1364,32 +1364,6 @@
       "mutual_reception": true
     },
     {
-      "from": "Mars",
-      "to": "Fortune",
-      "aspect": "sextile",
-      "orb": 0.1,
-      "max_orb": 8.5,
-      "partile": true,
-      "condition": "separating",
-      "direction": "sinister",
-      "reception_from_to": [],
-      "reception_to_from": [],
-      "mutual_reception": false
-    },
-    {
-      "from": "Mercury",
-      "to": "MC",
-      "aspect": "opposition",
-      "orb": 0.23,
-      "max_orb": 8.5,
-      "partile": true,
-      "condition": "applying",
-      "direction": "dexter",
-      "reception_from_to": [],
-      "reception_to_from": [],
-      "mutual_reception": false
-    },
-    {
       "from": "Sun",
       "to": "Mercury",
       "aspect": "conjunction",
@@ -1405,12 +1379,38 @@
       "mutual_reception": false
     },
     {
+      "from": "Mars",
+      "to": "Fortune",
+      "aspect": "sextile",
+      "orb": 0.1,
+      "max_orb": 8.5,
+      "partile": false,
+      "condition": "separating",
+      "direction": "sinister",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
+      "from": "Mercury",
+      "to": "MC",
+      "aspect": "opposition",
+      "orb": 0.23,
+      "max_orb": 8.5,
+      "partile": false,
+      "condition": "applying",
+      "direction": "dexter",
+      "reception_from_to": [],
+      "reception_to_from": [],
+      "mutual_reception": false
+    },
+    {
       "from": "Sun",
       "to": "MC",
       "aspect": "opposition",
       "orb": 0.97,
       "max_orb": 12.5,
-      "partile": true,
+      "partile": false,
       "condition": "applying",
       "direction": "dexter",
       "reception_from_to": [],
