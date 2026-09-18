@@ -67,6 +67,17 @@
 - `fixed_star_contacts`：null。56 星カタログは実装せず、キーのみ予約（I-2-1 保留、付録A #16）。v1 の `fixed_stars`（Regulus・Spica・Algol）は現状維持。
 - `timing`：null。`vocation.timing_slice`：null（METHOD_timing 未作成）。
 
+## v2 rev.2（2026-09-19）— rev.1 からの差分
+
+Phase 3（`time_unknown` モードの実装）で、出生時刻が不明のとき null になる 2 キーが
+rev.1 では null を許していなかったため追補した。型の追加のみで、既存の値は変わらない。
+
+- `planets[].essential_dignity.rulers_of_position.triplicity` を nullable に
+  （セクトが決まらないとトリプリシティ主星が定まらないため。`triplicity_rulers.sect_ruler`
+  と同じ理由）。
+- `modern_reference.planets[].house` を nullable に（ハウスが無いため）。
+- `x-schema_file_version` を `v2 (2026-09-19, rev.2)` に更新。
+
 ## 参照実装（Python）の記録
 
 - **タグ `v1-reference`**：GT-2 の基準となる Python 実装。

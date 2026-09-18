@@ -8,10 +8,13 @@ Python の `natal_classical.py`（タグ `v1-reference`）を移植したもの�
 - 要件：`~/Documents/デジタル販売/10_schema/SCHEMA_v2_要件書_20260918.md`（v0.3）
 - 依存：`astronomy-engine`（MIT）のみ。外部通信なし・DOM 非依存
 
-## 現在地（Phase 2）
+## 現在地（Phase 3）
 
-v1 相当の出力までを実装した。v2 の新設ブロック（`derived`・`summary`・`vocation`・
-`timing` など）は Phase 3・4 で足す。`computeChart()` は現在 `schema_version: "v1"` を書く。
+ネイタル側の v2 出力（`derived`・`houses_summary`・`boundary_warnings`・`summary`・
+`reading_notes`・`provenance`・`moon_range`・`time_unknown` モード）まで実装した。
+`vocation` と `timing` はキーだけ出して null（Phase 4）。
+`computeChart()` は `schema_version: "v2"` を書き、戻り値の型は
+`src/types/chart_v2.d.ts`（スキーマから生成）。
 
 ## 使い方
 
@@ -23,7 +26,9 @@ npm run build            # dist/traditionalchart.mjs（単一 ESM）
 npm run typegen          # SCHEMA_chart_v2.json から型を再生成
 
 node --experimental-strip-types cli/chart.ts \
-  --date 1985-07-21 --time 14:30 --tz 9 --lat 35.6895 --lon 139.6917 --pretty
+  --date 1985-07-21 --time 14:30 --tz Asia/Tokyo --lat 35.6895 --lon 139.6917 --pretty
+node --experimental-strip-types cli/chart.ts \
+  --date 1985-07-21 --tz Asia/Tokyo --lat 35.6895 --lon 139.6917 --time-unknown
 
 node --experimental-strip-types cli/compare.ts --verbose   # GT-2 の差分表
 ```
@@ -41,6 +46,11 @@ src/
   aspects.ts          プトレマイオス 5 種・モイエティ合算・レセプション
   accidental.ts       偶発的品位・太陽光線（決定 C）・ハイズ
   lots.ts             フォーチュン／スピリット・セクト
+  timezone.ts         IANA タイムゾーン（Intl の tzdata で壁時計 → UT）
+  derived.ts          derived ブロック（I-2）
+  serialize.ts        summary テンプレート・reading_notes・provenance
+  sources.ts          v2 で新設した出所ラベル
+  labels.ts           偶発的品位の英語ラベル
   fixed_stars.ts      恒星 3 星（保留中のため v1 の方式を踏襲）
   planetary_hours.ts  曜日主星・時刻主星
   index.ts            computeChart()
@@ -53,7 +63,6 @@ test/golden/          Python が生成したゴールデン 10 図（scripts/mak
 | 項目 | 内容 |
 |---|---|
 | 恒星 Spica | Python は Swiss Ephemeris の内蔵値（視位置）、JS は線形近似。約 18″ ずれる（GT-2 では報告のみ） |
-| プレナタル朔望の日時 | Python は常に JST で整形する不具合がある。JS は現地時刻で出す |
 | 度分の文字列 | 黄経が 0.02° 以内でも、分の切り捨て境界で 1 分ずれることがある（暦の境界事例） |
 | トゥルーノードの逆行フラグ | 停留付近では双方 |速度| < 0.001°/日 で符号が揺れる |
 

@@ -39,6 +39,8 @@ export interface TermAudit {
   has_term: boolean;
 }
 
+export type AlmutenTieMode = "house_order" | "vocation_2b" | "none";
+
 export interface EssentialDignity {
   sign: number;
   degree: number;
@@ -47,6 +49,8 @@ export interface EssentialDignity {
   peregrine: boolean | null;
   peregrine_cancelled_by: MutualReceptionType | null;
   peregrine_scored: boolean;
+  /** セクト不明（time_known:false）で、そのサインの昼／夜主星のためペレグリンが決まらない */
+  peregrine_uncertain: boolean;
   has_dignity: boolean;
   mutual_receptions: MutualReception[];
   score: number;
@@ -162,17 +166,21 @@ export function essentialDignity(
 
   let peregrine: boolean | null = labels.length === 0;
   let cancelledBy: MutualReceptionType | null = null;
-  let scoreNote: string | null = null;
+  let scoreNote: string | null = options.sectUnknown
+    ? "sect unknown: triplicity not scored" : null;
+  let peregrineUncertain = false;
   if (peregrine && receptions.length) {
     peregrine = false;
     cancelledBy = receptions[0].type;
   }
+  if (peregrine && options.sectUnknown && (planet === trip.day || planet === trip.night)) {
+    // セクトが決まればトリプリシティで +3 を得るかもしれない天体（I-4）
+    peregrine = null;
+    peregrineUncertain = true;
+  }
   if (peregrine) {
     if (debilities.length) scoreNote = PEREGRINE_SCORE_NOTE;
     else debilities.push("peregrine");
-  }
-  if (options.sectUnknown && peregrine && !debilities.includes("peregrine")) {
-    // セクト不明でトリプリシティが確定しない場合の扱いは Phase 3（peregrine_uncertain）
   }
 
   const score = [...labels, ...debilities].reduce((sum, key) => sum + DIGNITY_SCORE[key], 0);
@@ -185,6 +193,7 @@ export function essentialDignity(
     peregrine,
     peregrine_cancelled_by: cancelledBy,
     peregrine_scored: debilities.includes("peregrine"),
+    peregrine_uncertain: peregrineUncertain,
     has_dignity: labels.length > 0,
     mutual_receptions: receptions,
     score,
@@ -239,9 +248,25 @@ export interface AlmutenResult {
  * 単一度数のアルムテン（決定④）。
  * 同点はハウス位置（アングル＞サクシーデント＞ケーデント）、なお同点なら tie。
  */
+export interface AlmutenTieContext {
+  /** 同点処理の方式。house_order＝決定④、vocation_2b＝手順書 §2 ②-B、none＝決定⑤ */
+  mode?: AlmutenTieMode;
+  houseOf?: Record<string, number | null>;
+  /** vocation_2b 用：品位の高さ（本質的得点）、アングルからの近さ、セクト適合 */
+  dignityRank?: Record<string, number>;
+  angleProximity?: Record<string, number>;
+  inSect?: Record<string, boolean>;
+}
+
 export function resolveAlmuten(
-  scores: Record<string, number>, houseOf: Record<string, number | null> = {},
+  scores: Record<string, number>,
+  houseOfOrContext: Record<string, number | null> | AlmutenTieContext = {},
 ): Omit<AlmutenResult, "scores"> {
+  const context: AlmutenTieContext = isTieContext(houseOfOrContext)
+    ? houseOfOrContext
+    : { mode: "house_order", houseOf: houseOfOrContext };
+  const mode: AlmutenTieMode = context.mode ?? "house_order";
+  const houseOf = context.houseOf ?? {};
   const values = Object.values(scores);
   if (!values.length || Math.max(...values) <= 0) {
     return { almuten: null, almuten_tie: false, candidates: [], tie_break: null };
@@ -250,6 +275,13 @@ export function resolveAlmuten(
   const candidates = PLANET_NAMES.filter((n) => scores[n] === top);
   if (candidates.length === 1) {
     return { almuten: candidates[0], almuten_tie: false, candidates, tie_break: null };
+  }
+  if (mode === "none") {
+    // 決定⑤：同点は決着させない（呼び出し側が共同アルムテンとして扱う）
+    return { almuten: null, almuten_tie: true, candidates, tie_break: null };
+  }
+  if (mode === "vocation_2b") {
+    return resolveVocation2B(candidates, context);
   }
   const best = Math.max(...candidates.map((n) => houseAngularity(houseOf[n])));
   const finalists = candidates.filter((n) => houseAngularity(houseOf[n]) === best);
@@ -264,6 +296,45 @@ export function resolveAlmuten(
     candidates: finalists,
     tie_break: best > 0 ? "house_angularity" : null,
   };
+}
+
+function isTieContext(v: unknown): v is AlmutenTieContext {
+  return !!v && typeof v === "object"
+    && ("mode" in v || "houseOf" in v || "dignityRank" in v || "angleProximity" in v
+      || "inSect" in v);
+}
+
+/**
+ * 手順書 §2 ②-B の同点処理：品位の高い方 → アングルに近い方 → セクトに合う方 → tie。
+ * Phase 4 の適職で使う。
+ */
+function resolveVocation2B(
+  candidates: string[], context: AlmutenTieContext,
+): Omit<AlmutenResult, "scores"> {
+  const steps: { key: string; rank: (n: string) => number }[] = [
+    { key: "dignity_rank", rank: (n) => context.dignityRank?.[n] ?? 0 },
+    { key: "angle_proximity", rank: (n) => -(context.angleProximity?.[n] ?? Infinity) },
+    { key: "sect", rank: (n) => (context.inSect?.[n] ? 1 : 0) },
+  ];
+  let pool = [...candidates];
+  for (const step of steps) {
+    const best = Math.max(...pool.map(step.rank));
+    if (!Number.isFinite(best)) continue;
+    const next = pool.filter((n) => step.rank(n) === best);
+    if (next.length === 1) {
+      return { almuten: next[0], almuten_tie: false, candidates, tie_break: step.key };
+    }
+    if (next.length) pool = next;
+  }
+  return { almuten: null, almuten_tie: true, candidates: pool, tie_break: null };
+}
+
+/** ルール④専用のモイエティ（月のオーブ 12°30′ の半分）。一般オーブとは別の規則 */
+export const MOON_MOIETY_DEG = 6.25;
+
+/** 候補星が月から 6°15′ 以内にあるか（ルール④専用） */
+export function withinMoonMoiety(candidateLon: number, moonLon: number): boolean {
+  return Math.abs(((candidateLon - moonLon + 540) % 360) - 180) <= MOON_MOIETY_DEG;
 }
 
 export function almutenOfDegree(

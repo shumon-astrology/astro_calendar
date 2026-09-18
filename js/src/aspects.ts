@@ -104,6 +104,27 @@ export function findClassicalAspects(
   return aspects;
 }
 
+const SOFTENING_ASPECTS = ["square", "opposition"];
+const MAJOR_RECEPTIONS = ["domicile", "exaltation"];
+
+/**
+ * レセプションがアスペクトを和らげるか（要件書 I-2、プロジェクト慣行）。
+ * スクエア／オポジションで、相互受容またはドミサイル／イグザルテーションによる
+ * 片受容があれば softens。ターム／フェイスだけの受容は minor に分ける。
+ */
+export function receptionSoftening(
+  aspect: Pick<ClassicalAspect, "aspect" | "reception_1to2" | "reception_2to1" | "mutual_reception">,
+): { softens: boolean; minor: boolean } {
+  const all = [...aspect.reception_1to2, ...aspect.reception_2to1];
+  if (!all.length) return { softens: false, minor: false };
+  const hasMajor = all.some((r) => MAJOR_RECEPTIONS.includes(r));
+  if (!SOFTENING_ASPECTS.includes(aspect.aspect)) {
+    return { softens: false, minor: !hasMajor };
+  }
+  const softens = aspect.mutual_reception || hasMajor;
+  return { softens, minor: !softens };
+}
+
 /** アンティシャ（蟹0°／山羊0°軸の鏡像）と反アンティシャ */
 export function antiscia(lon: number): { antiscion: number; contraAntiscion: number } {
   return {

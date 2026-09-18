@@ -19,6 +19,7 @@ V1 = os.path.join(ROOT, "schema", "SCHEMA_chart_v1.json")
 OUT = os.path.join(ROOT, "schema", "SCHEMA_chart_v2.json")
 
 DRAFT_DATE = "2026-09-18"
+REVISION_DATE = "2026-09-19"   # rev.2：time_unknown で null になる 2 キーを追補
 
 PLANETS = ["Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury", "Moon"]
 HOUSE_CLASS = ["angular", "succedent", "cadent"]
@@ -84,7 +85,7 @@ def build():
     schema["$id"] = "https://traditionalchart.com/schema/chart_v2.json"
     schema["title"] = ("SCHEMA_chart_v2 — Classical natal chart JSON "
                        "(AmanJyoshi / traditionalchart)")
-    schema["x-schema_file_version"] = f"v2 ({DRAFT_DATE}, rev.1)"
+    schema["x-schema_file_version"] = f"v2 ({REVISION_DATE}, rev.2)"
     schema["x-method"] = ("METHOD_本質的品位表_v1.md v1.2 (+ decision C pending v1.3) / "
                           "METHOD_natal_v1.md v1.3 / "
                           "古典職業鑑定マニュアル v11 + 再基底化差分 2026-09-18")
@@ -363,6 +364,8 @@ def build():
                   "Null when the birth time is unknown and the sect decides it (peregrine_uncertain).")
     make_nullable(f"{ed}/triplicity_rulers/properties/sect_ruler",
                   "Null when the sect is unknown, in which case triplicity is not scored.")
+    make_nullable(f"{ed}/rulers_of_position/properties/triplicity",
+                  "Null when the sect is unknown (the triplicity ruler that would score).")
     add(f"{pp}/accidental_dignity/properties/items/items/properties/label_en",
         {"type": "string", "description": "English label of the accidental dignity item; label_ja is kept."})
     acc = node_at(schema, f"{pp}/accidental_dignity")
@@ -385,6 +388,9 @@ def build():
         make_nullable(path, note)
 
     # -------------------------------------------------------------------- nodes 追加
+    make_nullable("properties/modern_reference/properties/planets/items/properties/house",
+                  "Null when the birth time is unknown.")
+
     for kind in ("mean", "true"):
         np_ = f"properties/nodes/properties/{kind}/items/properties"
         add(f"{np_}/also_known_as", {"type": "array", "items": {"type": "string"},

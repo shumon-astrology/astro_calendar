@@ -11,7 +11,7 @@
  *   - 離散値の不一致が 0.02° 以内の差に由来する場合は「暦の境界事例」として別表に出す
  *     （自動合格にしない）
  */
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { computeChart } from "../src/index.ts";
@@ -137,6 +137,7 @@ function walk(py: unknown, js: unknown, path: string, ctx: WalkContext): void {
     return;
   }
   if (path === "/generator") return;            // 実装名は異なってよい
+  if (path === "/schema_version") return;       // ゴールデンは v1、JS は v2 を書く（加算原則）
   if (path.startsWith("/tables_used/sources")) return;  // 出所ラベルは Python の定数をそのまま写す
 
   const kind: DiffKind = isFixedStar ? "fixed_star"
@@ -149,10 +150,10 @@ export function compareAll(): { diffs: Diff[]; charts: string[] } {
   const manifest = JSON.parse(readFileSync(join(GOLDEN_DIR, "manifest.json"), "utf8"));
   const diffs: Diff[] = [];
   const charts: string[] = [];
-  for (const file of readdirSync(GOLDEN_DIR).filter((f) => f.endsWith(".json") && f !== "manifest.json").sort()) {
-    const name = file.replace(/\.json$/, "");
+  // manifest.json に載っている図だけを比較する（v2 のサンプルなどは対象外）
+  for (const name of Object.keys(manifest.charts).sort()) {
     const spec = manifest.charts[name];
-    const golden = JSON.parse(readFileSync(join(GOLDEN_DIR, file), "utf8"));
+    const golden = JSON.parse(readFileSync(join(GOLDEN_DIR, `${name}.json`), "utf8"));
     const js = computeChart({
       year: spec.year, month: spec.month, day: spec.day,
       hour: spec.hour, minute: spec.minute,
