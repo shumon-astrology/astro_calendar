@@ -90,7 +90,7 @@ def build():
                           "古典職業鑑定マニュアル v11 + 再基底化差分 2026-09-18")
     schema["x-sample"] = ("astro_calendar/schema/sample_chart_v1.json is the v1 sample; "
                           "a v2 sample is produced in Phase 3")
-    schema["x-requirements"] = ("10_schema/SCHEMA_v2_要件書_20260918.md v0.2 "
+    schema["x-requirements"] = ("10_schema/SCHEMA_v2_要件書_20260918.md v0.3 "
                                 "(第 I 部). Additive superset of v1 rev.2.")
     schema["description"] = (
         schema["description"].replace("SCHEMA_chart_v1", "SCHEMA_chart_v2")

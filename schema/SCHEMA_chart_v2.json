@@ -5668,7 +5668,7 @@
       "additionalProperties": true
     }
   },
-  "x-requirements": "10_schema/SCHEMA_v2_要件書_20260918.md v0.2 (第 I 部). Additive superset of v1 rev.2.",
+  "x-requirements": "10_schema/SCHEMA_v2_要件書_20260918.md v0.3 (第 I 部). Additive superset of v1 rev.2.",
   "$defs": {
     "planet_name": {
       "type": "string",
