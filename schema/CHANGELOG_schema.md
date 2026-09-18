@@ -4,7 +4,7 @@
 
 ## v2 rev.1（2026-09-18）— v1 rev.2 からの差分
 
-要件：`10_schema/SCHEMA_v2_要件書_20260918.md` v0.2 第 I 部。
+要件：`10_schema/SCHEMA_v2_要件書_20260918.md` v0.3 第 I 部。
 **加算原則**：v1 の全キーは同じ場所・同じ型・同じ意味で残る。既存 enum の変更なし。
 機械検証（`tests/test_schema_v2_additive.py`）：
 - v2 は `scripts/build_schema_v2.py` の出力と byte 一致（手書きしない）。
@@ -19,7 +19,7 @@
 | `schema_version` | const `"v1"` | const `"v2"` |
 | `x-schema_file_version` | `v1 (2026-09-17, rev.2: …)` | `v2 (2026-09-18, rev.1)` |
 | `x-method` | METHOD v1.2 | METHOD_本質的品位表 v1.2（決定 C は v1.3 待ち）／METHOD_natal_v1 v1.3／古典職業鑑定マニュアル v11＋再基底化差分 |
-| `x-requirements` | （なし） | SCHEMA_v2 要件書 v0.2 を追記 |
+| `x-requirements` | （なし） | SCHEMA_v2 要件書 v0.3 を追記 |
 | `$defs` | （なし） | `planet_name` `house_class` `aspect_contact` `condition` `source_entry` `almuten_keys` `ranking_extreme` を新設 |
 
 ### 2. 新設トップレベルブロック（11 個。すべて required）
