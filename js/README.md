@@ -5,7 +5,7 @@ Python の `natal_classical.py`（タグ `v1-reference`）を移植したもの�
 
 - 契約：`../schema/SCHEMA_chart_v2.json`（型は `src/types/chart_v2.d.ts` に自動生成）
 - 規則の正本：`~/Documents/デジタル販売/20_method/METHOD_本質的品位表_v1.md`（v1.2＋決定 C）
-- 要件：`~/Documents/デジタル販売/10_schema/SCHEMA_v2_要件書_20260918.md`（v0.3）
+- 要件：`~/Documents/デジタル販売/10_schema/SCHEMA_v2_要件書_20260918.md`（v0.4）
 - 依存：`astronomy-engine`（MIT）のみ。外部通信なし・DOM 非依存
 
 ## 現在地（Phase 3）
