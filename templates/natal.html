@@ -494,7 +494,7 @@
 
         <footer>
             Powered by <a href="https://www.astro.com/swisseph/" target="_blank">Swiss Ephemeris</a> (pyswisseph)<br>
-            このツールのソースコードは AGPL v3 ライセンスです。ご請求は amanjyoshi@gmail.com までご連絡ください。
+            このツールのソースコードは AGPL v3 ライセンスです。ソースコードをご希望の方は<span class="contact-mail" data-user="source" data-domain="traditionalchart.com"><noscript>source [at] traditionalchart.com</noscript></span>までご連絡ください。
         </footer>
     </div>
 
@@ -1065,6 +1065,16 @@
                 document.getElementById('lonEW_dms').value = 'E';
             }
         }
+
+        // フッターの連絡先を組み立てる。HTML に平文のアドレスを置かないための処置。
+        document.querySelectorAll('.contact-mail').forEach(function (el) {
+            const addr = el.dataset.user + String.fromCharCode(64) + el.dataset.domain;
+            const a = document.createElement('a');
+            a.href = 'mailto:' + addr;
+            a.textContent = addr;
+            el.textContent = '';
+            el.appendChild(a);
+        });
     </script>
 </body>
 </html>
