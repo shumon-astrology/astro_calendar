@@ -20,6 +20,7 @@ import {
 } from "./ephemeris.ts";
 import { fixedStarLongitudes } from "./fixed_stars.ts";
 import { computeHouses, determineHouse, type HouseSystem } from "./houses.ts";
+import { isInJoy } from "./joys.ts";
 import { isDayChart, partOfFortune, partOfSpirit, sectInfo } from "./lots.ts";
 import { planetaryHour } from "./planetary_hours.ts";
 import {
@@ -611,6 +612,7 @@ export function computeChart(input: ChartInput): ChartV2 {
       house: p.houseEffective,
       house_raw: p.house,
       near_next_cusp: p.nearCusp,
+      joy: isInJoy(p.name, p.houseEffective),
       above_horizon: p.aboveHorizon,
       essential_dignity: {
         dignities: p.essential.labels,

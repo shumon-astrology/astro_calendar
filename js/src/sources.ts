@@ -29,6 +29,20 @@ export const JS_TABLE_SOURCES: Record<string, unknown> = {
     reference: "natal_classical.py の FIXED_STARS_J2000（J2000 黄経＋歳差 50.29″/年）",
     note: SPICA_NOTE,
   },
+  joys: {
+    table: "Planetary joys (Mercury 1, Moon 3, Venus 5, Mars 6, Sun 9, Jupiter 11, Saturn 12)",
+    table_ja: "惑星の喜悦（水星1・月3・金星5・火星6・太陽9・木星11・土星12）",
+    label: "Lilly",
+    citation: "Lilly, Christian Astrology I, Ch. VII (Reprint p.13-16 / orig. p.50-57)"
+      + " / METHOD_natal_v1.md v1.7 STEP 5-12 (decisions 19-22)",
+    verified: true,
+    reference: "All seven joys are in Lilly's house chapters."
+      + " The accidental fortitudes/debilities table (Reprint p.53 / orig. p.115) has no joy row"
+      + " [verified 2026-09-21]; it scores the 6th at -4 and the 12th at -5,"
+      + " i.e. it penalises the very houses where Mars and Saturn rejoice.",
+    note: "得点ではない。accidental_dignity には入らず、total_score を動かさない。"
+      + "判定は house（5°規則の適用後）で行う",
+  },
   star_catalog: {
     table: "Star catalogue (reserved)",
     table_ja: "恒星カタログ（予約）",

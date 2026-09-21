@@ -28,6 +28,11 @@ const classify = (essential: number, accidental: number | null) => {
 };
 const aversion = (a: number, b: number) => [1, 5, 7, 11].includes(((a - b) % 12 + 12) % 12);
 
+/** 惑星の Joy（喜悦）。data/joys.json とは独立にここへ直書きする */
+const JOY_HOUSE: Record<string, number> = {
+  Mercury: 1, Moon: 3, Venus: 5, Mars: 6, Sun: 9, Jupiter: 11, Saturn: 12,
+};
+
 /** JSON だけから derived を組み立て直す（実装とは別経路） */
 function recomputeDerived(doc: any) {
   const timeUnknown = !doc.birth_data.time_known;
@@ -151,6 +156,15 @@ function recomputeDerived(doc: any) {
       ? planets.filter((p: any) => aversion(p.sign_index, doc.angles.ascendant.sign_index))
         .map((p: any) => p.name)
       : null,
+    joys: timeUnknown ? null : planets
+      .filter((p: any) => JOY_HOUSE[p.name] === p.house)
+      .map((p: any) => ({
+        planet: p.name,
+        house: p.house,
+        essential_score: p.essential_dignity.score,
+        total_score: p.total_score,
+      }))
+      .sort((a: any, b: any) => (b.total_score - a.total_score) || (a.house - b.house)),
   };
 }
 
@@ -267,5 +281,72 @@ describe("GT-3：derived と summary の整合", () => {
     expect(order).toContain(doc.derived.lord_of_geniture.primary[0]);
     expect(order).toContain(doc.sect.is_day ? "Mars" : "Saturn");
     expect(order.slice(0, 3)).toContain(doc.sect.is_day ? "Mars" : "Saturn");
+  });
+});
+
+describe("惑星の Joy（喜悦）", () => {
+  // 図 F・図 G（Astro.com Rodden AA。SKU 3 の試験図と同じ出生データ）
+  const chartF = () => computeChart({
+    year: 1942, month: 11, day: 1, hour: 21, minute: 10,
+    latitude: 37.75, longitude: -83.0667, timezoneId: "America/Kentucky/Louisville",
+    place: "Salyersville, KY, USA", generatedAt: FIXED_TIME,
+  }) as any;
+  const chartG = () => computeChart({
+    year: 1941, month: 8, day: 3, hour: 13, minute: 33,
+    latitude: 40.7333, longitude: -74.0833, timezoneId: "America/New_York",
+    place: "Jersey City, NJ, USA", generatedAt: FIXED_TIME,
+  }) as any;
+  const joyMap = (doc: any) => Object.fromEntries(
+    doc.planets.map((p: any) => [p.name, p.joy]));
+
+  it("図 F は金星（5室）と土星（12室）が喜悦", () => {
+    expect(joyMap(chartF())).toEqual({
+      Saturn: true, Jupiter: false, Mars: false, Sun: false,
+      Venus: true, Mercury: false, Moon: false,
+    });
+  });
+
+  it("図 G は火星（6室）と太陽（9室）が喜悦", () => {
+    expect(joyMap(chartG())).toEqual({
+      Saturn: false, Jupiter: false, Mars: true, Sun: true,
+      Venus: false, Mercury: false, Moon: false,
+    });
+  });
+
+  it("判定は house（5°規則の適用後）で行う：図 G の火星は raw 5室・実効 6室", () => {
+    const mars = chartG().planets.find((p: any) => p.name === "Mars");
+    expect(mars.house_raw).toBe(5);
+    expect(mars.house).toBe(6);
+    expect(mars.joy).toBe(true);        // house_raw で判定していたら false になる
+  });
+
+  it("derived.joys は総合点の降順（同点はハウス番号の小さい順）", () => {
+    expect(chartF().derived.joys).toEqual([
+      { planet: "Saturn", house: 12, essential_score: 0, total_score: -1 },
+      { planet: "Venus", house: 5, essential_score: -5, total_score: -3 },
+    ]);
+    expect(chartG().derived.joys).toEqual([
+      { planet: "Mars", house: 6, essential_score: 5, total_score: 12 },
+      { planet: "Sun", house: 9, essential_score: 8, total_score: 8 },
+    ]);
+  });
+
+  it("Joy は得点に入らない：total_score は本質＋偶発のままで、items にも現れない", () => {
+    for (const doc of [chartF(), chartG()]) {
+      for (const p of doc.planets) {
+        expect(p.total_score).toBe(p.essential_dignity.score + p.accidental_dignity.score);
+        const codes = p.accidental_dignity.items.map((i: any) => i.code);
+        expect(codes.some((c: string) => c.includes("joy"))).toBe(false);
+      }
+    }
+  });
+
+  it("時刻不明なら joy は null、derived.joys も null", () => {
+    const doc = computeChart({
+      year: 1985, month: 7, day: 21, latitude: 35.6895, longitude: 139.6917,
+      timezoneId: "Asia/Tokyo", timeKnown: false, generatedAt: FIXED_TIME,
+    }) as any;
+    expect(doc.planets.every((p: any) => p.joy === null)).toBe(true);
+    expect(doc.derived.joys).toBeNull();
   });
 });

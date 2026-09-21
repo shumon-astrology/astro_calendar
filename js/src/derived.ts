@@ -4,6 +4,7 @@
  * 再計算できる（GT-3 がそれを検証する）。
  */
 import { houseAngularity } from "./dignity.ts";
+import { isInJoy } from "./joys.ts";
 import { BENEFICS, MALEFICS } from "./tables.ts";
 import { PLANET_NAMES, signOf } from "./util.ts";
 
@@ -131,6 +132,7 @@ export interface Derived {
     lord_in_aversion: boolean;
   }[] | null;
   aversions_to_ascendant: string[] | null;
+  joys: { planet: string; house: number; essential_score: number; total_score: number }[] | null;
   reading_order: string[];
   thresholds: typeof THRESHOLDS;
 }
@@ -292,6 +294,19 @@ export function buildDerived(input: DerivedInput): Derived {
       .map((p) => p.name)
     : null;
 
+  // --- joys（喜悦）。得点には入らない記述層。強い順に並べる ---
+  // 判定は house（＝ 5°規則の適用後）で行う。並びは dignity_ranking と同じ総合点の降順、
+  // 同点はハウス番号の小さい順。
+  const joys = timeUnknown ? null : input.planets
+    .filter((p) => isInJoy(p.name, p.house) === true)
+    .map((p) => ({
+      planet: p.name,
+      house: p.house as number,
+      essential_score: p.essential_score,
+      total_score: p.total_score ?? p.essential_score,
+    }))
+    .sort((a, b) => (b.total_score - a.total_score) || (a.house - b.house));
+
   // --- reading_order（決定 12）。重複は先勝ち ---
   const order: string[] = [];
   const push = (name: string | null | undefined) => {
@@ -333,6 +348,7 @@ export function buildDerived(input: DerivedInput): Derived {
     in_sect_benefic: conditionFor(input.isDay === null ? null : (input.isDay ? "Jupiter" : "Venus")),
     house_conditions: houseConditions,
     aversions_to_ascendant: aversions,
+    joys,
     reading_order: order,
     thresholds: THRESHOLDS,
   };
